@@ -1,0 +1,82 @@
+# yii console commands
+/yii
+/yii_test
+/yii_test.bat
+
+# phpstorm project files
+.idea
+
+# netbeans project files
+nbproject
+
+# zend studio for eclipse project files
+.buildpath
+.project
+.settings
+
+# windows thumbnail cache
+Thumbs.db
+
+# composer vendor dir
+/vendor
+
+# composer itself is not needed
+composer.phar
+
+# Mac DS_Store Files
+.DS_Store
+
+# phpunit itself is not needed
+phpunit.phar
+# local phpunit config
+/phpunit.xml
+
+# vagrant runtime
+/.vagrant
+
+# ignore generated files
+/frontend/web/index.php
+/frontend/web/index-test.php
+/frontend/web/robots.txt
+/backend/web/index.php
+/backend/web/index-test.php
+/backend/web/robots.txt
+/backend/.htaccess
+/backend/web/.htaccess
+/frontend/web/.htaccess
+
+composer.lock
+
+# Ignora Archivos de Imagenes de Cabinas
+/backend/web/img/cabin/*.png
+/backend/web/img/cabin/*.jpg
+/backend/web/img/cabin/*.jpeg
+# Ignora Archivos de Imagenes de Barcos
+/backend/web/img/ship/*.png
+/backend/web/img/ship/*.jpg
+/backend/web/img/ship/*.jpeg
+# Ignora Archivos de Imagenes de Servicios
+/backend/web/img/service/*.png
+/backend/web/img/service/*.jpg
+/backend/web/img/service/*.jpeg
+# Ignora Archivos de Imagenes de Itinerario
+/backend/web/img/itinerary/*.png
+/backend/web/img/itinerary/*.jpg
+/backend/web/img/itinerary/*.jpeg
+
+# Ignora Archivos de Imagenes de Cabinas
+/frontend/web/img/cabin/*.png
+/frontend/web/img/cabin/*.jpg
+/frontend/web/img/cabin/*.jpeg
+# Ignora Archivos de Imagenes de Barcos
+/frontend/web/img/ship/*.png
+/frontend/web/img/ship/*.jpg
+/frontend/web/img/ship/*.jpeg
+# Ignora Archivos de Imagenes de Servicios
+/frontend/web/img/service/*.png
+/frontend/web/img/service/*.jpg
+/frontend/web/img/service/*.jpeg
+# Ignora Archivos de Imagenes de Itinerario
+/frontend/web/img/itinerary/*.png
+/frontend/web/img/itinerary/*.jpg
+/frontend/web/img/itinerary/*.jpeg
