@@ -73,7 +73,7 @@ CrudAsset::register($this);
 				'modelDirectivos' => $modelDirectivos,
 				'modelListTipoDirectivos'=>$modelListTipoDirectivos,
 				'modelCampeonato'=>$modelCampeonato,
-				'modelEquipo'=>$model,
+				'modelEquipo'=>$model,			
 				
 			]);
 		}
