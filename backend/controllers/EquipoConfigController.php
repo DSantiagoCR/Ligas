@@ -6,6 +6,7 @@ use common\models\Campeonato;
 use common\models\DirectivaEquipos;
 use common\models\Directivos;
 use common\models\Equipo;
+use common\models\Jugador;
 use common\models\EquipoCategoria;
 use Mpdf\Tag\Em;
 use Yii;
@@ -44,20 +45,16 @@ class EquipoConfigController extends Controller
      * @return mixed
      */
     public function actionIndex()
-    {           
-        // return $this->render('index', [
-        //     'searchModel' => $searchModel,
-        //     'dataProvider' => $dataProvider,
-        // ]);
+    {         
+       
         $request = Yii::$app->request;
         $modelListEquipos = Equipo::find()->all();
         $model= new Equipo();
        
 
-        if ($request->isPost) 
-        {
+        
            
-            $model->setAttribute('id', $request->post('Equipo')['id']);
+            //$model->setAttribute('id', $request->post('Equipo')['id']);
 
             $modelCampeonato = Campeonato::find()
             ->where(['estado'=>1])
@@ -67,15 +64,9 @@ class EquipoConfigController extends Controller
 	        $modelListGenero = HelperGeneral::obtenerListaCatalogoPorIdCatalogo(17);
 	        $modelListTipoDirectivos = HelperGeneral::obtenerListaCatalogoPorIdCatalogo(1);
 
-            $modelCampeonato = Campeonato::find()
-            ->where(['id'=>2])
-            ->andWhere(['estado'=>1])
-            ->one();
-            //** equipo - categoria */
-            $modelEquipoCategoria = EquipoCategoria::find()
-            ->where(['id_equipo'=>$model->id])
-            ->andWhere(['estado'=>1])
-            ->all();
+
+            //$sql = $modelEquipoCategoria->createCommand()->getRawSql();
+            //$this->imprimeconDie($modelEquipoCategoria->);            
 
             $modelDirectivaEquipo = DirectivaEquipos::find()
             ->where(['id_equipo'=>$model->id])
@@ -86,40 +77,114 @@ class EquipoConfigController extends Controller
             //** directivos */
             $modelDirectivos = Directivos::find()
             ->where(['estado'=>1])
-            ->all();          
+            ->all();
+            
+            /** Jugadores */
+            $modelJugadores = null;//Jugador::find()->all();
 
+            //$this->imprimeconDie($modelListEquipos);
             //$this->imprimeconDie($modelEquipoCategoria);
-            return $this->render('index', [
-                'arrayListEquipos'=>ArrayHelper::map($modelListEquipos,'id','nombre') ,
-                'listaJuagadores'=>'ok, recibido',
-                'modelEquipoCategoria'=>$modelEquipoCategoria,
-                'modelDirectivaEquipo'=>$modelDirectivaEquipo,
-                'modelDirectivos'=>$modelDirectivos,
-                'modelListCategoria'=>$modelListCategoria,
-                'modelListGenero'=>$modelListGenero,
-                'modelListTipoDirectivos'=>$modelListTipoDirectivos,
-                'modelCampeonato'=>$modelCampeonato,
-                'model' => $model,
-            ]);
-        }
-        else
-        {
-
+            // return $this->render('index', [
+            //     'arrayListEquipos'=>ArrayHelper::map($modelListEquipos,'id','nombre') ,
+            //     'modelListEquipos'=>$modelListEquipos,
+            //     'listaJuagadores'=>'ok',
+            //     'modelDirectivaEquipo'=>$modelDirectivaEquipo,
+            //     'modelDirectivos'=>$modelDirectivos,
+            //     'modelListCategoria'=>$modelListCategoria,
+            //     'modelListGenero'=>$modelListGenero,
+            //     'modelListTipoDirectivos'=>$modelListTipoDirectivos,
+            //     'modelCampeonato'=>$modelCampeonato,
+            //     'modelJugadores'=>$modelJugadores,
+            //     'model' => $model,
+            // ]);
+              
             return $this->render('index', [
                'arrayListEquipos'=>ArrayHelper::map($modelListEquipos,'id','nombre') ,
-               'listaJuagadores'=>null,
-               'modelEquipoCategoria'=>null,
+               'modelListEquipos'=>$modelListEquipos,
+               'listaJuagadores'=>null,              
                'modelDirectivaEquipo'=>null,
                'modelDirectivos'=>null,
                'modelListCategoria'=>null,
                'modelListGenero'=>null,
                'modelListTipoDirectivos'=>null,
                'modelCampeonato'=>null,
+               'modelJugadores'=>null,
                'model' => $model,
            ]);
-        }
+     
 
   
+    }
+    public function actionModalContenido($id_contenido,$id_equipo)
+    {
+        switch ($id_contenido) {
+            case 1:
+                $content = $this->contenidoCatGenero($id_equipo);
+                break;
+            case 2:
+                $content = $this->contenidoDirectivos($id_equipo);
+                break;
+            case 3:
+                $content = "Contenido del modal 3";
+                break;
+            // Puedes agregar más casos si es necesario
+            default:
+                $content = "Contenido por defecto o no encontrado";
+                break;
+        }
+
+    return $content; // O podrías renderizar una vista parcial si lo prefieres
+    }
+    
+    public function contenidoCatGenero($id)
+    {
+        $modelEquipo = Equipo::find()->where(['id'=>$id])->one();
+        $modelCampeonato = Campeonato::find()
+            ->where(['estado'=>1])
+            ->one();
+        //**catalogos */
+        $modelListCategoria = HelperGeneral::obtenerListaCatalogoPorIdCatalogo(21);	
+	    $modelListGenero = HelperGeneral::obtenerListaCatalogoPorIdCatalogo(17);
+	    $modelListTipoDirectivos = HelperGeneral::obtenerListaCatalogoPorIdCatalogo(1);
+
+        //** equipo - categoria */
+        $modelEquipoCategoria = EquipoCategoria::find()
+            ->where(['id_equipo'=>$modelEquipo->id])          
+            ->all();
+
+        // Renderizamos una vista parcial (sin layout)
+        return $this->renderAjax('categoria-genero', [
+            // Pasamos datos si es necesario
+            'modelEquipoCategoria' => $modelEquipoCategoria,
+			'modelListCategoria'=>$modelListCategoria,
+			'modelListGenero'=>$modelListGenero,
+			'modelEquipo'=>$modelEquipo,
+        ]);
+    }
+    public function contenidoDirectivos($id)
+    {
+        $modelEquipo = Equipo::find()->where(['id'=>$id])->one();
+        $modelCampeonato = Campeonato::find()
+            ->where(['estado'=>1])
+            ->one();
+        //**catalogos */
+        $modelListCategoria = HelperGeneral::obtenerListaCatalogoPorIdCatalogo(21);	
+	    $modelListGenero = HelperGeneral::obtenerListaCatalogoPorIdCatalogo(17);
+	    $modelListTipoDirectivos = HelperGeneral::obtenerListaCatalogoPorIdCatalogo(1);
+
+        //** equipo - categoria */
+        $modelEquipoCategoria = EquipoCategoria::find()
+            ->where(['id_equipo'=>$modelEquipo->id])          
+            ->all();
+
+        // Renderizamos una vista parcial (sin layout)
+        return $this->renderAjax('categoria-genero', [
+            // Pasamos datos si es necesario
+            'modelEquipoCategoria' => $modelEquipoCategoria,
+			'modelListCategoria'=>$modelListCategoria,
+			'modelListGenero'=>$modelListGenero,
+			'modelEquipo'=>$modelEquipo,
+        ]);
     }
 
     /** Acciones utilizadas en Ajax */
