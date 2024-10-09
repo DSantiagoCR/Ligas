@@ -4,20 +4,20 @@
     <table class="table table-bordered border-primary">
         <thead class="table-dark">
             <tr>
-                <td> NOMBRE</td>
-                <td> </td>
-                <td> GENERO</td>
+                <td> NOMBRE</td>               
+                <td> APELLIDO</td>
+                <td> CEDULA</td>
             </tr>
         </thead>
         <tbody>
             <?php
 
-            foreach ($modelEquipoCategoria as $objEC) {
+            foreach ($modelJugadores as $objJugador) {
             ?>
                 <tr>
-                    <td> <?= $objEC->equipo->nombre ?></td>
-                    <td> <?= $objEC->categoria->valor ?></td>
-                    <td> <?= $objEC->genero->valor ?></td>
+                    <td> <?= $objJugador->nombres ?></td>
+                    <td> <?= $objJugador->apellidos ?></td>
+                    <td> <?= $objJugador->cedula ?></td>
                 </tr>
             <?php
             } //fin for
