@@ -18,19 +18,19 @@ $arrayEstadoCivil = ArrayHelper::map($modelsEstadoCivil,'id','valor');
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
+    <!-- <?= $form->field($model, 'code',['errorOptions' => ['class' => 'text-danger']])->textInput(['maxlength' => true]) ?> -->
 
-    <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'nombre',['errorOptions' => ['class' => 'text-danger']])->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'apellido')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'apellido',['errorOptions' => ['class' => 'text-danger']])->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'fecha_nacimiento')->textInput(['type'=>'date']) ?>
+    <?= $form->field($model, 'fecha_nacimiento',['errorOptions' => ['class' => 'text-danger']])->textInput(['type'=>'date']) ?>
 
-    <?= $form->field($model, 'cedula')->textInput(['maxlength' => true])->label('Cédula') ?>
+    <?= $form->field($model, 'cedula',['errorOptions' => ['class' => 'text-danger']])->textInput(['maxlength' => true])->label('Cédula') ?>
 
-    <?= $form->field($model, 'id_estado_civil')->dropDownList($arrayEstadoCivil)->label('Estado Civíl') ?>
+    <?= $form->field($model, 'id_estado_civil',['errorOptions' => ['class' => 'text-danger']])->dropDownList($arrayEstadoCivil,['prompt'=>'Seleccione'])->label('Estado Civíl') ?>
 
-    <?= $form->field($model, 'estado')->checkbox() ?>
+    <?= $form->field($model, 'estado',['errorOptions' => ['class' => 'text-danger']])->checkbox(['label'=>'Activado'])->label(false) ?>
 
   
 	<?php if (!Yii::$app->request->isAjax){ ?>

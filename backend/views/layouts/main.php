@@ -19,7 +19,7 @@ backend\assets\AppAsset::register($this);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php $this->registerCsrfMetaTags() ?>
-    <title><?= Html::encode('Book - '.$this->title) ?></title>
+    <title><?= Html::encode('Ligas - '.$this->title) ?></title>
     <link rel="shortcut icon" type="image/ico"  href="<?=Yii::getAlias('@web')?>/img/pi.jps">
     <?php $this->head() ?>
     <link href="<?= Yii::getAlias('@web') ?>/css/bootstrap4/css/bootstrap-glyphicons.min.css" rel="stylesheet" type="text/css" />

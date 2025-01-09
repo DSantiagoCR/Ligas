@@ -8,16 +8,25 @@ use Yii;
  * This is the model class for table "equipo".
  *
  * @property int $id
- * @property string $code
+ * @property string|null $code
  * @property string $nombre
  * @property string|null $fecha_fundacion
  * @property string|null $link_logotipo
  * @property bool $activo
- * @property int $id_genero
+ * @property int|null $id_genero
+ * @property int|null $id_categoria
+ * @property int|null $id_campeonato
  *
- * @property DirectivaEquipos[] $directivaEquipos
- * @property EquipoCategoria[] $equipoCategorias
+ * @property CabeceraVocalia[] $cabeceraVocalias
+ * @property CabeceraVocalia[] $cabeceraVocalias0
+ * @property CabeceraVocalia[] $cabeceraVocalias1
+ * @property CabeceraVocalia[] $cabeceraVocalias2
+ * @property Campeonato $campeonato
+ * @property Catalogos $categoria
+ * @property Directivos[] $directivos
  * @property Catalogos $genero
+ * @property GrupoEquipo[] $grupoEquipos
+ * @property Jugador[] $jugadors
  */
 class Equipo extends \yii\db\ActiveRecord
 {
@@ -35,14 +44,17 @@ class Equipo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['code', 'nombre', 'activo', 'id_genero'], 'required'],
+            [['nombre', 'activo','fecha_fundacion','id_genero','id_categoria','id_campeonato'], 'required'],
             [['fecha_fundacion'], 'safe'],
             [['activo'], 'boolean'],
-            [['id_genero'], 'default', 'value' => null],
-            [['id_genero'], 'integer'],
+            [['id_genero', 'id_categoria', 'id_campeonato'], 'default', 'value' => null],
+            [['id_genero', 'id_categoria', 'id_campeonato'], 'integer'],
             [['code'], 'string', 'max' => 20],
-            [['nombre', 'link_logotipo'], 'string', 'max' => 255],
+            [['nombre'], 'string', 'max' => 255],
+            [['link_logotipo'], 'string', 'max' => 1000],
+            [['id_campeonato'], 'exist', 'skipOnError' => true, 'targetClass' => Campeonato::class, 'targetAttribute' => ['id_campeonato' => 'id']],
             [['id_genero'], 'exist', 'skipOnError' => true, 'targetClass' => Catalogos::class, 'targetAttribute' => ['id_genero' => 'id']],
+            [['id_categoria'], 'exist', 'skipOnError' => true, 'targetClass' => Catalogos::class, 'targetAttribute' => ['id_categoria' => 'id']],
         ];
     }
 
@@ -59,27 +71,79 @@ class Equipo extends \yii\db\ActiveRecord
             'link_logotipo' => 'Link Logotipo',
             'activo' => 'Activo',
             'id_genero' => 'Id Genero',
+            'id_categoria' => 'Id Categoria',
+            'id_campeonato' => 'Id Campeonato',
         ];
     }
 
     /**
-     * Gets query for [[DirectivaEquipos]].
+     * Gets query for [[CabeceraVocalias]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getDirectivaEquipos()
+    public function getCabeceraVocalias()
     {
-        return $this->hasMany(DirectivaEquipos::class, ['id_equipo' => 'id']);
+        return $this->hasMany(CabeceraVocalia::class, ['id_equipo_1' => 'id']);
     }
 
     /**
-     * Gets query for [[EquipoCategorias]].
+     * Gets query for [[CabeceraVocalias0]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getEquipoCategorias()
+    public function getCabeceraVocalias0()
     {
-        return $this->hasMany(EquipoCategoria::class, ['id_equipo' => 'id']);
+        return $this->hasMany(CabeceraVocalia::class, ['id_equipo_2' => 'id']);
+    }
+
+    /**
+     * Gets query for [[CabeceraVocalias1]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCabeceraVocalias1()
+    {
+        return $this->hasMany(CabeceraVocalia::class, ['id_equipo_vocal' => 'id']);
+    }
+
+    /**
+     * Gets query for [[CabeceraVocalias2]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCabeceraVocalias2()
+    {
+        return $this->hasMany(CabeceraVocalia::class, ['id_equipo_veedor' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Campeonato]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCampeonato()
+    {
+        return $this->hasOne(Campeonato::class, ['id' => 'id_campeonato']);
+    }
+
+    /**
+     * Gets query for [[Categoria]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategoria()
+    {
+        return $this->hasOne(Catalogos::class, ['id' => 'id_categoria']);
+    }
+
+    /**
+     * Gets query for [[Directivos]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDirectivos()
+    {
+        return $this->hasMany(Directivos::class, ['id_equipo' => 'id']);
     }
 
     /**
@@ -90,5 +154,25 @@ class Equipo extends \yii\db\ActiveRecord
     public function getGenero()
     {
         return $this->hasOne(Catalogos::class, ['id' => 'id_genero']);
+    }
+
+    /**
+     * Gets query for [[GrupoEquipos]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGrupoEquipos()
+    {
+        return $this->hasMany(GrupoEquipo::class, ['id_equipo' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Jugadors]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getJugadors()
+    {
+        return $this->hasMany(Jugador::class, ['id_equipo' => 'id']);
     }
 }

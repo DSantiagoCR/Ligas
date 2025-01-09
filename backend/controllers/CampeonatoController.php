@@ -99,18 +99,48 @@ class CampeonatoController extends Controller
                                 Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
         
                 ];         
-            }else if($model->load($request->post()) && $model->save()){
-                return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Crear Campeonato",
-                    'content'=>'<span class="text-success">Creación Campeonato Exitoso</span>',
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                            Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
-        
-                ];         
+            }else if($model->load($request->post())){
+                
+                if ($model->validate()){
+                    if($model->save()){
+                        return [
+                            'forceReload'=>'#crud-datatable-pjax',
+                            'title'=> "Crear Campeonato",
+                            'content'=>'<span class="text-success">Creación Campeonato Exitoso</span>',
+                            'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
+                                    Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                
+                        ];  
+                    }
+                    else
+                    {
+                        return [
+                            'title'=> "Crear Campeonato : No se pudo Guardar",
+                            'content'=>$this->renderAjax('create', [
+                                'model' => $model,
+                            ]),
+                            'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
+                                        Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
+                
+                        ];  
+                    }
+    
+                }
+                else
+                {
+                    return [
+                        'title'=> "Crear Campeonato: Datos Incorrectos",
+                        'content'=>$this->renderAjax('create', [
+                            'model' => $model,
+                        ]),
+                        'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
+                                    Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
+            
+                    ];   
+                }                 
             }else{           
                 return [
-                    'title'=> "Crear Campeonato",
+                    'title'=> "Crear Campeonato : Revisar Datos",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
@@ -268,4 +298,6 @@ class CampeonatoController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+  
 }

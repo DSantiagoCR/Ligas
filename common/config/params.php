@@ -1,9 +1,9 @@
 <?php
 return [
-    'adminEmail' => 'lcaiza@gogalapagos.com',
-    'supportEmail' => 'support@gogalapagos.com',
-    'senderEmail' => 'noreply@gogalapagos.com',
-    'senderName' => 'GoGalapagos.com mailer',
+    'adminEmail' => 'santiagoclavijoromero@gmail.com',
+    'supportEmail' => 'testproyectos360@gmail.com',
+    'senderEmail' => 'testproyectos360@gmail.com',
+    'senderName' => 'LigaOne mailer',
     'user.passwordResetTokenExpire' => 3600,
     'user.passwordMinLength' => 8,
     'bsDependencyEnabled' => false,

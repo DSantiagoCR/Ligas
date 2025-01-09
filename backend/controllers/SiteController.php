@@ -118,6 +118,7 @@ class SiteController extends Controller
         $this->layout = 'blank';
         $model = new \backend\models\PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            
             if ($model->sendEmail()) {
                 Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
 

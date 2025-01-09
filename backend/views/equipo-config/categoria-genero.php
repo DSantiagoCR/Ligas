@@ -6,10 +6,13 @@ use common\models\search\EquipoSearch;
 use yii\bootstrap4\Modal;
 
 ?>
+
 <div class="card" style="padding: 10px;" >
-    <p style="color:black"><b>Selección de Categoria y Género</b></p>
+<h3 style="color:red">Categoria y Genero </h2>
+<p style="color:black"><b>Equipo: <?= $modelEquipo->nombre ?></b></p>
+<p style="color:red"><b>Campeonato: <?=$modelCampeonato->nombre."($modelCampeonato->anio)"?></b></p>
     <div class="row">
-        <div class="col">
+        <div class="col-4">
 
             <label for="ddl_categoria" class="form-label text-primary">
                 Categoria
@@ -52,7 +55,7 @@ use yii\bootstrap4\Modal;
             </div>
 
         </div>
-        <div class="col">
+        <div class="col-8">
             <table class="table table-bordered border-primary">
                 <thead class="table-dark">
                     <tr>

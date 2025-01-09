@@ -17,15 +17,15 @@ $arrayNucleoArbitros = ArrayHelper::map($modelNucleArbitros,'id','nombre');
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'code',['errorOptions' => ['class' => 'text-danger']])->textInput(['maxlength' => true])->label('Código')?>
 
-    <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'nombre',['errorOptions' => ['class' => 'text-danger']],)->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'anio')->textInput(['maxlength' => true])->label('Año') ?>
+    <?= $form->field($model, 'anio',['errorOptions' => ['class' => 'text-danger']])->textInput(['maxlength' => true])->label('Año') ?>
 
-    <?= $form->field($model, 'id_nucleo_arbitros')->dropDownList($arrayNucleoArbitros)->label('Nucleo Arbitros'); ?>
+    <?= $form->field($model, 'id_nucleo_arbitros',['errorOptions' => ['class' => 'text-danger']])->dropDownList($arrayNucleoArbitros,['prompt'=>'Seleccione Opción'])->label('Nucleo Arbitros'); ?>
 
-    <?= $form->field($model, 'estado')->checkbox() ?>
+    <?= $form->field($model, 'estado')->checkbox(['label' => 'Activado'])->label(false) ?>
 
     <?= $form->field($model, 'detalle')->textarea(['rows' => 4]) ?>
 

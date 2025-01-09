@@ -10,15 +10,11 @@ use Yii;
  * @property int $id
  * @property int $id_campeonato
  * @property int $id_fechas
- * @property int $id_equipo_categoria1
- * @property int $id_equipo_categoria2
  * @property int $ta_e1
  * @property int $ta_e2
  * @property int $tr_e1
  * @property int $tr_e2
- * @property int $id_equipo_categoria_vocal
  * @property string|null $informe_vocal
- * @property int $id_equipo_categoria_veedor
  * @property string|null $informe_veedor
  * @property int $id_arbitro
  * @property string|null $informe_arbitro
@@ -30,13 +26,18 @@ use Yii;
  * @property string|null $link_documento
  * @property int|null $hora_empieza
  * @property string|null $hora_termina
+ * @property int $id_equipo_1
+ * @property int $id_equipo_2
+ * @property int $id_equipo_vocal
+ * @property int $id_equipo_veedor
  *
  * @property Arbitros $arbitro
  * @property Campeonato $campeonato
  * @property DetalleVocalia[] $detalleVocalias
- * @property EquipoCategoria $equipoCategoria1
- * @property EquipoCategoria $equipoCategoria2
- * @property EquipoCategoria $equipoCategoriaVocal
+ * @property Equipo $equipo1
+ * @property Equipo $equipo2
+ * @property Equipo $equipoVeedor
+ * @property Equipo $equipoVocal
  * @property Catalogos $estadoVocalia
  */
 class CabeceraVocalia extends \yii\db\ActiveRecord
@@ -55,18 +56,19 @@ class CabeceraVocalia extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_campeonato', 'id_fechas', 'id_equipo_categoria1', 'id_equipo_categoria2', 'ta_e1', 'ta_e2', 'tr_e1', 'tr_e2', 'id_equipo_categoria_vocal', 'id_equipo_categoria_veedor', 'id_arbitro', 'id_estado_vocalia'], 'required'],
-            [['id_campeonato', 'id_fechas', 'id_equipo_categoria1', 'id_equipo_categoria2', 'ta_e1', 'ta_e2', 'tr_e1', 'tr_e2', 'id_equipo_categoria_vocal', 'id_equipo_categoria_veedor', 'id_arbitro', 'id_estado_vocalia', 'hora_empieza'], 'default', 'value' => null],
-            [['id_campeonato', 'id_fechas', 'id_equipo_categoria1', 'id_equipo_categoria2', 'ta_e1', 'ta_e2', 'tr_e1', 'tr_e2', 'id_equipo_categoria_vocal', 'id_equipo_categoria_veedor', 'id_arbitro', 'id_estado_vocalia', 'hora_empieza'], 'integer'],
+            [['id_campeonato', 'id_fechas', 'ta_e1', 'ta_e2', 'tr_e1', 'tr_e2', 'id_arbitro', 'id_estado_vocalia', 'id_equipo_1', 'id_equipo_2', 'id_equipo_vocal', 'id_equipo_veedor'], 'required'],
+            [['id_campeonato', 'id_fechas', 'ta_e1', 'ta_e2', 'tr_e1', 'tr_e2', 'id_arbitro', 'id_estado_vocalia', 'hora_empieza', 'id_equipo_1', 'id_equipo_2', 'id_equipo_vocal', 'id_equipo_veedor'], 'default', 'value' => null],
+            [['id_campeonato', 'id_fechas', 'ta_e1', 'ta_e2', 'tr_e1', 'tr_e2', 'id_arbitro', 'id_estado_vocalia', 'hora_empieza', 'id_equipo_1', 'id_equipo_2', 'id_equipo_vocal', 'id_equipo_veedor'], 'integer'],
             [['informe_vocal', 'informe_veedor', 'informe_arbitro', 'novedades_equipo_1', 'novedades_equipo_2', 'novedades_generales', 'novedades_directiva'], 'string', 'max' => 2500],
             [['link_documento'], 'string', 'max' => 255],
             [['hora_termina'], 'string', 'max' => 20],
             [['id_arbitro'], 'exist', 'skipOnError' => true, 'targetClass' => Arbitros::class, 'targetAttribute' => ['id_arbitro' => 'id']],
             [['id_campeonato'], 'exist', 'skipOnError' => true, 'targetClass' => Campeonato::class, 'targetAttribute' => ['id_campeonato' => 'id']],
             [['id_estado_vocalia'], 'exist', 'skipOnError' => true, 'targetClass' => Catalogos::class, 'targetAttribute' => ['id_estado_vocalia' => 'id']],
-            [['id_equipo_categoria1'], 'exist', 'skipOnError' => true, 'targetClass' => EquipoCategoria::class, 'targetAttribute' => ['id_equipo_categoria1' => 'id']],
-            [['id_equipo_categoria2'], 'exist', 'skipOnError' => true, 'targetClass' => EquipoCategoria::class, 'targetAttribute' => ['id_equipo_categoria2' => 'id']],
-            [['id_equipo_categoria_vocal'], 'exist', 'skipOnError' => true, 'targetClass' => EquipoCategoria::class, 'targetAttribute' => ['id_equipo_categoria_vocal' => 'id']],
+            [['id_equipo_1'], 'exist', 'skipOnError' => true, 'targetClass' => Equipo::class, 'targetAttribute' => ['id_equipo_1' => 'id']],
+            [['id_equipo_2'], 'exist', 'skipOnError' => true, 'targetClass' => Equipo::class, 'targetAttribute' => ['id_equipo_2' => 'id']],
+            [['id_equipo_vocal'], 'exist', 'skipOnError' => true, 'targetClass' => Equipo::class, 'targetAttribute' => ['id_equipo_vocal' => 'id']],
+            [['id_equipo_veedor'], 'exist', 'skipOnError' => true, 'targetClass' => Equipo::class, 'targetAttribute' => ['id_equipo_veedor' => 'id']],
         ];
     }
 
@@ -79,15 +81,11 @@ class CabeceraVocalia extends \yii\db\ActiveRecord
             'id' => 'ID',
             'id_campeonato' => 'Id Campeonato',
             'id_fechas' => 'Id Fechas',
-            'id_equipo_categoria1' => 'Id Equipo Categoria1',
-            'id_equipo_categoria2' => 'Id Equipo Categoria2',
             'ta_e1' => 'Ta E1',
             'ta_e2' => 'Ta E2',
             'tr_e1' => 'Tr E1',
             'tr_e2' => 'Tr E2',
-            'id_equipo_categoria_vocal' => 'Id Equipo Categoria Vocal',
             'informe_vocal' => 'Informe Vocal',
-            'id_equipo_categoria_veedor' => 'Id Equipo Categoria Veedor',
             'informe_veedor' => 'Informe Veedor',
             'id_arbitro' => 'Id Arbitro',
             'informe_arbitro' => 'Informe Arbitro',
@@ -99,6 +97,10 @@ class CabeceraVocalia extends \yii\db\ActiveRecord
             'link_documento' => 'Link Documento',
             'hora_empieza' => 'Hora Empieza',
             'hora_termina' => 'Hora Termina',
+            'id_equipo_1' => 'Id Equipo 1',
+            'id_equipo_2' => 'Id Equipo 2',
+            'id_equipo_vocal' => 'Id Equipo Vocal',
+            'id_equipo_veedor' => 'Id Equipo Veedor',
         ];
     }
 
@@ -133,33 +135,43 @@ class CabeceraVocalia extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[EquipoCategoria1]].
+     * Gets query for [[Equipo1]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getEquipoCategoria1()
+    public function getEquipo1()
     {
-        return $this->hasOne(EquipoCategoria::class, ['id' => 'id_equipo_categoria1']);
+        return $this->hasOne(Equipo::class, ['id' => 'id_equipo_1']);
     }
 
     /**
-     * Gets query for [[EquipoCategoria2]].
+     * Gets query for [[Equipo2]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getEquipoCategoria2()
+    public function getEquipo2()
     {
-        return $this->hasOne(EquipoCategoria::class, ['id' => 'id_equipo_categoria2']);
+        return $this->hasOne(Equipo::class, ['id' => 'id_equipo_2']);
     }
 
     /**
-     * Gets query for [[EquipoCategoriaVocal]].
+     * Gets query for [[EquipoVeedor]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getEquipoCategoriaVocal()
+    public function getEquipoVeedor()
     {
-        return $this->hasOne(EquipoCategoria::class, ['id' => 'id_equipo_categoria_vocal']);
+        return $this->hasOne(Equipo::class, ['id' => 'id_equipo_veedor']);
+    }
+
+    /**
+     * Gets query for [[EquipoVocal]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEquipoVocal()
+    {
+        return $this->hasOne(Equipo::class, ['id' => 'id_equipo_vocal']);
     }
 
     /**

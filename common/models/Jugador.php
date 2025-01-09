@@ -17,8 +17,18 @@ use Yii;
  * @property int|null $id_estado_civil
  * @property int|null $hijos
  * @property bool $estado
+ * @property string|null $link_foto
+ * @property int|null $id_equipo
+ * @property bool|null $puede_jugar
+ * @property int|null $ta_acumulada
+ * @property int|null $ta_actuales
+ * @property int|null $tr_acumulada
+ * @property int|null $tr_actuales
+ * @property int|null $goles
+ * @property string|null $link_ficha
  *
- * @property EquipoCategoriaJugador[] $equipoCategoriaJugadors
+ * @property DetalleVocalia[] $detalleVocalias
+ * @property Equipo $equipo
  * @property Catalogos $estadoCivil
  */
 class Jugador extends \yii\db\ActiveRecord
@@ -39,13 +49,15 @@ class Jugador extends \yii\db\ActiveRecord
         return [
             [['nombres', 'apellidos', 'estado'], 'required'],
             [['fecha_nacimiento'], 'safe'],
-            [['id_estado_civil', 'hijos'], 'default', 'value' => null],
-            [['id_estado_civil', 'hijos'], 'integer'],
-            [['estado'], 'boolean'],
+            [['id_estado_civil', 'hijos', 'id_equipo', 'ta_acumulada', 'ta_actuales', 'tr_acumulada', 'tr_actuales', 'goles'], 'default', 'value' => null],
+            [['id_estado_civil', 'hijos', 'id_equipo', 'ta_acumulada', 'ta_actuales', 'tr_acumulada', 'tr_actuales', 'goles'], 'integer'],
+            [['estado', 'puede_jugar'], 'boolean'],
             [['code'], 'string', 'max' => 20],
             [['nombres', 'apellidos'], 'string', 'max' => 100],
             [['cedula', 'celular'], 'string', 'max' => 50],
+            [['link_foto', 'link_ficha'], 'string', 'max' => 1000],
             [['id_estado_civil'], 'exist', 'skipOnError' => true, 'targetClass' => Catalogos::class, 'targetAttribute' => ['id_estado_civil' => 'id']],
+            [['id_equipo'], 'exist', 'skipOnError' => true, 'targetClass' => Equipo::class, 'targetAttribute' => ['id_equipo' => 'id']],
         ];
     }
 
@@ -65,17 +77,36 @@ class Jugador extends \yii\db\ActiveRecord
             'id_estado_civil' => 'Id Estado Civil',
             'hijos' => 'Hijos',
             'estado' => 'Estado',
+            'link_foto' => 'Link Foto',
+            'id_equipo' => 'Id Equipo',
+            'puede_jugar' => 'Puede Jugar',
+            'ta_acumulada' => 'Ta Acumulada',
+            'ta_actuales' => 'Ta Actuales',
+            'tr_acumulada' => 'Tr Acumulada',
+            'tr_actuales' => 'Tr Actuales',
+            'goles' => 'Goles',
+            'link_ficha' => 'Link Ficha',
         ];
     }
 
     /**
-     * Gets query for [[EquipoCategoriaJugadors]].
+     * Gets query for [[DetalleVocalias]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getEquipoCategoriaJugadors()
+    public function getDetalleVocalias()
     {
-        return $this->hasMany(EquipoCategoriaJugador::class, ['id_jugador' => 'id']);
+        return $this->hasMany(DetalleVocalia::class, ['id_jugador' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Equipo]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEquipo()
+    {
+        return $this->hasOne(Equipo::class, ['id' => 'id_equipo']);
     }
 
     /**
