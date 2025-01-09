@@ -15,10 +15,15 @@ use Yii;
  * @property string $cedula
  * @property int $id_estado_civil
  * @property bool $estado
+ * @property int|null $id_equipo
+ * @property int|null $id_tipo_directivo
+ * @property int|null $id_campeonato
  *
- * @property DirectivaEquipos[] $directivaEquipos
+ * @property Campeonato $campeonato
  * @property DirectivaLiga[] $directivaLigas
+ * @property Equipo $equipo
  * @property Catalogos $estadoCivil
+ * @property Catalogos $tipoDirectivo
  */
 class Directivos extends \yii\db\ActiveRecord
 {
@@ -38,13 +43,16 @@ class Directivos extends \yii\db\ActiveRecord
         return [
             [['code', 'nombre', 'apellido', 'fecha_nacimiento', 'cedula', 'id_estado_civil', 'estado'], 'required'],
             [['fecha_nacimiento'], 'safe'],
-            [['id_estado_civil'], 'default', 'value' => null],
-            [['id_estado_civil'], 'integer'],
+            [['id_estado_civil', 'id_equipo', 'id_tipo_directivo', 'id_campeonato'], 'default', 'value' => null],
+            [['id_estado_civil', 'id_equipo', 'id_tipo_directivo', 'id_campeonato'], 'integer'],
             [['estado'], 'boolean'],
             [['code'], 'string', 'max' => 20],
             [['nombre', 'apellido'], 'string', 'max' => 100],
             [['cedula'], 'string', 'max' => 50],
+            [['id_campeonato'], 'exist', 'skipOnError' => true, 'targetClass' => Campeonato::class, 'targetAttribute' => ['id_campeonato' => 'id']],
             [['id_estado_civil'], 'exist', 'skipOnError' => true, 'targetClass' => Catalogos::class, 'targetAttribute' => ['id_estado_civil' => 'id']],
+            [['id_tipo_directivo'], 'exist', 'skipOnError' => true, 'targetClass' => Catalogos::class, 'targetAttribute' => ['id_tipo_directivo' => 'id']],
+            [['id_equipo'], 'exist', 'skipOnError' => true, 'targetClass' => Equipo::class, 'targetAttribute' => ['id_equipo' => 'id']],
         ];
     }
 
@@ -62,17 +70,20 @@ class Directivos extends \yii\db\ActiveRecord
             'cedula' => 'Cedula',
             'id_estado_civil' => 'Id Estado Civil',
             'estado' => 'Estado',
+            'id_equipo' => 'Id Equipo',
+            'id_tipo_directivo' => 'Id Tipo Directivo',
+            'id_campeonato' => 'Id Campeonato',
         ];
     }
 
     /**
-     * Gets query for [[DirectivaEquipos]].
+     * Gets query for [[Campeonato]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getDirectivaEquipos()
+    public function getCampeonato()
     {
-        return $this->hasMany(DirectivaEquipos::class, ['id_directivo' => 'id']);
+        return $this->hasOne(Campeonato::class, ['id' => 'id_campeonato']);
     }
 
     /**
@@ -86,6 +97,16 @@ class Directivos extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Equipo]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEquipo()
+    {
+        return $this->hasOne(Equipo::class, ['id' => 'id_equipo']);
+    }
+
+    /**
      * Gets query for [[EstadoCivil]].
      *
      * @return \yii\db\ActiveQuery
@@ -93,6 +114,16 @@ class Directivos extends \yii\db\ActiveRecord
     public function getEstadoCivil()
     {
         return $this->hasOne(Catalogos::class, ['id' => 'id_estado_civil']);
+    }
+
+    /**
+     * Gets query for [[TipoDirectivo]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTipoDirectivo()
+    {
+        return $this->hasOne(Catalogos::class, ['id' => 'id_tipo_directivo']);
     }
     public function nombreApellido()
     {

@@ -11,7 +11,7 @@ use yii\widgets\DetailView;
         'model' => $model,
         'attributes' => [
             //'id',
-            'code',
+            //'code',
             'nombres',
             'apellidos',
             'fecha_nacimiento',

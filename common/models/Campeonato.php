@@ -17,8 +17,9 @@ use Yii;
  *
  * @property CabeceraFechas[] $cabeceraFechas
  * @property CabeceraVocalia[] $cabeceraVocalias
- * @property DirectivaEquipos[] $directivaEquipos
+ * @property Directivos[] $directivos
  * @property Documentos[] $documentos
+ * @property Equipo[] $equipos
  * @property GrupoEquipo[] $grupoEquipos
  * @property NucleArbitros $nucleoArbitros
  */
@@ -37,16 +38,35 @@ class Campeonato extends \yii\db\ActiveRecord
      */
     public function rules()
     {
+        // return [
+        //     [['code', 'nombre', 'anio', 'id_nucleo_arbitros', 'estado'], 'required'],
+        //     [['id_nucleo_arbitros'], 'default', 'value' => null],
+        //     [['id_nucleo_arbitros'], 'integer'],
+        //     [['estado'], 'boolean'],
+        //     [['code'], 'string', 'max' => 20],
+        //     [['nombre'], 'string', 'max' => 250],
+        //     [['anio'], 'string', 'max' => 50],
+        //     [['detalle'], 'string', 'max' => 1000],
+        //     [['id_nucleo_arbitros'], 'exist', 'skipOnError' => true, 'targetClass' => NucleArbitros::class, 'targetAttribute' => ['id_nucleo_arbitros' => 'id']],
+        // ];
         return [
-            [['code', 'nombre', 'anio', 'id_nucleo_arbitros', 'estado'], 'required'],
-            [['id_nucleo_arbitros'], 'default', 'value' => null],
-            [['id_nucleo_arbitros'], 'integer'],
-            [['estado'], 'boolean'],
-            [['code'], 'string', 'max' => 20],
-            [['nombre'], 'string', 'max' => 250],
-            [['anio'], 'string', 'max' => 50],
-            [['detalle'], 'string', 'max' => 1000],
-            [['id_nucleo_arbitros'], 'exist', 'skipOnError' => true, 'targetClass' => NucleArbitros::class, 'targetAttribute' => ['id_nucleo_arbitros' => 'id']],
+            // Reglas de validación
+            [['nombre', 'anio'], 'required', 'message' => '{attribute} no puede estar vacío.'], // Campos obligatorios
+            [['id_nucleo_arbitros'], 'required', 'message' => 'Es obligatorio.'], // Campos obligatorios
+            [['id_nucleo_arbitros'], 'default', 'value' => null], // Valor predeterminado para id_nucleo_arbitros
+            [['id_nucleo_arbitros'], 'integer'], // Validación de tipo entero
+            [['estado'], 'boolean'], // Validación de tipo booleano
+            [['code'], 'string', 'max' => 20], // Validación de longitud máxima para 'code'
+            [['nombre'], 'string', 'max' => 250], // Validación de longitud máxima para 'nombre'
+            [['anio'], 'string', 'max' => 50], // Validación de longitud máxima para 'anio'
+            [['detalle'], 'string', 'max' => 1000], // Validación de longitud máxima para 'detalle'
+            [
+                ['id_nucleo_arbitros'], 
+                'exist', 
+                'skipOnError' => true, 
+                'targetClass' => NucleArbitros::class, 
+                'targetAttribute' => ['id_nucleo_arbitros' => 'id'] // Verifica la existencia en la tabla relacionada
+            ],
         ];
     }
 
@@ -87,13 +107,13 @@ class Campeonato extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[DirectivaEquipos]].
+     * Gets query for [[Directivos]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getDirectivaEquipos()
+    public function getDirectivos()
     {
-        return $this->hasMany(DirectivaEquipos::class, ['id_campeonato' => 'id']);
+        return $this->hasMany(Directivos::class, ['id_campeonato' => 'id']);
     }
 
     /**
@@ -104,6 +124,16 @@ class Campeonato extends \yii\db\ActiveRecord
     public function getDocumentos()
     {
         return $this->hasMany(Documentos::class, ['id_campeonato' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Equipos]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEquipos()
+    {
+        return $this->hasMany(Equipo::class, ['id_campeonato' => 'id']);
     }
 
     /**

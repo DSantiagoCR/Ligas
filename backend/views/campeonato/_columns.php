@@ -7,10 +7,10 @@ use yii\helpers\Url;
 $modelNucleoArbitros = NucleArbitros::find()->where(['estado'=>true])->all();
 $arrayNucleoArbitros = ArrayHelper::map($modelNucleoArbitros,'id','nombre');
 return [
-    [
-        'class' => 'kartik\grid\CheckboxColumn',
-        'width' => '20px',
-    ],
+    // [
+    //     'class' => 'kartik\grid\CheckboxColumn',
+    //     'width' => '20px',
+    // ],
     [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
@@ -22,6 +22,7 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'code',
+        'label'=>'Código',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
@@ -30,6 +31,7 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'anio',
+        'label'=>'Año',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
@@ -62,8 +64,8 @@ return [
                           'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
                           'data-request-method'=>'post',
                           'data-toggle'=>'tooltip',
-                          'data-confirm-title'=>'Are you sure?',
-                          'data-confirm-message'=>'Are you sure want to delete this item'], 
+                          'data-confirm-title'=>'Eliminación?',
+                          'data-confirm-message'=>'Está seguro de eliminar el registro ?'], 
     ],
 
 ];   

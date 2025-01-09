@@ -9,14 +9,14 @@ use Yii;
  *
  * @property int $id
  * @property int $id_cabecera_vocalia
- * @property int $id_equipo_jugador_categoria
  * @property int|null $ta
  * @property int|null $tr
  * @property int|null $goles
  * @property bool|null $entrega_carnet
+ * @property int $id_jugador
  *
  * @property CabeceraVocalia $cabeceraVocalia
- * @property EquipoCategoriaJugador $equipoJugadorCategoria
+ * @property Jugador $jugador
  */
 class DetalleVocalia extends \yii\db\ActiveRecord
 {
@@ -34,12 +34,12 @@ class DetalleVocalia extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_cabecera_vocalia', 'id_equipo_jugador_categoria'], 'required'],
-            [['id_cabecera_vocalia', 'id_equipo_jugador_categoria', 'ta', 'tr', 'goles'], 'default', 'value' => null],
-            [['id_cabecera_vocalia', 'id_equipo_jugador_categoria', 'ta', 'tr', 'goles'], 'integer'],
+            [['id_cabecera_vocalia', 'id_jugador'], 'required'],
+            [['id_cabecera_vocalia', 'ta', 'tr', 'goles', 'id_jugador'], 'default', 'value' => null],
+            [['id_cabecera_vocalia', 'ta', 'tr', 'goles', 'id_jugador'], 'integer'],
             [['entrega_carnet'], 'boolean'],
             [['id_cabecera_vocalia'], 'exist', 'skipOnError' => true, 'targetClass' => CabeceraVocalia::class, 'targetAttribute' => ['id_cabecera_vocalia' => 'id']],
-            [['id_equipo_jugador_categoria'], 'exist', 'skipOnError' => true, 'targetClass' => EquipoCategoriaJugador::class, 'targetAttribute' => ['id_equipo_jugador_categoria' => 'id']],
+            [['id_jugador'], 'exist', 'skipOnError' => true, 'targetClass' => Jugador::class, 'targetAttribute' => ['id_jugador' => 'id']],
         ];
     }
 
@@ -51,11 +51,11 @@ class DetalleVocalia extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'id_cabecera_vocalia' => 'Id Cabecera Vocalia',
-            'id_equipo_jugador_categoria' => 'Id Equipo Jugador Categoria',
             'ta' => 'Ta',
             'tr' => 'Tr',
             'goles' => 'Goles',
             'entrega_carnet' => 'Entrega Carnet',
+            'id_jugador' => 'Id Jugador',
         ];
     }
 
@@ -70,12 +70,12 @@ class DetalleVocalia extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[EquipoJugadorCategoria]].
+     * Gets query for [[Jugador]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getEquipoJugadorCategoria()
+    public function getJugador()
     {
-        return $this->hasOne(EquipoCategoriaJugador::class, ['id' => 'id_equipo_jugador_categoria']);
+        return $this->hasOne(Jugador::class, ['id' => 'id_jugador']);
     }
 }

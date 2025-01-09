@@ -8,22 +8,22 @@ $modelsEstadoCivil = Catalogos::find()->where(['id_catalogo'=>10])->all();
 $arrayEstadoCivil = ArrayHelper::map($modelsEstadoCivil,'id','valor');
 
 return [
-    [
-        'class' => 'kartik\grid\CheckboxColumn',
-        'width' => '20px',
-    ],
-    [
-        'class' => 'kartik\grid\SerialColumn',
-        'width' => '30px',
-    ],
+    // [
+    //     'class' => 'kartik\grid\CheckboxColumn',
+    //     'width' => '20px',
+    // ],
+    // [
+    //     'class' => 'kartik\grid\SerialColumn',
+    //     'width' => '30px',
+    // ],
         // [
         // 'class'=>'\kartik\grid\DataColumn',
         // 'attribute'=>'id',
     // ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'code',
-    ],
+    // [
+    //     'class'=>'\kartik\grid\DataColumn',
+    //     'attribute'=>'code',
+    // ],
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'nombre',
@@ -40,6 +40,7 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'cedula',
+        'label'=>'Cédula',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
@@ -69,8 +70,8 @@ return [
                           'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
                           'data-request-method'=>'post',
                           'data-toggle'=>'tooltip',
-                          'data-confirm-title'=>'Are you sure?',
-                          'data-confirm-message'=>'Are you sure want to delete this item'], 
+                          'data-confirm-title'=>'Eliminación',
+                          'data-confirm-message'=>'Está Seguro de eliminar el registro ?'], 
     ],
 
 ];   

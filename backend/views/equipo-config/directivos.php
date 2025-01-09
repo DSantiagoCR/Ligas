@@ -1,13 +1,16 @@
 <?php 
 use yii\helpers\Html;
+use yii\helpers\Url;
+
 
 ?>
-<div class="card" style="width: 50rem; padding: 10px;" p>
-    <p style="color:black"><b>Selección Directivos</b></p>
+<div class="card" style="padding: 10px;" >
+<h3 style="color:red">Directivos </h3>
+    <p style="color:black"><b>Equipo: <?= $modelEquipo->nombre ?></b></p>
     <p style="color:red"><b>Campeonato: <?=$modelCampeonato->nombre."($modelCampeonato->anio)"?></b></p>
 
     <div class="row">
-        <div class="col">
+        <div class="col-12 col-md-4">
 
             <label for="ddl_categoria" class="form-label text-primary">
                 Directivos
@@ -52,13 +55,15 @@ use yii\helpers\Html;
             </div>
 
         </div>
-        <div class="col">
+        <div class="col-12 col-md-8">
             <table class="table table-bordered border-primary">
                 <thead class="table-dark">
                     <tr>
                         <td> EQUIPO</td>
                         <td> DIRECTIVO</td>
                         <td> CARGO</td>
+                        <td> ESTADO</td>
+                        <td> ACCION</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -70,6 +75,42 @@ use yii\helpers\Html;
                         <td> <?= $objDE->equipo->nombre ?></td>
                         <td> <?= $objDE->directivo->nombreApellido() ?></td>
                         <td> <?= $objDE->tipoDirectivo->valor ?></td>
+                        <td>
+                            <?php
+                            if ($objDE->activo )
+                            { 
+                            ?>
+                            <i class="fas fa-check-circle" style="color:green"></i>
+                            <?php
+                            }
+                            else
+                            { 
+                            ?>
+                            <i class="fas fa-exclamation-circle" style="color:red"></i>
+                            <?php
+                            }                         
+                            ?>
+                        </td>
+                        <td>
+                            <?= Html::button('<i class="fas fa-trash-alt fa-xs"></i>', [
+                                'value' => Url::to(['directivos/index']),
+                                'class' => 'btn btn-outline-primary btn-sm',
+                                'id' => 'modalButton1',
+                                'title' => 'Eliminar',
+                            ]) ?>
+                            <?= Html::button('<i class="fas fa-trash-alt"></i>', [
+                                'class' => 'btn btn-danger btn-sm', // Estilos del botón
+                                'id' => 'deleteButton', // ID para capturar el evento
+                                'data-url' => Url::to(['equipo/delete', 'id' => 200]), // URL del controlador de eliminación
+                                'data-toggle' => 'tooltip',
+                                'role'=>'modal-remote',
+                                'title' => 'Eliminar',
+                                'data-confirm-title' => '¿Estás seguro?',
+                                'data-confirm-message' => '¿Estás seguro de que deseas eliminar este elemento?',
+                                'data-method' => 'post' // Método POST para la solicitud
+                            ]) ?>
+                        </td>
+                       
                     </tr>
                     <?php
             } //fin for

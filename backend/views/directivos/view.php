@@ -10,14 +10,27 @@ use yii\widgets\DetailView;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'code',
+            //'id',
+            //'code',
             'nombre',
             'apellido',
             'fecha_nacimiento',
             'cedula',
-            'id_estado_civil',
-            'estado:boolean',
+            //'id_estado_civil',      
+            [
+                'label'=>'Estado Civil ',                
+                'value'=>function($data){                   
+                    return $data->estadoCivil->valor;                
+                }
+            ],
+            //'estado:boolean',
+            [
+                'label'=>'Estado',                
+                'value'=>function($data){                   
+                    return  ($data->estado)?'Activado':'Desactivado';                 
+               
+                }
+            ],
         ],
     ]) ?>
 

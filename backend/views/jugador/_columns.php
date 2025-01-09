@@ -1,6 +1,9 @@
 <?php
 
 use common\models\Catalogos;
+use common\models\Equipo;
+use common\models\EquipoCategoria;
+use common\models\EquipoCategoriaJugador;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\helpers\Html;
@@ -22,10 +25,10 @@ return [
         // 'class'=>'\kartik\grid\DataColumn',
         // 'attribute'=>'id',
     // ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'code',
-    ],
+    // [
+    //     'class'=>'\kartik\grid\DataColumn',
+    //     'attribute'=>'code',
+    // ],
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'nombres',
@@ -71,6 +74,14 @@ return [
             return Html::img( $data->link_foto, ['width' => '200px']);
         }
 
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'id_equipo',
+        'value'=>function($data)
+        {
+            return $data->equipo->nombre;
+        }
     ],
     [
         'class'=>'\kartik\grid\BooleanColumn',

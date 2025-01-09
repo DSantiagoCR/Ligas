@@ -19,12 +19,13 @@ use Yii;
  * @property Catalogos $catalogo
  * @property Catalogos[] $catalogos
  * @property DetalleFecha[] $detalleFechas
- * @property DirectivaEquipos[] $directivaEquipos
  * @property DirectivaLiga[] $directivaLigas
  * @property Directivos[] $directivos
+ * @property Directivos[] $directivos0
  * @property Documentos[] $documentos
- * @property EquipoCategoria[] $equipoCategorias
- * @property EquipoCategoria[] $equipoCategorias0
+ * @property Equipo[] $equipos
+ * @property Equipo[] $equipos0
+ * @property Jugador[] $jugadors
  */
 class Catalogos extends \yii\db\ActiveRecord
 {
@@ -107,7 +108,6 @@ class Catalogos extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Catalogos::class, ['id_catalogo' => 'id']);
     }
-  
 
     /**
      * Gets query for [[DetalleFechas]].
@@ -117,16 +117,6 @@ class Catalogos extends \yii\db\ActiveRecord
     public function getDetalleFechas()
     {
         return $this->hasMany(DetalleFecha::class, ['id_estado_partido' => 'id']);
-    }
-
-    /**
-     * Gets query for [[DirectivaEquipos]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDirectivaEquipos()
-    {
-        return $this->hasMany(DirectivaEquipos::class, ['id_tipo_directivo' => 'id']);
     }
 
     /**
@@ -150,6 +140,16 @@ class Catalogos extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Directivos0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDirectivos0()
+    {
+        return $this->hasMany(Directivos::class, ['id_tipo_directivo' => 'id']);
+    }
+
+    /**
      * Gets query for [[Documentos]].
      *
      * @return \yii\db\ActiveQuery
@@ -160,22 +160,32 @@ class Catalogos extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[EquipoCategorias]].
+     * Gets query for [[Equipos]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getEquipoCategorias()
+    public function getEquipos()
     {
-        return $this->hasMany(EquipoCategoria::class, ['id_categoria' => 'id']);
+        return $this->hasMany(Equipo::class, ['id_genero' => 'id']);
     }
 
     /**
-     * Gets query for [[EquipoCategorias0]].
+     * Gets query for [[Equipos0]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getEquipoCategorias0()
+    public function getEquipos0()
     {
-        return $this->hasMany(EquipoCategoria::class, ['id_genero' => 'id']);
+        return $this->hasMany(Equipo::class, ['id_categoria' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Jugadors]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getJugadors()
+    {
+        return $this->hasMany(Jugador::class, ['id_estado_civil' => 'id']);
     }
 }

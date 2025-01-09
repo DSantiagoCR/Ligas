@@ -83,7 +83,7 @@ class JugadorController extends Controller
     {
         $request = Yii::$app->request;
         $model = new Jugador();  
-
+     
         if($request->isAjax){
             /*
             *   Process for ajax request

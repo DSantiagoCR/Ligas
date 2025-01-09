@@ -10,6 +10,7 @@ use hoaaah\ajaxcrud\BulkButtonWidget;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\search\EquipoSearch */
@@ -22,6 +23,7 @@ $this->registerJs($this->render('/evento/jquery.blockUI.js'));
 CrudAsset::register($this);
 
 ?>
+
 
 <div class="equipo-config-index">
     <?php
@@ -38,36 +40,54 @@ CrudAsset::register($this);
 				} 					
 		?>
 				<div class="col">
-					<div class="card" style="width: 30rem; padding: 10px;">
+					<div class="card" style=" padding: 10px;">
 						<div class="card-body">
 							<div class="row">
-								<div class="col-3">
+								<div class="col-12 col-md-3 ">
 									<img src="<?= $item->link_logotipo?>" class="card-img-top card-sm" alt="Descripción de la imagen"
-										style="width: 100px; height: 100px;">
+										style="width: 100%; height: 100%">
 
 								</div>
-								<div class="col-9">
+								<div class="col-12 col-md-9">
 									<h5 class="card-title text-primary fw-bold mb-3"
 										style="font-size: 1.25rem; letter-spacing: 0.05em;">
 										<?= $item->nombre ?>
 									</h5>
 									<p class="card-text"></p>
-									<?= Html::button('<i class="fas fa-trash-alt fa-xs"></i>', [
+									<!-- cat-gen -->
+									<?= Html::button('<i class="fas fa-people-arrows"></i>', [
 											'value' => Url::to(['modal-contenido','id_contenido'=>1,'id_equipo'=>$item->id]),
 											'class' => 'btn btn-outline-primary btn-sm showModalButton',
 											'id' => 'modalButton',//'catGenero'.$item->id,
 											'title' => 'Categoria-Genero',
 										]) ?>
-									<?= Html::button('<i class="fas fa-trash-alt fa-xs"></i>', [
+									<!-- directivos -->
+									<?= Html::button('<i class="fas fa-user-tie"></i>', [
 										'value' => Url::to(['modal-contenido','id_contenido'=>2,'id_equipo'=>$item->id]),
 										'class' => 'btn btn-outline-primary btn-sm showModalButton',
 										'id' => 'modalButton',//'dir'.$item->id,
 										'title' => 'Directivos',
 									]) ?>
-									<?=
-									 Html::a('<i class="glyphicon glyphicon-plus"></i>', ['modal-contenido','id_contenido'=>1,'id_equipo'=>$item->id],
-									 ['role'=>'myModal','title'=> 'Create new Equipos','class'=>'btn btn-default'])
-									 ?>
+									<!-- Agregar jugadores	 -->
+									<?= Html::button('<i class="far fa-address-card"></i>', [
+										'value' => Url::to(['modal-contenido','id_contenido'=>3,'id_equipo'=>$item->id]),
+										'class' => 'btn btn-outline-primary btn-sm showModalButton',
+										'id' => 'modalButton',//'dir'.$item->id,
+										'title' => 'Agregar Jugador',
+									]) ?>
+									<!-- Mostrar Jugadores - Categorias	 -->
+										<?= Html::button('<i class="fas fa-address-book"></i>', [
+										'value' => Url::to(['modal-contenido','id_contenido'=>3,'id_equipo'=>$item->id]),
+										'class' => 'btn btn-outline-primary btn-sm showModalButton',
+										'id' => 'modalButton',//'dir'.$item->id,
+										'title' => 'Mostrar Jugadores Categoria',
+									]) ?>
+									<!-- Mostrartest	 -->
+									 <?=Html::a('<i class="glyphicon glyphicon-plus"></i>', ['modal-contenido',
+									 'id_contenido'=>3,'id_equipo'=>$item->id],
+									 ['role'=>'modal-remote','title'=> 'Create new Jugadors','class'=>'btn btn-default'])
+									 ?>										
+									 
 								</div>
 							</div>
 						</div>
@@ -79,7 +99,7 @@ CrudAsset::register($this);
 				{ 	
 					$cont=0;				
 		?>
-			</div>
+			</div> <!-- div row -->
 		<?php
 				} 
 							
@@ -101,7 +121,7 @@ CrudAsset::register($this);
 
 <?php
 Modal::begin([
-    'title' => '<h4>Modal con AJAX</h4>',    
+    'title' => '',    
     'id' => 'myModal',
     'size' => Modal::SIZE_EXTRA_LARGE, // Tamaño del modal (modal-sm, modal-lg)
 ]);
@@ -110,6 +130,16 @@ echo "<div id='modalContent'></div>";
 
 Modal::end();
 ?>
+
+<?php 
+
+Modal::begin([
+    "id"=>"ajaxCrudModal",
+    "footer"=>"",// always need it for jquery plugin
+	'size' => Modal::SIZE_EXTRA_LARGE, // Tamaño del modal (modal-sm, modal-lg)
+])
+?>
+<?php Modal::end(); ?>
 
 <script>
 
