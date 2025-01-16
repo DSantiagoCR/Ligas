@@ -1,7 +1,6 @@
 <?php
 
 use common\models\Campeonato;
-use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\bootstrap4\Modal;
 use kartik\grid\GridView;

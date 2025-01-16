@@ -23,6 +23,13 @@ use yii\widgets\DetailView;
                     return $data->estadoCivil->valor;                
                 }
             ],
+              //'id_campeonato',
+              [
+                'label' => 'CAMPEONATO',
+                'value' => function ($data) {
+                    return ($data->id_campeonato)?$data->campeonato->nombre:'';
+                }
+            ],
             //'estado:boolean',
             [
                 'label'=>'Estado',                

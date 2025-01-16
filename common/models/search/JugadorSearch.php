@@ -18,7 +18,7 @@ class JugadorSearch extends Jugador
     public function rules()
     {
         return [
-            [['id', 'id_estado_civil', 'hijos'], 'integer'],
+            [['id', 'id_estado_civil', 'hijos','id_equipo'], 'integer'],
             [['code', 'nombres', 'apellidos', 'fecha_nacimiento', 'cedula', 'celular'], 'safe'],
             [['estado'], 'boolean'],
         ];
@@ -42,6 +42,9 @@ class JugadorSearch extends Jugador
      */
     public function search($params)
     {
+        // echo '<pre>';
+        // print_r($params);
+        // die();
         $query = Jugador::find();
 
         $dataProvider = new ActiveDataProvider([
@@ -62,6 +65,7 @@ class JugadorSearch extends Jugador
             'id_estado_civil' => $this->id_estado_civil,
             'hijos' => $this->hijos,
             'estado' => $this->estado,
+            'id_equipo' => $this->id_equipo,
         ]);
 
         $query->andFilterWhere(['like', 'code', $this->code])

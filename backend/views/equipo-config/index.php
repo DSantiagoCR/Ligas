@@ -55,12 +55,12 @@ CrudAsset::register($this);
 									</h5>
 									<p class="card-text"></p>
 									<!-- cat-gen -->
-									<?= Html::button('<i class="fas fa-people-arrows"></i>', [
+									<!-- <?= Html::button('<i class="fas fa-people-arrows"></i>', [
 											'value' => Url::to(['modal-contenido','id_contenido'=>1,'id_equipo'=>$item->id]),
 											'class' => 'btn btn-outline-primary btn-sm showModalButton',
 											'id' => 'modalButton',//'catGenero'.$item->id,
 											'title' => 'Categoria-Genero',
-										]) ?>
+										]) ?> -->
 									<!-- directivos -->
 									<?= Html::button('<i class="fas fa-user-tie"></i>', [
 										'value' => Url::to(['modal-contenido','id_contenido'=>2,'id_equipo'=>$item->id]),

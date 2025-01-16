@@ -81,6 +81,7 @@ return [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
         'vAlign' => 'middle',
+        'template' => '{view} {update} {delete} {custom}',
         'urlCreator' => function ($action, $model, $key, $index) {
             return Url::to([$action, 'id' => $key]);
         },
@@ -95,6 +96,16 @@ return [
             'data-toggle' => 'tooltip',
             'data-confirm-title' => 'Are you sure?',
             'data-confirm-message' => 'Are you sure want to delete this item'
+        ],
+        'buttons' => [
+            'custom' => function ($url, $model, $key) {
+                return Html::a('<i class="fa fa-cogs"></i>', ['modal-contenido', 'id' => $key], [
+                    'role' => 'modal-remote',
+                    'title' => 'Custom Action',
+                    'data-toggle' => 'tooltip',
+                    'class' => 'btn btn-info btn-sm',
+                ]);
+            },
         ],
     ],
 

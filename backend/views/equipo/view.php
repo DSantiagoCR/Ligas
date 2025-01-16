@@ -22,13 +22,7 @@ use yii\helpers\Html;
                     return Html::a(substr($data->link_logotipo, 0, 40) . '...', $data->link_logotipo, ['target' => '_blank']);
                 }
             ],
-            //'activo:boolean',
-            [
-                'label' => 'Estado ',
-                'value' => function ($data) {
-                    return ($data->activo) ? 'Activado' : 'Desactivado';
-                }
-            ],
+           
             //'id_genero',
             [
                 'label' => 'Género',
@@ -50,7 +44,14 @@ use yii\helpers\Html;
                     return ($data->id_campeonato)?$data->campeonato->nombre:'';
                 }
             ],
-            'activo:boolean',
+             //'activo:boolean',
+             [
+                'label' => 'Estado ',
+                'value' => function ($data) {
+                    return ($data->activo) ? 'Activado' : 'Desactivado';
+                }
+            ],
+       
         ],
     ]) ?>
 

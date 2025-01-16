@@ -11,6 +11,10 @@ use yii\helpers\Html;
 $modelsEstadoCivil = Catalogos::find()->where(['id_catalogo'=>10])->all();
 $arrayEstadoCivil = ArrayHelper::map($modelsEstadoCivil,'id','valor');
 
+$modelEquipos = Equipo::find()->where(['activo'=>1,'id_campeonato' => $modelCampeonato->id])->all();
+$arrayEquipos = ArrayHelper::map($modelEquipos, 'id', function($model) {  
+    return $model->nombre . ' - ' . $model->categoria->valor . ' - '. $model->genero->valor;
+});
 
 return [
     [
@@ -78,9 +82,11 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'id_equipo',
+        'label'=>'Equipos',
+        'filter'=>$arrayEquipos,
         'value'=>function($data)
         {
-            return $data->equipo->nombre;
+            return $data->equipo->nombre . ' - '.$data->equipo->genero->valor . ' - '.$data->equipo->categoria->valor;
         }
     ],
     [
