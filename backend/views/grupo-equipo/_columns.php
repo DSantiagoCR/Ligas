@@ -1,6 +1,5 @@
 <?php
 use yii\helpers\Url;
-use kartik\grid\GridView;
 
 return [
     // [
@@ -11,30 +10,36 @@ return [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
     ],
-    [
-        'class' => 'kartik\grid\ExpandRowColumn',
-        'width' => '50px',
-        'value' => function ($model, $key, $index, $column) {
-            return GridView::ROW_COLLAPSED;
-        },
-        'detailUrl' => Url::to(['/grupo-equipo/index1']),
-        'headerOptions' => ['class' => 'kartik-sheet-style']
-    ],
         // [
         // 'class'=>'\kartik\grid\DataColumn',
         // 'attribute'=>'id',
     // ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'code',
+        'attribute'=>'id_campeonato',
+        'label'=>'Campeonato',
+        'value'=>function($model)
+        {
+            return $model->campeonato->nombre;
+        }
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'nombre',
+        'attribute'=>'id_grupo',
+        'label'=>'Grupo',
+        'value'=>function($model)
+        {
+            return $model->grupo->nombre;
+        }
     ],
     [
-        'class'=>'\kartik\grid\BooleanColumn',
-        'attribute'=>'estado',
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'id_equipo',
+        'label'=>'Equipo',
+        'value'=>function($model)
+        {
+            return $model->equipo->nombre;
+        }
     ],
     [
         'class' => 'kartik\grid\ActionColumn',
