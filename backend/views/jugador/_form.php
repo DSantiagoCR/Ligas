@@ -19,7 +19,7 @@ $modelCampeonato = Campeonato::find()->where(['estado' => true])->one();
 // $modelEquipos = Equipo::find()->where(['id_campeonato' => $modelCampeonato->id])->all();
 // $arrayEsquipos = ArrayHelper::map($modelEquipos, 'id', 'nombre');
 
-$modelEquipos = Equipo::find()->where(['activo'=>1,'id_campeonato' => $modelCampeonato->id])->all();
+$modelEquipos = Equipo::find()->where(['activo'=>true,'id_campeonato' => $modelCampeonato->id])->all();
 $arrayEquipos = ArrayHelper::map($modelEquipos, 'id', function($model) {  
     return $model->nombre . ' - ' . $model->categoria->valor . ' - '. $model->genero->valor;
 });

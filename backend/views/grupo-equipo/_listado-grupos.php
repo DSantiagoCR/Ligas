@@ -28,11 +28,11 @@ CrudAsset::register($this);
             'toolbar'=> [
                 ['content'=>
                     Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create','id'=>$id_equipo],
-                        ['role'=>'modal-remote','title'=> 'Crear Nueva Imagen Cabina','class'=>'btn btn-default'])
-//                    Html::a('<i class="glyphicon glyphicon-repeat"></i>', [''],
-//                        ['data-pjax'=>1, 'class'=>'btn btn-default', 'title'=>'Reset Grid']).
-//                    '{toggleData}'
-//                    '{export}'
+                        ['role'=>'modal-remote','title'=> 'Agregar Equipo','class'=>'btn btn-default'])
+                //    Html::a('<i class="glyphicon glyphicon-repeat"></i>', [''],
+                //        ['data-pjax'=>1, 'class'=>'btn btn-default', 'title'=>'Reset Grid']).
+                //    '{toggleData}'.
+                //    '{export}'
                 ],
             ],
             'striped' => true,
@@ -40,7 +40,7 @@ CrudAsset::register($this);
             'responsive' => true,
             'panel' => [
                 'type' => 'primary',
-                'heading' => '<i class="fa fa-address-book"></i> Listado Imagenes',
+                'heading' => '<i class="fa fa-address-book"></i> Listado Equipos',
                 'before'=>'<em>* Cambie el tamaño de las columnas de la tabla como si fuera una hoja de cálculo arrastrando los bordes de las columnas.</em>',
 
             ]

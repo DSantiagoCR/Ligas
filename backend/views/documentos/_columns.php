@@ -13,10 +13,10 @@ $modelsCatalogo = Catalogos::find()->where(['id_catalogo'=>25])->all();
 $arrayCatalogo = ArrayHelper::map($modelsCatalogo,'id','valor');
 
 return [
-    [
-        'class' => 'kartik\grid\CheckboxColumn',
-        'width' => '20px',
-    ],
+    // [
+    //     'class' => 'kartik\grid\CheckboxColumn',
+    //     'width' => '20px',
+    // ],
     [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',

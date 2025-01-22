@@ -3,7 +3,8 @@
 use common\models\NucleArbitros;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+//use yii\widgets\ActiveForm;
+use yii\bootstrap5\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Campeonato */
@@ -15,7 +16,9 @@ $arrayNucleoArbitros = ArrayHelper::map($modelNucleArbitros,'id','nombre');
 
 <div class="campeonato-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'layout'=>'horizontal'
+    ]); ?>
 
     <?= $form->field($model, 'code',['errorOptions' => ['class' => 'text-danger']])->textInput(['maxlength' => true])->label('Código')?>
 
@@ -24,9 +27,9 @@ $arrayNucleoArbitros = ArrayHelper::map($modelNucleArbitros,'id','nombre');
     <?= $form->field($model, 'anio',['errorOptions' => ['class' => 'text-danger']])->textInput(['maxlength' => true])->label('Año') ?>
 
     <?= $form->field($model, 'id_nucleo_arbitros',['errorOptions' => ['class' => 'text-danger']])->dropDownList($arrayNucleoArbitros,['prompt'=>'Seleccione Opción'])->label('Nucleo Arbitros'); ?>
-
-    <?= $form->field($model, 'estado')->checkbox(['label' => 'Activado'])->label(false) ?>
-
+    <div class="form-check form-switch">
+        <?= $form->field($model, 'estado')->checkbox() ?>
+    </div>
     <?= $form->field($model, 'detalle')->textarea(['rows' => 4]) ?>
 
   

@@ -37,7 +37,7 @@ class NucleArbitrosController extends Controller
      * @return mixed
      */
     public function actionIndex()
-    {    
+    {
         $searchModel = new NucleArbitrosSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -54,19 +54,19 @@ class NucleArbitrosController extends Controller
      * @return mixed
      */
     public function actionView($id)
-    {   
+    {
         $request = Yii::$app->request;
-        if($request->isAjax){
+        if ($request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> "Nucleo Arbitros ",
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $this->findModel($id),
-                    ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                            Html::a('Editar',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
-        }else{
+                'title' => "Nucleo Arbitros ",
+                'content' => $this->renderAjax('view', [
+                    'model' => $this->findModel($id),
+                ]),
+                'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                    Html::a('Editar', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+            ];
+        } else {
             return $this->render('view', [
                 'model' => $this->findModel($id),
             ]);
@@ -82,44 +82,59 @@ class NucleArbitrosController extends Controller
     public function actionCreate()
     {
         $request = Yii::$app->request;
-        $model = new NucleArbitros();  
+        $model = new NucleArbitros();
 
-        if($request->isAjax){
+        if ($request->isAjax) {
             /*
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            if($request->isGet){
+            if ($request->isGet) {
                 return [
-                    'title'=> "Crear Nucleo Arbitros",
-                    'content'=>$this->renderAjax('create', [
+                    'title' => "Crear Nucleo Arbitros",
+                    'content' => $this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-        
-                ];         
-            }else if($model->load($request->post()) && $model->save()){
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                        Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+
+                ];
+            } else if ($model->load($request->post()) && $model->validate()) {
+                if ($model->estado) {
+                    $this->cambia_estado_nucleo_arbitros_all();
+                }
+                if ($model->save()) {
+                    return [
+                        'forceReload' => '#crud-datatable-pjax',
+                        'title' => "Crear Nucleo Arbitros",
+                        'content' => '<span class="text-success">Create NucleArbitros success</span>',
+                        'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                            Html::a('Create More', ['create'], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+
+                    ];
+                } else {
+                    return [
+                        'title' => "Crear Nucleo Arbitros",
+                        'content' => $this->renderAjax('create', [
+                            'model' => $model,
+                        ]),
+                        'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                            Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+
+                    ];
+                }
+            } else {
                 return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Crear Nucleo Arbitros",
-                    'content'=>'<span class="text-success">Create NucleArbitros success</span>',
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                            Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
-        
-                ];         
-            }else{           
-                return [
-                    'title'=> "Crear Nucleo Arbitros",
-                    'content'=>$this->renderAjax('create', [
+                    'title' => "Crear Nucleo Arbitros",
+                    'content' => $this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
-        
-                ];         
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                        Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+
+                ];
             }
-        }else{
+        } else {
             /*
             *   Process for non-ajax request
             */
@@ -131,7 +146,6 @@ class NucleArbitrosController extends Controller
                 ]);
             }
         }
-       
     }
 
     /**
@@ -144,43 +158,57 @@ class NucleArbitrosController extends Controller
     public function actionUpdate($id)
     {
         $request = Yii::$app->request;
-        $model = $this->findModel($id);       
+        $model = $this->findModel($id);
 
-        if($request->isAjax){
+        if ($request->isAjax) {
             /*
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            if($request->isGet){
+            if ($request->isGet) {
                 return [
-                    'title'=> "Actualizar Nucleo Arbitros #".$id,
-                    'content'=>$this->renderAjax('update', [
+                    'title' => "Actualizar Nucleo Arbitros #" . $id,
+                    'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
-                ];         
-            }else if($model->load($request->post()) && $model->save()){
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                        Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+                ];
+            } else if ($model->load($request->post()) && $model->validate()) {
+                if ($model->estado) {
+                    $this->cambia_estado_nucleo_arbitros_all();
+                }
+                if ($model->save()) {
+                    return [
+                        'forceReload' => '#crud-datatable-pjax',
+                        'title' => "Nucleo Arbitros ",
+                        'content' => $this->renderAjax('view', [
+                            'model' => $model,
+                        ]),
+                        'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                            Html::a('Editar', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+                    ];
+                } else {
+                    return [
+                        'title' => "Actualizar Nucleo Arbitros:No se pudo Actualizar" . $id,
+                        'content' => $this->renderAjax('update', [
+                            'model' => $model,
+                        ]),
+                        'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                            Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+                    ];
+                }
+            } else {
                 return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Nucleo Arbitros ",
-                    'content'=>$this->renderAjax('view', [
+                    'title' => "Actualizar Nucleo Arbitros #" . $id,
+                    'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                            Html::a('Editar',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
-            }else{
-                 return [
-                    'title'=> "Actualizar Nucleo Arbitros #".$id,
-                    'content'=>$this->renderAjax('update', [
-                        'model' => $model,
-                    ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
-                ];        
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                        Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+                ];
             }
-        }else{
+        } else {
             /*
             *   Process for non-ajax request
             */
@@ -206,23 +234,21 @@ class NucleArbitrosController extends Controller
         $request = Yii::$app->request;
         $this->findModel($id)->delete();
 
-        if($request->isAjax){
+        if ($request->isAjax) {
             /*
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceCerrar'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
+            return ['forceCerrar' => true, 'forceReload' => '#crud-datatable-pjax'];
+        } else {
             /*
             *   Process for non-ajax request
             */
             return $this->redirect(['index']);
         }
-
-
     }
 
-     /**
+    /**
      * Delete multiple existing NucleArbitros model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
@@ -230,27 +256,26 @@ class NucleArbitrosController extends Controller
      * @return mixed
      */
     public function actionBulkdelete()
-    {        
+    {
         $request = Yii::$app->request;
-        $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
-        foreach ( $pks as $pk ) {
+        $pks = explode(',', $request->post('pks')); // Array or selected records primary keys
+        foreach ($pks as $pk) {
             $model = $this->findModel($pk);
             $model->delete();
         }
 
-        if($request->isAjax){
+        if ($request->isAjax) {
             /*
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceCerrar'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
+            return ['forceCerrar' => true, 'forceReload' => '#crud-datatable-pjax'];
+        } else {
             /*
             *   Process for non-ajax request
             */
             return $this->redirect(['index']);
         }
-       
     }
 
     /**
@@ -267,5 +292,9 @@ class NucleArbitrosController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    private function cambia_estado_nucleo_arbitros_all()
+    {
+        NucleArbitros::updateAll(['estado' => false]);
     }
 }

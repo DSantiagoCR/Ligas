@@ -60,22 +60,22 @@ $modelCampeonato = Campeonato::find()->where(['estado' => true])->one();
                         'type' => 'primary',
                         'heading' => '<i class="glyphicon glyphicon-list"></i> Nucleo Arbitros ',
                         'before' => '',
-                        'after' => BulkButtonWidget::widget([
-                            'buttons' => Html::a(
-                                '<i class="glyphicon glyphicon-trash"></i>&nbsp; Delete All',
-                                ["bulkdelete"],
-                                [
-                                    "class" => "btn btn-danger btn-xs",
-                                    'role' => 'modal-remote-bulk',
-                                    'data-confirm' => false,
-                                    'data-method' => false, // for overide yii data api
-                                    'data-request-method' => 'post',
-                                    'data-confirm-title' => 'Are you sure?',
-                                    'data-confirm-message' => 'Are you sure want to delete this item'
-                                ]
-                            ),
-                        ]) .
-                            '<div class="clearfix"></div>',
+                        // 'after' => BulkButtonWidget::widget([
+                        //     'buttons' => Html::a(
+                        //         '<i class="glyphicon glyphicon-trash"></i>&nbsp; Delete All',
+                        //         ["bulkdelete"],
+                        //         [
+                        //             "class" => "btn btn-danger btn-xs",
+                        //             'role' => 'modal-remote-bulk',
+                        //             'data-confirm' => false,
+                        //             'data-method' => false, // for overide yii data api
+                        //             'data-request-method' => 'post',
+                        //             'data-confirm-title' => 'Are you sure?',
+                        //             'data-confirm-message' => 'Are you sure want to delete this item'
+                        //         ]
+                        //     ),
+                        // ]) .
+                        //     '<div class="clearfix"></div>',
                     ]
                 ]) ?>
             </div>
@@ -85,5 +85,6 @@ $modelCampeonato = Campeonato::find()->where(['estado' => true])->one();
 <?php Modal::begin([
     "id" => "ajaxCrudModal",
     "footer" => "", // always need it for jquery plugin
+    "size"=>Modal::SIZE_EXTRA_LARGE
 ]) ?>
 <?php Modal::end(); ?>

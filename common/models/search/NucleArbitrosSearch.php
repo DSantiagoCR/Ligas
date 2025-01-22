@@ -2,6 +2,7 @@
 
 namespace common\models\search;
 
+use common\models\Campeonato;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -42,6 +43,7 @@ class NucleArbitrosSearch extends NucleArbitros
      */
     public function search($params)
     {
+       
         $query = NucleArbitros::find();
 
         $dataProvider = new ActiveDataProvider([
