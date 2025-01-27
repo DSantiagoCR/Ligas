@@ -10,10 +10,31 @@ use yii\widgets\DetailView;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'id_campeonato',
-            'id_grupo',
-            'id_equipo',
+            //'id',
+            [
+                'attribute'=>'id_campeonato',
+                'label'=>'Campeonato',
+                'value'=>function($data){
+                    return $data->campeonato->nombre;
+                }
+            ],
+            //'id_campeonato',
+            //'id_grupo',
+            [
+                'attribute'=>'id_grupo',
+                'label'=>'Grupo',
+                'value'=>function($data){
+                    return $data->grupo->nombre;
+                }
+            ],
+            //'id_equipo',
+            [
+                'attribute'=>'id_equipo',
+                'label'=>'Equipo',
+                'value'=>function($data){
+                    return $data->equipo->nombre;
+                }
+            ],
         ],
     ]) ?>
 

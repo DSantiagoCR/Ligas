@@ -3,9 +3,8 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\GrupoEquipo;
-use common\models\Grupos;
-use common\models\search\GrupoEquipoSearch;
+use common\models\DetalleFecha;
+use common\models\search\DetalleFechaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -13,9 +12,9 @@ use \yii\web\Response;
 use yii\helpers\Html;
 
 /**
- * GrupoEquipoController implements the CRUD actions for GrupoEquipo model.
+ * DetalleFechaController implements the CRUD actions for DetalleFecha model.
  */
-class GrupoEquipoController extends Controller
+class DetalleFechaController extends Controller
 {
     /**
      * @inheritdoc
@@ -34,12 +33,12 @@ class GrupoEquipoController extends Controller
     }
 
     /**
-     * Lists all GrupoEquipo models.
+     * Lists all DetalleFecha models.
      * @return mixed
      */
     public function actionIndex()
     {    
-        $searchModel = new GrupoEquipoSearch();
+        $searchModel = new DetalleFechaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -47,32 +46,10 @@ class GrupoEquipoController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-    public function actionIndex1()
-    {
-        /*FC: 2023-05-19    CP: Santiago C      FM:         MP
-        Note: Esta accion, es llamada para realizar el filtro en el GRID de GRUPOS, muestra las imagenes asociadas
-        */    
 
-        if (isset($_POST['expandRowKey'])) {
-            // echo '<pre>';
-            // var_dump('hola');
-            // die();
-            $searchModel = new GrupoEquipoSearch();
-            $dataProvider = $searchModel->searchGrupoEquipo(Yii::$app->request->queryParams,$_POST['expandRowKey']);
-
-            return $this->renderPartial('_listado-grupos', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-                'id_equipo'=>$_POST['expandRowKey'],
-            ]);
-
-        } else {
-            return '<div class="alert alert-danger">Datos no Encontrados</div>';
-        }
-    }
 
     /**
-     * Displays a single GrupoEquipo model.
+     * Displays a single DetalleFecha model.
      * @param integer $id
      * @return mixed
      */
@@ -81,14 +58,13 @@ class GrupoEquipoController extends Controller
         $request = Yii::$app->request;
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
-            $modelGrupoEquipo = GrupoEquipo::findOne($id);
             return [
-                    'title'=>'<b>Sección:</b> <span style="color:red"> '. $modelGrupoEquipo->grupo->catalogo->valor.'</span>',
+                    'title'=> "DetalleFecha #".$id,
                     'content'=>$this->renderAjax('view', [
                         'model' => $this->findModel($id),
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                            Html::a('Editar',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                            Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
                 ];    
         }else{
             return $this->render('view', [
@@ -98,57 +74,48 @@ class GrupoEquipoController extends Controller
     }
 
     /**
-     * Creates a new GrupoEquipo model.
+     * Creates a new DetalleFecha model.
      * For ajax request will return json object
      * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($id_grupo)
-    {     
-        
+    public function actionCreate()
+    {
         $request = Yii::$app->request;
-        $model = new GrupoEquipo();  
-        $model->id_grupo = $id_grupo;
-         
+        $model = new DetalleFecha();  
+
         if($request->isAjax){
             /*
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
-        // echo '<pre>';
-        // print_r($id_grupo);
-        // die();
                 return [
-                    'title'=> "Crear Nuevo Grupo",
+                    'title'=> "Create new DetalleFecha",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
         
                 ];         
-            }else if($model->load($request->post()) && $model->validate() ){
-
-                //revisamos si ya existe el equipo, en algun otro grupo, del mismo campeonato, de la misma etapa
-
-                $model->save();
+            }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Crear Nuevo Grupo",
-                    'content'=>'<span class="text-success">Create GrupoEquipo success</span>',
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"])
-                            //Html::a('Crear Nuevo',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                    'title'=> "Create new DetalleFecha",
+                    'content'=>'<span class="text-success">Create DetalleFecha success</span>',
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                            Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
         
                 ];         
             }else{           
                 return [
-                    'title'=> "Crear Nuevo Grupo",
+                    'title'=> "Create new DetalleFecha",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Crear Nuevo',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
         
                 ];         
             }
@@ -168,7 +135,7 @@ class GrupoEquipoController extends Controller
     }
 
     /**
-     * Updates an existing GrupoEquipo model.
+     * Updates an existing DetalleFecha model.
      * For ajax request will return json object
      * and for non-ajax request if update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
@@ -186,31 +153,31 @@ class GrupoEquipoController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Update GrupoEquipo #".$id,
+                    'title'=> "Update DetalleFecha #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
                 ];         
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "GrupoEquipo #".$id,
+                    'title'=> "DetalleFecha #".$id,
                     'content'=>$this->renderAjax('view', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                            Html::a('Editar',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                            Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
                 ];    
             }else{
                  return [
-                    'title'=> "Update GrupoEquipo #".$id,
+                    'title'=> "Update DetalleFecha #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
                 ];        
             }
         }else{
@@ -228,7 +195,7 @@ class GrupoEquipoController extends Controller
     }
 
     /**
-     * Delete an existing GrupoEquipo model.
+     * Delete an existing DetalleFecha model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -256,7 +223,7 @@ class GrupoEquipoController extends Controller
     }
 
      /**
-     * Delete multiple existing GrupoEquipo model.
+     * Delete multiple existing DetalleFecha model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -287,54 +254,18 @@ class GrupoEquipoController extends Controller
     }
 
     /**
-     * Finds the GrupoEquipo model based on its primary key value.
+     * Finds the DetalleFecha model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return GrupoEquipo the loaded model
+     * @return DetalleFecha the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = GrupoEquipo::findOne($id)) !== null) {
+        if (($model = DetalleFecha::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-    }
-
-    private function revisa_equipo_duplicado_en_grupo($model_grupo_equipo)
-    {        
-        $modelGrupoEquipo = GrupoEquipo::find()
-        ->where(['id_campeonato'=>$model_grupo_equipo->id_campeonato])
-        ->andWhere(['id_grupo'=>$model_grupo_equipo->id_grupo])
-        ->andWhere(['id_equipo'=>$model_grupo_equipo->id_equipo])
-        ->one();
-        if ($modelGrupoEquipo)
-        {
-            return false;
-        }
-
-        return true;
-    }
-    private function revisa_equipo_duplicado_en_etapa($model_grupo_equipo)
-    {        
-        $modelGrupoEquipos = GrupoEquipo::find()
-        ->where(['id_campeonato'=>$model_grupo_equipo->id_campeonato])      
-        ->andWhere(['id_equipo'=>$model_grupo_equipo->id_equipo])
-        ->all();
-
-        // $modelGrupos = Grupos::find()
-        // ->where(['id_campeonato'=>$model_grupo_equipo->id_campeonato])
-        // ->all();
-
-        // foreach($modelGrupoEquipos as $model1)
-        // {
-        //     if()
-        //     {
-
-        //     }
-        // }
-
-        return true;
     }
 }

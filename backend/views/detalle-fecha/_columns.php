@@ -2,10 +2,10 @@
 use yii\helpers\Url;
 
 return [
-    // [
-    //     'class' => 'kartik\grid\CheckboxColumn',
-    //     'width' => '20px',
-    // ],
+    [
+        'class' => 'kartik\grid\CheckboxColumn',
+        'width' => '20px',
+    ],
     [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
@@ -16,31 +16,40 @@ return [
     // ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'id_campeonato',
-        'label'=>'Campeonato',
-        'value'=>function($model)
-        {
-            return $model->campeonato->nombre;
-        }
+        'attribute'=>'id_cabecera_fecha',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'id_grupo',
-        'label'=>'Grupo',
-        'value'=>function($model)
-        {
-            return $model->grupo->nombre;
-        }
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'id_equipo',
-        'label'=>'Equipo',
-        'value'=>function($model)
-        {
-            return $model->equipo->nombre;
-        }
+        'attribute'=>'id_grupo_equipo1',
     ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'id_grupo_equipo2',
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'goles_equipo1',
+    ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'goles_equipo2',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'hora_inicio',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'id_estado_partido',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'estado',
+    // ],
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
@@ -54,8 +63,8 @@ return [
                           'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
                           'data-request-method'=>'post',
                           'data-toggle'=>'tooltip',
-                          'data-confirm-title'=>'Eliminar',
-                          'data-confirm-message'=>'Esta seguro de eliminar el registro?'], 
+                          'data-confirm-title'=>'Are you sure?',
+                          'data-confirm-message'=>'Are you sure want to delete this item'], 
     ],
 
 ];   

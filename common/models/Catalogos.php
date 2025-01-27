@@ -25,6 +25,7 @@ use Yii;
  * @property Documentos[] $documentos
  * @property Equipo[] $equipos
  * @property Equipo[] $equipos0
+ * @property Grupos[] $grupos
  * @property Jugador[] $jugadors
  */
 class Catalogos extends \yii\db\ActiveRecord
@@ -177,6 +178,16 @@ class Catalogos extends \yii\db\ActiveRecord
     public function getEquipos0()
     {
         return $this->hasMany(Equipo::class, ['id_categoria' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Grupos]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGrupos()
+    {
+        return $this->hasMany(Grupos::class, ['id_catalogo' => 'id']);
     }
 
     /**

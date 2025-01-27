@@ -27,7 +27,7 @@ CrudAsset::register($this);
             'columns' => require(__DIR__.'/_columns.php'),
             'toolbar'=> [
                 ['content'=>
-                    Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create','id'=>$id_equipo],
+                    Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create','id_grupo'=>$id_equipo],
                         ['role'=>'modal-remote','title'=> 'Agregar Equipo','class'=>'btn btn-default'])
                 //    Html::a('<i class="glyphicon glyphicon-repeat"></i>', [''],
                 //        ['data-pjax'=>1, 'class'=>'btn btn-default', 'title'=>'Reset Grid']).

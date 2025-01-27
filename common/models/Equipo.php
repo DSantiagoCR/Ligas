@@ -44,7 +44,7 @@ class Equipo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre', 'activo','fecha_fundacion','id_genero','id_categoria','id_campeonato'], 'required'],
+            [['nombre', 'activo','fecha_fundacion','id_genero','id_categoria'], 'required'],
             [['fecha_fundacion'], 'safe'],
             [['activo'], 'boolean'],
             [['id_genero', 'id_categoria', 'id_campeonato'], 'default', 'value' => null],
@@ -70,9 +70,9 @@ class Equipo extends \yii\db\ActiveRecord
             'fecha_fundacion' => 'Fecha Fundacion',
             'link_logotipo' => 'Link Logotipo',
             'activo' => 'Activo',
-            'id_genero' => 'Id Genero',
-            'id_categoria' => 'Id Categoria',
-            'id_campeonato' => 'Id Campeonato',
+            'id_genero' => 'Genero',
+            'id_categoria' => 'Categoria',
+            'id_campeonato' => 'Campeonato',
         ];
     }
 

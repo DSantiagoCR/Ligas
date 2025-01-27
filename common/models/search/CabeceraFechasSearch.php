@@ -5,12 +5,12 @@ namespace common\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Directivos;
+use common\models\CabeceraFechas;
 
 /**
- * DirectivosSearch represents the model behind the search form about `common\models\Directivos`.
+ * CabeceraFechasSearch represents the model behind the search form about `\common\models\CabeceraFechas`.
  */
-class DirectivosSearch extends Directivos
+class CabeceraFechasSearch extends CabeceraFechas
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class DirectivosSearch extends Directivos
     public function rules()
     {
         return [
-            [['id', 'id_estado_civil','id_equipo'], 'integer'],
-            [['code', 'nombre', 'apellido', 'fecha_nacimiento', 'cedula'], 'safe'],
+            [['id', 'id_campeonato', 'id_estado_fecha'], 'integer'],
+            [['dia', 'fecha'], 'safe'],
             [['estado'], 'boolean'],
         ];
     }
@@ -42,7 +42,7 @@ class DirectivosSearch extends Directivos
      */
     public function search($params)
     {
-        $query = Directivos::find();
+        $query = CabeceraFechas::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -58,17 +58,14 @@ class DirectivosSearch extends Directivos
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'fecha_nacimiento' => $this->fecha_nacimiento,
-            'id_estado_civil' => $this->id_estado_civil,
+            'fecha' => $this->fecha,
+            'id_campeonato' => $this->id_campeonato,
+            'id_estado_fecha' => $this->id_estado_fecha,
             'estado' => $this->estado,
-            'id_equipo' => $this->id_equipo,
         ]);
 
-        $query->andFilterWhere(['like', 'code', $this->code])
-            ->andFilterWhere(['like', 'upper(nombre)', strtoupper( $this->nombre??'')])
-            ->andFilterWhere(['like', 'upper(apellido)', strtoupper($this->apellido??'')])
-            ->andFilterWhere(['like', 'cedula', $this->cedula]);
-           
+        $query->andFilterWhere(['like', 'dia', $this->dia]);
+
         return $dataProvider;
     }
 }

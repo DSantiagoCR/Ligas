@@ -38,16 +38,16 @@ $arrayCampeonato = ArrayHelper::map($modelsCampeonatoALL, 'id', 'nombre');
     <div class="form-check form-switch">
         <?= $form->field($model, 'activo')->checkbox(['label' => 'Activado'])->label('Estado', ['class' => '']) ?>
     </div>
-    <?= $form->field($model, 'id_genero')->dropDownList($arrayCatGenero, ['prompt' => 'Seleccione...'])->label('Genero') ?>
+    <?= $form->field($model, 'id_genero')->dropDownList($arrayCatGenero, ['prompt' => 'Seleccione...'])->label('Género') ?>
 
-    <?= $form->field($model, 'id_categoria')->dropDownList($arrayCatCategia, ['prompt' => 'Seleccione...'])->label('Categoria') ?>
+    <?= $form->field($model, 'id_categoria')->dropDownList($arrayCatCategia, ['prompt' => 'Seleccione...'])->label('Categoría') ?>
    
     <?= $form->field($model, 'id_campeonato')->dropDownList($arrayCampeonato, [      
     
         'options' => [
             $modelsCampeonato->id => ['Selected' => true]
         ],
-    ]) ?>
+    ])->label('Campeonato') ?>
 
 
     <?php if (!Yii::$app->request->isAjax) { ?>

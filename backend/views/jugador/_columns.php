@@ -44,6 +44,19 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'fecha_nacimiento',
+        'filter' => \kartik\date\DatePicker::widget([
+            'model' => $searchModel,
+            'attribute' => 'fecha_nacimiento',
+            'type' => \kartik\date\DatePicker::TYPE_INPUT,
+            'options' => [
+            'id' => 'fecha-nacimiento-filter', // ID único
+        ],
+            'pluginOptions' => [
+                'autoclose' => true,
+                'format' => 'yyyy-mm-dd', // Asegúrate de que coincida con el formato de tu base de datos
+            ],
+        ]),
+        'format' => ['date', 'php:Y-m-d'], // Formato para mostrar en la tabla
     ],
     [
         'class'=>'\kartik\grid\DataColumn',

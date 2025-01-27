@@ -96,7 +96,7 @@ class DirectivosController extends Controller
                         'model' => $model,
                     ]),
                     'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
         
                 ];         
             }else if($model->load($request->post()) && $model->validate()){

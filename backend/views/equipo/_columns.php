@@ -8,6 +8,9 @@ use yii\helpers\Html;
 $modelCatalogos = Catalogos::find()->where(['id_catalogo' => '17'])->all();
 $arrayCatalogos = ArrayHelper::map($modelCatalogos, 'id', 'valor');
 
+$modelCategoria = Catalogos::find()->where(['id_catalogo' => '21'])->all();
+$arrayCategoria = ArrayHelper::map($modelCategoria, 'id', 'valor');
+
 return [
     // [
     //     'class' => 'kartik\grid\CheckboxColumn',
@@ -63,7 +66,8 @@ return [
     [
         'class' => '\kartik\grid\DataColumn',
         'attribute' => 'id_categoria',  
-        'label'=>'Categoria',      
+        'label'=>'Categoria', 
+        'filter' => $arrayCategoria,     
         'value' => function ($data) {
             return ($data->id_categoria)?$data->categoria->valor:'';
         }
@@ -94,8 +98,8 @@ return [
             'data-method' => false, // for overide yii data api
             'data-request-method' => 'post',
             'data-toggle' => 'tooltip',
-            'data-confirm-title' => 'Are you sure?',
-            'data-confirm-message' => 'Are you sure want to delete this item'
+            'data-confirm-title' => 'Eliminar',
+            'data-confirm-message' => 'Esta seguro que desea eliminar ?'
         ],
         'buttons' => [
             'custom' => function ($url, $model, $key) {

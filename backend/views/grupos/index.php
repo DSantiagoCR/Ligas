@@ -1,6 +1,7 @@
 <?php
 
 use common\models\Campeonato;
+use common\models\Catalogos;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\bootstrap4\Modal;
@@ -17,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);
 $modelCampeonato = Campeonato::find()->where(['estado' => true])->one();
+$modelEtapas = Catalogos::find()->where(['id_catalogo' => 27])->all();
 ?>
 <div class="grupos-index">
     <div class="equipo-index">
@@ -30,6 +32,8 @@ $modelCampeonato = Campeonato::find()->where(['estado' => true])->one();
                 </div>
             </div>
             <div class="card-body">
+
+
                 <div id="ajaxCrudDatatable">
                     <?= GridView::widget([
                         'id' => 'crud-datatable',
@@ -80,11 +84,13 @@ $modelCampeonato = Campeonato::find()->where(['estado' => true])->one();
                         ]
                     ]) ?>
                 </div>
+
             </div>
         </div>
     </div>
-    <?php Modal::begin([
-        "id" => "ajaxCrudModal",
-        "footer" => "", // always need it for jquery plugin
-    ]) ?>
-    <?php Modal::end(); ?>
+</div>
+<?php Modal::begin([
+    "id" => "ajaxCrudModal",
+    "footer" => "", // always need it for jquery plugin
+]) ?>
+<?php Modal::end(); ?>

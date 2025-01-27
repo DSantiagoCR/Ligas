@@ -16,6 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);
 $modelCampeonato = Campeonato::find()->where(['estado' => true])->one();
+
+
 ?>
 <div class="equipo-index">
     <div class="card">

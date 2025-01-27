@@ -5,12 +5,12 @@ namespace common\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Directivos;
+use common\models\DetalleFecha;
 
 /**
- * DirectivosSearch represents the model behind the search form about `common\models\Directivos`.
+ * DetalleFechaSearch represents the model behind the search form about `\common\models\DetalleFecha`.
  */
-class DirectivosSearch extends Directivos
+class DetalleFechaSearch extends DetalleFecha
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class DirectivosSearch extends Directivos
     public function rules()
     {
         return [
-            [['id', 'id_estado_civil','id_equipo'], 'integer'],
-            [['code', 'nombre', 'apellido', 'fecha_nacimiento', 'cedula'], 'safe'],
+            [['id', 'id_cabecera_fecha', 'id_grupo', 'id_grupo_equipo1', 'id_grupo_equipo2', 'goles_equipo1', 'goles_equipo2', 'id_estado_partido'], 'integer'],
+            [['hora_inicio'], 'safe'],
             [['estado'], 'boolean'],
         ];
     }
@@ -42,7 +42,7 @@ class DirectivosSearch extends Directivos
      */
     public function search($params)
     {
-        $query = Directivos::find();
+        $query = DetalleFecha::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -58,17 +58,18 @@ class DirectivosSearch extends Directivos
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'fecha_nacimiento' => $this->fecha_nacimiento,
-            'id_estado_civil' => $this->id_estado_civil,
+            'id_cabecera_fecha' => $this->id_cabecera_fecha,
+            'id_grupo' => $this->id_grupo,
+            'id_grupo_equipo1' => $this->id_grupo_equipo1,
+            'id_grupo_equipo2' => $this->id_grupo_equipo2,
+            'goles_equipo1' => $this->goles_equipo1,
+            'goles_equipo2' => $this->goles_equipo2,
+            'id_estado_partido' => $this->id_estado_partido,
             'estado' => $this->estado,
-            'id_equipo' => $this->id_equipo,
         ]);
 
-        $query->andFilterWhere(['like', 'code', $this->code])
-            ->andFilterWhere(['like', 'upper(nombre)', strtoupper( $this->nombre??'')])
-            ->andFilterWhere(['like', 'upper(apellido)', strtoupper($this->apellido??'')])
-            ->andFilterWhere(['like', 'cedula', $this->cedula]);
-           
+        $query->andFilterWhere(['like', 'hora_inicio', $this->hora_inicio]);
+
         return $dataProvider;
     }
 }

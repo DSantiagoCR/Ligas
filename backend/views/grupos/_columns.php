@@ -1,7 +1,18 @@
 <?php
+
+use common\models\Catalogos;
 use yii\helpers\Url;
 use kartik\grid\GridView;
+use yii\helpers\ArrayHelper;
 
+$modelEtapas = Catalogos::find()->where(['id_catalogo'=>27])->all();
+$arrayEtapas = ArrayHelper::map($modelEtapas,'id','valor');
+
+$modelGenero = Catalogos::find()->where(['id_catalogo'=>17])->all();
+$arrayGenero = ArrayHelper::map($modelGenero,'id','valor');
+
+$modelCategoria = Catalogos::find()->where(['id_catalogo'=>21])->all();
+$arrayCategoria = ArrayHelper::map($modelCategoria,'id','valor');
 return [
     // [
     //     'class' => 'kartik\grid\CheckboxColumn',
@@ -24,13 +35,43 @@ return [
         // 'class'=>'\kartik\grid\DataColumn',
         // 'attribute'=>'id',
     // ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'code',
-    ],
+    // [
+    //     'class'=>'\kartik\grid\DataColumn',
+    //     'attribute'=>'code',
+    // ],
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'nombre',
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'id_catalogo',
+        'label'=>'Etapa',
+        'filter'=>$arrayEtapas,
+        'format'=>'html',
+        'value'=>function($data){
+            return '<span style="color:red"><b>'.$data->catalogo->valor.'</b></span>';
+        }
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'id_genero',
+        'label'=>'Género',
+        'filter'=>$arrayGenero,
+        'format'=>'html',
+        'value'=>function($data){
+            return '<span style="color:green"><b>'.$data->genero->valor.'</b></span>';
+        }
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'id_categoria',
+        'label'=>'Categoría',
+        'filter'=>$arrayCategoria,
+        'format'=>'html',
+        'value'=>function($data){
+            return '<span style="color:blue"><b>'.$data->categoria->valor.'</b></span>';
+        }
     ],
     [
         'class'=>'\kartik\grid\BooleanColumn',
@@ -49,8 +90,8 @@ return [
                           'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
                           'data-request-method'=>'post',
                           'data-toggle'=>'tooltip',
-                          'data-confirm-title'=>'Are you sure?',
-                          'data-confirm-message'=>'Are you sure want to delete this item'], 
+                          'data-confirm-title'=>'Eliminar',
+                          'data-confirm-message'=>'Esta seguro de eliminar ?'], 
     ],
 
 ];   

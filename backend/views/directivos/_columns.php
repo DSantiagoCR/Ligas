@@ -11,7 +11,10 @@ use yii\helpers\Url;
 // $arrayEstadoCivil = ArrayHelper::map($modelsEstadoCivil,'id','valor');
 
 $modelEquipos = Equipo::find()->all();
-$arrayEquipos = ArrayHelper::map($modelEquipos, 'id', 'nombre');
+$arrayEquipos = ArrayHelper::map($modelEquipos, 'id', function($data)
+{
+    return $data->nombre.' - '. $data->genero->valor . ' - '.$data->categoria->valor;
+});
 
 
 $modelListTipoDirectivos = Catalogos::find()->where(['id_catalogo' => 1])->andWhere(['estado' => true])->all();
@@ -71,7 +74,17 @@ return [
         'filter'=>$arrayEquipos,
         'value'=>function($data)
         {
-            return $data->equipo->nombre . ' - '.$data->equipo->genero->valor . ' - '.$data->equipo->categoria->valor;
+            return $data->equipo->nombre.' - '. $data->equipo->genero->valor . ' - '.$data->equipo->categoria->valor;
+        }
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        //'attribute'=>'id_equipo',
+        'label'=>'Categoria',
+        'filter'=>$arrayEquipos,
+        'value'=>function($data)
+        {
+            return $data->equipo->genero->valor . ' - '.$data->equipo->categoria->valor;
         }
     ],
     [

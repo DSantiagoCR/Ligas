@@ -50,9 +50,9 @@ class GrupoEquipo extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'id_campeonato' => 'Id Campeonato',
-            'id_grupo' => 'Id Grupo',
-            'id_equipo' => 'Id Equipo',
+            'id_campeonato' => 'Campeonato',
+            'id_grupo' => 'Grupo',
+            'id_equipo' => 'Equipo',
         ];
     }
 

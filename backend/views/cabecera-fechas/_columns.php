@@ -1,5 +1,10 @@
 <?php
 use yii\helpers\Url;
+use common\models\Catalogos;
+use yii\helpers\ArrayHelper;
+
+$modelCatalogos = Catalogos::find()->where(['id_catalogo' => '17'])->all();
+$arrayCatalogos = ArrayHelper::map($modelCatalogos, 'id', 'valor');
 
 return [
     // [
@@ -16,30 +21,32 @@ return [
     // ],
     [
         'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'dia',
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'fecha',
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'id_campeonato',
         'label'=>'Campeonato',
-        'value'=>function($model)
-        {
-            return $model->campeonato->nombre;
+        'value' => function ($data) {
+            return ($data->id_campeonato)?$data->campeonato->nombre:'';
         }
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'id_grupo',
-        'label'=>'Grupo',
-        'value'=>function($model)
-        {
-            return $model->grupo->nombre;
+        'attribute'=>'id_estado_fecha',
+        'label' => 'Estado Fecha',
+        'filter' => $arrayCatalogos,
+        'value' => function ($model) {
+            return ($model->id_genero)?$model->genero->valor:'';
         }
     ],
     [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'id_equipo',
-        'label'=>'Equipo',
-        'value'=>function($model)
-        {
-            return $model->equipo->nombre;
-        }
+        'class'=>'\kartik\grid\BooleanColumn',
+        'attribute'=>'estado',
     ],
     [
         'class' => 'kartik\grid\ActionColumn',
@@ -54,8 +61,8 @@ return [
                           'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
                           'data-request-method'=>'post',
                           'data-toggle'=>'tooltip',
-                          'data-confirm-title'=>'Eliminar',
-                          'data-confirm-message'=>'Esta seguro de eliminar el registro?'], 
+                          'data-confirm-title'=>'Are you sure?',
+                          'data-confirm-message'=>'Are you sure want to delete this item'], 
     ],
 
 ];   

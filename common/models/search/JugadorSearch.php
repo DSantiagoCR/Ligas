@@ -6,6 +6,8 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Jugador;
+use DateTime;
+use PHPUnit\Framework\Constraint\IsNull;
 
 /**
  * JugadorSearch represents the model behind the search form about `common\models\Jugador`.
@@ -58,7 +60,15 @@ class JugadorSearch extends Jugador
             // $query->where('0=1');
             return $dataProvider;
         }
-
+        if($this->fecha_nacimiento!='')
+        {
+            if(!$this->validarFecha($this->fecha_nacimiento??null))
+            {
+                $this->fecha_nacimiento = null; //date('Y-m-d');
+            }
+        }
+       
+       
         $query->andFilterWhere([
             'id' => $this->id,
             'fecha_nacimiento' => $this->fecha_nacimiento,
@@ -69,11 +79,19 @@ class JugadorSearch extends Jugador
         ]);
 
         $query->andFilterWhere(['like', 'code', $this->code])
-            ->andFilterWhere(['like', 'nombres', $this->nombres])
-            ->andFilterWhere(['like', 'apellidos', $this->apellidos])
+            ->andFilterWhere(['like', 'upper(nombres)', strtoupper(($this->nombres??''))])
+            ->andFilterWhere(['like', 'upper(apellidos)', strtoupper($this->apellidos??'')])
             ->andFilterWhere(['like', 'cedula', $this->cedula])
             ->andFilterWhere(['like', 'celular', $this->celular]);
 
         return $dataProvider;
+    }
+    private function validarFecha($fecha, $formato = 'Y-m-d') {
+        if($fecha==null)
+        {
+            return false;
+        }
+        $d = DateTime::createFromFormat($formato, $fecha);
+        return $d && $d->format($formato) === $fecha;
     }
 }
