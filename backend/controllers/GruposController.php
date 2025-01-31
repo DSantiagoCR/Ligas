@@ -103,7 +103,7 @@ class GruposController extends Controller
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
                     'title'=> "Crear Nuevo Grupos",
-                    'content'=>'<span class="text-success">Create Grupos success</span>',
+                    'content'=>'<span class="text-success">Registro Creado Exitosamente</span>',
                     'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"])
                            // Html::a('Crear Nuevo',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
         

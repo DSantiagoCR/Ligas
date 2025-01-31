@@ -85,7 +85,10 @@ if ($model->id_grupo) {
     )->label('Equipo2') ?>
 
 
-    <?= $form->field($model, 'hora_inicio')->dropDownList($arrayHorasPartido, ['type' => 'time', 'prompt' => 'Seleccione...']) ?>
+    <?= $form->field($model, 'hora_inicio')->dropDownList(
+        $arrayHorasPartido,
+        ['id' => 'idHoraInicio', 'type' => 'time', 'prompt' => 'Seleccione...']
+    ) ?>
 
     <?= $form->field($model, 'id_estado_partido')->dropDownList($arrayEstadoPartido, ['prompt' => 'Seleccione..'])->label('Estado Partido') ?>
     <div class="form-check form-switch">
@@ -148,6 +151,27 @@ $('#drop_equipo1').change(function() {
             $('#drop_equipo2').empty().append('<option value=\"\">Seleccione...</option>');
             $.each(data, function(index, item) {
                 $('#drop_equipo2').append('<option value=\"' + item.id + '\">' + item.name + '</option>');
+            });
+        }
+    });
+});
+");
+
+    $this->registerJs("
+$('#drop_equipo2').change(function() {
+    var id_grupo = $('#drop_grupos').val();
+    var id_cab_fechas = '" . $model->id_cabecera_fecha . "';
+    $.ajax({
+        type:'POST',
+        url: '" . Url::to(['busqueda-horas-inicio']) . "',
+        data: {
+        id_grupo: id_grupo,
+        id_cab_fechas:id_cab_fechas
+         },
+        success: function(data) {
+            $('#idHoraInicio').empty().append('<option value=\"\">Seleccione...</option>');
+            $.each(data, function(index, item) {
+                $('#idHoraInicio').append('<option value=\"' + item.id + '\">' + item.name + '</option>');
             });
         }
     });

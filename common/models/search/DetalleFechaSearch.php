@@ -104,7 +104,7 @@ class DetalleFechaSearch extends DetalleFecha
             ->andFilterWhere(['like', 'id_grupo_equipo1', $this->id_grupo_equipo1])
             ->andFilterWhere(['like', 'id_grupo_equipo2', $this->id_grupo_equipo2]);
 
-        $query->orderBy(['id'=>SORT_ASC]);
+        $query->orderBy(['hora_inicio'=>SORT_ASC]);
 
         return $dataProvider;
     }

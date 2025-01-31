@@ -2,6 +2,8 @@
 
 namespace backend\controllers;
 
+use common\models\CabeceraFechas;
+use common\models\Catalogos;
 use Yii;
 use common\models\DetalleFecha;
 use common\models\GrupoEquipo;
@@ -144,7 +146,7 @@ class DetalleFechaController extends Controller
                     return [
                         'forceReload' => '#crud-datatable-pjax',
                         'title' => "Detalle Fechas",
-                        'content' => '<span class="text-success">Create DetalleFecha success</span>',
+                        'content' => '<span class="text-success">Registro Creado Corrctamente</span>',
                         'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
                             Html::a('Crear Nuevo', ['create'], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
 
@@ -377,6 +379,41 @@ class DetalleFechaController extends Controller
         foreach ($GruposEquipos as $subcategoria) {
             $data[] = ['id' => $subcategoria->id, 'name' => $subcategoria->equipo->nombre];
         }
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return $data;
+        //return json_encode($data);
+    }
+    public function actionBusquedaHorasInicio()
+    {
+        $request = Yii::$app->request;
+        $id_grupo =  $request->post('id_grupo');
+        $id_cab_fechas =  $request->post('id_cab_fechas');
+        // echo '<pre>';
+        // print_r(   $id_cab_fechas  );
+        // DIE();
+
+        //$modelCabFechas = CabeceraFechas::findOne( $id_cab_fechas);
+        $modelDF = DetalleFecha::find()
+        ->where(['id_cabecera_fecha'=> $id_cab_fechas])
+        ->andWhere(['id_estado_partido'=>51])
+        ->all();        
+    
+        $dataDF = [];
+        foreach ($modelDF as $dato) {
+            $dataDF[] = $dato->hora_inicio;         
+        }      
+
+        $horasPartidos = Catalogos::find()
+            ->where(['id_catalogo' => 56])           
+            ->andWhere(['not in','id',$dataDF])
+            ->all();           
+
+        $data = [];
+        foreach ($horasPartidos as $data1) {
+            $data[] = ['id' => $data1->id, 'name' => $data1->valor];
+        }
+     
 
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return $data;

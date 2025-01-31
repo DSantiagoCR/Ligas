@@ -120,7 +120,7 @@ class GrupoEquipoController extends Controller
         // print_r($id_grupo);
         // die();
                 return [
-                    'title'=> "Crear Nuevo Grupo",
+                    'title'=> "Creación",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
@@ -135,15 +135,15 @@ class GrupoEquipoController extends Controller
                 $model->save();
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Crear Nuevo Grupo",
-                    'content'=>'<span class="text-success">Create GrupoEquipo success</span>',
+                    'title'=> "Creación",
+                    'content'=>'<span class="text-success">Registo Creado Correctamente</span>',
                     'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"])
                             //Html::a('Crear Nuevo',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
         
                 ];         
             }else{           
                 return [
-                    'title'=> "Crear Nuevo Grupo",
+                    'title'=> "Creación",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
