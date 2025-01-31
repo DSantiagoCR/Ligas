@@ -65,6 +65,8 @@ class GruposSearch extends Grupos
         $query->andFilterWhere(['like', 'code', $this->code])
             ->andFilterWhere(['like', 'nombre', $this->nombre]);
 
+        $query->orderBy(['id_catalogo'=>SORT_ASC,'nombre'=>SORT_ASC]);
+
         return $dataProvider;
     }
 }

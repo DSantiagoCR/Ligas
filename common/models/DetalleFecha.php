@@ -17,9 +17,11 @@ use Yii;
  * @property string $hora_inicio
  * @property int $id_estado_partido
  * @property bool $estado
+ * @property int|null $id_etapa
  *
  * @property CabeceraFechas $cabeceraFecha
  * @property Catalogos $estadoPartido
+ * @property Catalogos $etapa
  * @property Grupos $grupo
  * @property GrupoEquipo $grupoEquipo1
  * @property GrupoEquipo $grupoEquipo2
@@ -40,9 +42,9 @@ class DetalleFecha extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_cabecera_fecha', 'id_grupo', 'id_grupo_equipo1', 'id_grupo_equipo2', 'goles_equipo1', 'goles_equipo2', 'hora_inicio', 'id_estado_partido', 'estado'], 'required'],
+            [['id_cabecera_fecha', 'id_grupo', 'id_grupo_equipo1', 'id_grupo_equipo2', 'goles_equipo1', 'goles_equipo2', 'hora_inicio', 'id_estado_partido', 'estado', 'id_etapa'], 'required'],
             [['id_cabecera_fecha', 'id_grupo', 'id_grupo_equipo1', 'id_grupo_equipo2', 'goles_equipo1', 'goles_equipo2', 'id_estado_partido'], 'default', 'value' => null],
-            [['id_cabecera_fecha', 'id_grupo', 'id_grupo_equipo1', 'id_grupo_equipo2', 'goles_equipo1', 'goles_equipo2', 'id_estado_partido'], 'integer'],
+            [['id_cabecera_fecha', 'id_grupo', 'id_grupo_equipo1', 'id_grupo_equipo2', 'goles_equipo1', 'goles_equipo2', 'id_estado_partido', 'id_etapa'], 'integer'],
             [['estado'], 'boolean'],
             [['hora_inicio'], 'string', 'max' => 20],
             [['id_cabecera_fecha'], 'exist', 'skipOnError' => true, 'targetClass' => CabeceraFechas::class, 'targetAttribute' => ['id_cabecera_fecha' => 'id']],
@@ -62,14 +64,25 @@ class DetalleFecha extends \yii\db\ActiveRecord
             'id' => 'ID',
             'id_cabecera_fecha' => 'Id Cabecera Fecha',
             'id_grupo' => 'Id Grupo',
-            'id_grupo_equipo1' => 'Id Grupo Equipo1',
-            'id_grupo_equipo2' => 'Id Grupo Equipo2',
+            'id_grupo_equipo1' => 'Grupo Equipo1',
+            'id_grupo_equipo2' => 'Grupo Equipo2',
             'goles_equipo1' => 'Goles Equipo1',
             'goles_equipo2' => 'Goles Equipo2',
             'hora_inicio' => 'Hora Inicio',
-            'id_estado_partido' => 'Id Estado Partido',
+            'id_estado_partido' => 'Estado Partido',
             'estado' => 'Estado',
+            'id_etapa' => 'Etapa',
         ];
+    }
+
+    /** 
+     * Gets query for [[Etapa]]. 
+     * 
+     * @return \yii\db\ActiveQuery 
+     */
+    public function getEtapa()
+    {
+        return $this->hasOne(Catalogos::class, ['id' => 'id_etapa']);
     }
 
     /**

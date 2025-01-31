@@ -66,6 +66,8 @@ class CabeceraFechasSearch extends CabeceraFechas
 
         $query->andFilterWhere(['like', 'dia', $this->dia]);
 
+        $query->orderBy(['fecha'=>SORT_ASC]);
+
         return $dataProvider;
     }
 }

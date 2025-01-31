@@ -2,6 +2,7 @@
 use yii\helpers\Url;
 use common\models\Catalogos;
 use yii\helpers\ArrayHelper;
+use kartik\grid\GridView;
 
 $modelCatalogos = Catalogos::find()->where(['id_catalogo' => '17'])->all();
 $arrayCatalogos = ArrayHelper::map($modelCatalogos, 'id', 'valor');
@@ -20,8 +21,19 @@ return [
         // 'attribute'=>'id',
     // ],
     [
+        'class' => 'kartik\grid\ExpandRowColumn',
+        'width' => '50px',
+        'value' => function ($model, $key, $index, $column) {
+            return GridView::ROW_COLLAPSED;
+        },
+        'detailUrl' => Url::to(['/detalle-fecha/index1']),
+        'headerOptions' => ['class' => 'kartik-sheet-style']
+    ],
+    [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'dia',
+        'label'=>'Dia Semana',
+        
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
@@ -35,15 +47,7 @@ return [
             return ($data->id_campeonato)?$data->campeonato->nombre:'';
         }
     ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'id_estado_fecha',
-        'label' => 'Estado Fecha',
-        'filter' => $arrayCatalogos,
-        'value' => function ($model) {
-            return ($model->id_genero)?$model->genero->valor:'';
-        }
-    ],
+
     [
         'class'=>'\kartik\grid\BooleanColumn',
         'attribute'=>'estado',

@@ -10,12 +10,36 @@ use yii\widgets\DetailView;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+            //'id',
             'dia',
             'fecha',
-            'id_campeonato',
-            'id_estado_fecha',
-            'estado:boolean',
+            //'id_campeonato',
+            [
+                'attribute'=>'id_campeonato',
+                'label'=>'Campeonato',
+                'value'=>function($data)
+                {
+                    return $data->campeonato->nombre;
+                }
+            ],
+            //'id_estado_fecha',
+            [
+                'attribute'=>'id_estado_fecha',
+                'label'=>'Estado Fecha',
+                'value'=>function($data)
+                {
+                    return $data->estadoFecha->valor;
+                }
+            ],
+            //'estado:boolean',
+            [
+                'attribute'=>'estado',
+                'label'=>'Estado',
+                'value'=>function($data)
+                {
+                    return $data->estado?'Activado':'Desactivado';
+                }
+            ],
         ],
     ]) ?>
 

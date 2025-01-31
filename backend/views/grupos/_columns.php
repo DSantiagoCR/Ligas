@@ -22,6 +22,7 @@ return [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
     ],
+  
     [
         'class' => 'kartik\grid\ExpandRowColumn',
         'width' => '50px',

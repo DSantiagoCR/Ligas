@@ -2,6 +2,7 @@
 
 namespace common\models\search;
 
+use common\models\Campeonato;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -69,6 +70,41 @@ class DetalleFechaSearch extends DetalleFecha
         ]);
 
         $query->andFilterWhere(['like', 'hora_inicio', $this->hora_inicio]);
+
+        return $dataProvider;
+    }
+    public function searchDetalleFechas($params,$id_cabFechas=null)
+    {
+      
+       $query = DetalleFecha::find()
+        ->where(['id_cabecera_fecha'=>$id_cabFechas]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+  
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+    
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'id_cabecera_fecha' => $this->id_cabecera_fecha,
+            'id_grupo' => $this->id_grupo,
+            'id_grupo_equipo1' => $this->id_grupo_equipo1,
+            'id_grupo_equipo2' => $this->id_grupo_equipo2,
+        ]);
+        
+        $query->andFilterWhere(['like', 'id_cabecera_fecha', $this->id_cabecera_fecha])
+            ->andFilterWhere(['like', 'id_grupo', $this->id_grupo])
+            ->andFilterWhere(['like', 'id_grupo_equipo1', $this->id_grupo_equipo1])
+            ->andFilterWhere(['like', 'id_grupo_equipo2', $this->id_grupo_equipo2]);
+
+        $query->orderBy(['id'=>SORT_ASC]);
 
         return $dataProvider;
     }

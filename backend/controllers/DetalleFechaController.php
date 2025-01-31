@@ -4,12 +4,15 @@ namespace backend\controllers;
 
 use Yii;
 use common\models\DetalleFecha;
+use common\models\GrupoEquipo;
+use common\models\Grupos;
 use common\models\search\DetalleFechaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
+use yii\widgets\DetailView;
 
 /**
  * DetalleFechaController implements the CRUD actions for DetalleFecha model.
@@ -37,7 +40,7 @@ class DetalleFechaController extends Controller
      * @return mixed
      */
     public function actionIndex()
-    {    
+    {
         $searchModel = new DetalleFechaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -49,24 +52,48 @@ class DetalleFechaController extends Controller
 
 
     /**
+     * Lists all DetalleFecha models.
+     * @return mixed
+     */
+    public function actionIndex1()
+    {
+        if (isset($_POST['expandRowKey'])) {
+            // echo '<pre>';
+            // var_dump('hola');
+            // die();
+            $searchModel = new DetalleFechaSearch();
+            $dataProvider = $searchModel->searchDetalleFechas(Yii::$app->request->queryParams, $_POST['expandRowKey']);
+
+            return $this->renderPartial('_listado-fechas', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'id_cabFechas' => $_POST['expandRowKey'],
+            ]);
+        } else {
+            return '<div class="alert alert-danger">Datos no Encontrados</div>';
+        }
+    }
+
+
+    /**
      * Displays a single DetalleFecha model.
      * @param integer $id
      * @return mixed
      */
     public function actionView($id)
-    {   
+    {
         $request = Yii::$app->request;
-        if($request->isAjax){
+        if ($request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> "DetalleFecha #".$id,
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $this->findModel($id),
-                    ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
-        }else{
+                'title' => "DetalleFecha #" . $id,
+                'content' => $this->renderAjax('view', [
+                    'model' => $this->findModel($id),
+                ]),
+                'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                    Html::a('Editar', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+            ];
+        } else {
             return $this->render('view', [
                 'model' => $this->findModel($id),
             ]);
@@ -79,47 +106,72 @@ class DetalleFechaController extends Controller
      * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($id_cabFechas)
     {
         $request = Yii::$app->request;
-        $model = new DetalleFecha();  
+        $model = new DetalleFecha();
+        $model->id_cabecera_fecha = $id_cabFechas;
 
-        if($request->isAjax){
+        if ($request->isAjax) {
             /*
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            if($request->isGet){
+            if ($request->isGet) {
                 return [
-                    'title'=> "Create new DetalleFecha",
-                    'content'=>$this->renderAjax('create', [
+                    'title' => "Detalle Fechas",
+                    'content' => $this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-        
-                ];         
-            }else if($model->load($request->post()) && $model->save()){
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                        Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+
+                ];
+            } else if ($model->load($request->post()) && $model->validate()) {
+                $alert1 = $alert2 = $alert3 = $alert4 = $alert5 = true;
+
+                if (!$this->verifica_det_fecha_equipos($model)) {
+                    Yii::$app->session->setFlash('A1', 'No se puede configurar dos veces el mismo EQUIPO en el mismo DIA');
+                    $alert1 = false;
+                }
+                if (!$this->verifica_det_fecha_hora_partido($model)) {
+                    Yii::$app->session->setFlash('A1', 'No se puede configurar dos veces la misma HORA en el mismo DIA');
+                    $alert2 = false;
+
+                }
+                if ($alert1 and $alert2 and $alert3 and $alert4 and $alert5) {
+                    $model->save();
+                    return [
+                        'forceReload' => '#crud-datatable-pjax',
+                        'title' => "Detalle Fechas",
+                        'content' => '<span class="text-success">Create DetalleFecha success</span>',
+                        'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                            Html::a('Crear Nuevo', ['create'], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+
+                    ];
+                } else {
+                    return [
+                        'title' => "Detalle Fechas",
+                        'content' => $this->renderAjax('create', [
+                            'model' => $model,
+                        ]),
+                        'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                            Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+
+                    ];
+                }
+            } else {
                 return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Create new DetalleFecha",
-                    'content'=>'<span class="text-success">Create DetalleFecha success</span>',
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
-        
-                ];         
-            }else{           
-                return [
-                    'title'=> "Create new DetalleFecha",
-                    'content'=>$this->renderAjax('create', [
+                    'title' => "Detalle Fechas",
+                    'content' => $this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-        
-                ];         
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                        Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+
+                ];
             }
-        }else{
+        } else {
             /*
             *   Process for non-ajax request
             */
@@ -131,7 +183,6 @@ class DetalleFechaController extends Controller
                 ]);
             }
         }
-       
     }
 
     /**
@@ -144,43 +195,43 @@ class DetalleFechaController extends Controller
     public function actionUpdate($id)
     {
         $request = Yii::$app->request;
-        $model = $this->findModel($id);       
+        $model = $this->findModel($id);
 
-        if($request->isAjax){
+        if ($request->isAjax) {
             /*
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            if($request->isGet){
+            if ($request->isGet) {
                 return [
-                    'title'=> "Update DetalleFecha #".$id,
-                    'content'=>$this->renderAjax('update', [
+                    'title' => "Update DetalleFecha #" . $id,
+                    'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-                ];         
-            }else if($model->load($request->post()) && $model->save()){
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                        Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+                ];
+            } else if ($model->load($request->post()) && $model->save()) {
                 return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "DetalleFecha #".$id,
-                    'content'=>$this->renderAjax('view', [
+                    'forceReload' => '#crud-datatable-pjax',
+                    'title' => "DetalleFecha #" . $id,
+                    'content' => $this->renderAjax('view', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
-            }else{
-                 return [
-                    'title'=> "Update DetalleFecha #".$id,
-                    'content'=>$this->renderAjax('update', [
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                        Html::a('Editar', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+                ];
+            } else {
+                return [
+                    'title' => "Update DetalleFecha #" . $id,
+                    'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-                ];        
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                        Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+                ];
             }
-        }else{
+        } else {
             /*
             *   Process for non-ajax request
             */
@@ -206,23 +257,21 @@ class DetalleFechaController extends Controller
         $request = Yii::$app->request;
         $this->findModel($id)->delete();
 
-        if($request->isAjax){
+        if ($request->isAjax) {
             /*
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
+            return ['forceClose' => true, 'forceReload' => '#crud-datatable-pjax'];
+        } else {
             /*
             *   Process for non-ajax request
             */
             return $this->redirect(['index']);
         }
-
-
     }
 
-     /**
+    /**
      * Delete multiple existing DetalleFecha model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
@@ -230,27 +279,108 @@ class DetalleFechaController extends Controller
      * @return mixed
      */
     public function actionBulkdelete()
-    {        
+    {
         $request = Yii::$app->request;
-        $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
-        foreach ( $pks as $pk ) {
+        $pks = explode(',', $request->post('pks')); // Array or selected records primary keys
+        foreach ($pks as $pk) {
             $model = $this->findModel($pk);
             $model->delete();
         }
 
-        if($request->isAjax){
+        if ($request->isAjax) {
             /*
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
+            return ['forceClose' => true, 'forceReload' => '#crud-datatable-pjax'];
+        } else {
             /*
             *   Process for non-ajax request
             */
             return $this->redirect(['index']);
         }
-       
+    }
+
+    public function actionBusquedaEtapaGrupo()
+    {
+        $request = Yii::$app->request;
+        $id_etapa =  $request->post('id_etapa1');
+        $Grupos = Grupos::find()->where(['id_catalogo' => $id_etapa])->all();
+        $data = [];
+        foreach ($Grupos as $subcategoria) {
+            $data[] = [
+                'id' => $subcategoria->id, 
+                'name' => $subcategoria->nombre.' - '.$subcategoria->genero->valor.' - '.$subcategoria->categoria->valor];
+        }
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return $data;
+        //return json_encode($data);
+    }
+    public function actionBusquedaGrupoEquipo1()
+    {
+        $request = Yii::$app->request;
+        $id_grupo =  $request->post('id_grupo1');        
+
+        $modelDF = DetalleFecha::find()
+        ->where(['id_grupo'=>$id_grupo])
+        ->all();
+
+        $dataDF = [];
+        foreach ($modelDF as $dato) {
+            $dataDF[] = $dato->grupoEquipo1->id_equipo;
+            $dataDF[] = $dato->grupoEquipo2->id_equipo;            
+        }
+
+        $GruposEquipo = GrupoEquipo::find()
+        ->where(['id_grupo' => $id_grupo])
+        ->andWhere(['not in','id_equipo',$dataDF])
+        ->all();
+
+        $data = [];
+        foreach ($GruposEquipo as $subcategoria) {
+            $data[] = ['id' => $subcategoria->id, 'name' => $subcategoria->equipo->nombre];
+        }
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return $data;
+        //return json_encode($data);
+    }
+    public function actionBusquedaGrupoEquipo2()
+    {
+        $request = Yii::$app->request;
+        $id_grupo_equipo1 =  $request->post('id_grupo_equipo1');
+
+        $GruposEquipo = GrupoEquipo::find()->where(['id' => $id_grupo_equipo1])->one(); 
+        
+        $modelDF = DetalleFecha::find()
+        ->where(['id_grupo'=> $GruposEquipo->id_grupo])
+        ->all();
+
+        $dataDF = [];
+        foreach ($modelDF as $dato) {
+            $dataDF[] = $dato->grupoEquipo1->id_equipo;
+            $dataDF[] = $dato->grupoEquipo2->id_equipo;            
+        } 
+
+        $dataDF[] = $GruposEquipo->id_equipo;
+
+        $GruposEquipos = GrupoEquipo::find()
+            ->where(['id_grupo' => $GruposEquipo->id_grupo])
+            //->andWhere(['<>', 'id_equipo', $GruposEquipo->id_equipo]);
+            ->andWhere(['not in','id_equipo',$dataDF])
+            ->all();
+            // print_r($GruposEquipos->createCommand()->getRawSql());
+            // die();
+ 
+
+        $data = [];
+        foreach ($GruposEquipos as $subcategoria) {
+            $data[] = ['id' => $subcategoria->id, 'name' => $subcategoria->equipo->nombre];
+        }
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return $data;
+        //return json_encode($data);
     }
 
     /**
@@ -267,5 +397,43 @@ class DetalleFechaController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    private function verifica_det_fecha_equipos($modelDetFec)
+    {
+        //metodo que verifica que no se repita en grupo, el equipo
+
+        $modelDF1 = DetalleFecha::find()
+            ->where(['id_cabecera_fecha' => $modelDetFec->id_cabecera_fecha])
+            ->andWhere(['id_grupo_equipo1' => $modelDetFec->id_grupo_equipo1])
+            ->one();
+
+        $modelDF2 = DetalleFecha::find()
+            ->where(['id_cabecera_fecha' => $modelDetFec->id_cabecera_fecha])
+            ->andWhere(['id_grupo_equipo2' => $modelDetFec->id_grupo_equipo2])
+            ->one();
+
+
+        if ($modelDF1) {
+            return false;
+        }
+        if ($modelDF2) {
+            return false;
+        }
+        return true;
+    }
+    private function verifica_det_fecha_hora_partido($modelDetFec)
+    {
+        //metodo que no se repita la hora para los partidos en la misma fecha
+
+        $modelDF1 = DetalleFecha::find()
+            ->where(['id_cabecera_fecha' => $modelDetFec->id_cabecera_fecha])
+            ->andWhere(['hora_inicio' => $modelDetFec->hora_inicio])
+            ->one();
+
+        if ($modelDF1) {
+            return false;
+        }
+        return true;
     }
 }
