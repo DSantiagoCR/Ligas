@@ -30,6 +30,7 @@ class Directivos extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    
     public static function tableName()
     {
         return 'directivos';
@@ -41,7 +42,7 @@ class Directivos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['code', 'nombre', 'apellido', 'fecha_nacimiento', 'cedula', 'id_estado_civil', 'estado'], 'required'],
+            [['nombre', 'apellido', 'fecha_nacimiento', 'cedula', 'id_estado_civil', 'estado'], 'required'],
             [['fecha_nacimiento'], 'safe'],
             [['id_estado_civil', 'id_equipo', 'id_tipo_directivo', 'id_campeonato'], 'default', 'value' => null],
             [['id_estado_civil', 'id_equipo', 'id_tipo_directivo', 'id_campeonato'], 'integer'],

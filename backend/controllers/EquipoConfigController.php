@@ -139,16 +139,9 @@ class EquipoConfigController extends Controller
 
         $modelCampeonato = Campeonato::find()->where(['estado' => 1])->one();
 
-        //** equipo - categoria */
-        $modelEquipoCategoria = EquipoCategoria::find()
-            ->where(['id_equipo' => $modelEquipo->id])
-            ->all();
-
-
         // Renderizamos una vista parcial (sin layout)
         return $this->renderAjax('categoria-genero', [
             // Pasamos datos si es necesario
-            'modelEquipoCategoria' => $modelEquipoCategoria,
             'modelListCategoria' => $modelListCategoria,
             'modelListGenero' => $modelListGenero,
             'modelEquipo' => $modelEquipo,

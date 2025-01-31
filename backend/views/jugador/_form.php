@@ -16,9 +16,13 @@ $modelsEstadoCivil = Catalogos::find()->where(['id_catalogo' => 10])->all();
 $arrayEstadoCivil = ArrayHelper::map($modelsEstadoCivil, 'id', 'valor');
 
 $modelCampeonato = Campeonato::find()->where(['estado' => true])->one();
-$modelEquipos = Equipo::find()->where(['id_campeonato' => $modelCampeonato->id])->all();
-$arrayEsquipos = ArrayHelper::map($modelEquipos, 'id', 'nombre');
+// $modelEquipos = Equipo::find()->where(['id_campeonato' => $modelCampeonato->id])->all();
+// $arrayEsquipos = ArrayHelper::map($modelEquipos, 'id', 'nombre');
 
+$modelEquipos = Equipo::find()->where(['activo'=>true,'id_campeonato' => $modelCampeonato->id])->all();
+$arrayEquipos = ArrayHelper::map($modelEquipos, 'id', function($model) {  
+    return $model->nombre . ' - ' . $model->categoria->valor . ' - '. $model->genero->valor;
+});
 ?>
 
 <div class="jugador-form">
@@ -39,7 +43,7 @@ $arrayEsquipos = ArrayHelper::map($modelEquipos, 'id', 'nombre');
 
     <?= $form->field($model, 'id_estado_civil')->dropDownList($arrayEstadoCivil,['prompt'=>'Seleccione..'])->label('Estado Cívil') ?>
 
-    <?= $form->field($model, 'id_equipo')->dropDownList($arrayEsquipos,['prompt'=>'Seleccione..'])->label('Equipo') ?>
+    <?= $form->field($model, 'id_equipo')->dropDownList($arrayEquipos,['prompt'=>'Seleccione..'])->label('Equipo') ?>
 
     <?= $form->field($model, 'hijos')->textInput(['type' => 'number']) ?>
     <div class="form-check form-switch">

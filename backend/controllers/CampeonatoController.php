@@ -102,7 +102,12 @@ class CampeonatoController extends Controller
             }else if($model->load($request->post())){
                 
                 if ($model->validate()){
+                    if ($model->estado)
+                    {
+                        $this->cambia_estado_campeonato_all();
+                    }
                     if($model->save()){
+
                         return [
                             'forceReload'=>'#crud-datatable-pjax',
                             'title'=> "Crear Campeonato",
@@ -190,16 +195,37 @@ class CampeonatoController extends Controller
                     'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
                                 Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
                 ];         
-            }else if($model->load($request->post()) && $model->save()){
-                return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Campeonato Actualizar",
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $model,
-                    ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                            Html::a('Editar',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
+            }else if($model->load($request->post()) && $model->validate()){
+
+                if ($model->estado)
+                {
+                    $this->cambia_estado_campeonato_all();
+                }
+                if($model->save())
+                {
+                    return [
+                        'forceReload'=>'#crud-datatable-pjax',
+                        'title'=> "Campeonato Actualizar",
+                        'content'=>$this->renderAjax('view', [
+                            'model' => $model,
+                        ]),
+                        'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
+                                Html::a('Editar',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                    ];
+                }
+                else
+                {
+                    return [
+                        'title'=> "Actualizar Campeonato: No se pudo actualizar ",
+                        'content'=>$this->renderAjax('update', [
+                            'model' => $model,
+                        ]),
+                        'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
+                                    Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
+                    ]; 
+                }
+
+                    
             }else{
                  return [
                     'title'=> "Actualizar Campeonato ",
@@ -299,5 +325,9 @@ class CampeonatoController extends Controller
         }
     }
 
+    private function cambia_estado_campeonato_all()
+    {
+        Campeonato::updateAll(['estado'=>false]);
+    }
   
 }

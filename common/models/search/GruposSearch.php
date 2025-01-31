@@ -18,7 +18,7 @@ class GruposSearch extends Grupos
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id','id_catalogo','id_genero','id_categoria'], 'integer'],
             [['code', 'nombre'], 'safe'],
         ];
     }
@@ -57,10 +57,15 @@ class GruposSearch extends Grupos
 
         $query->andFilterWhere([
             'id' => $this->id,
+            'id_catalogo' => $this->id_catalogo,
+            'id_genero' => $this->id_genero,
+            'id_categoria' => $this->id_categoria,
         ]);
 
         $query->andFilterWhere(['like', 'code', $this->code])
             ->andFilterWhere(['like', 'nombre', $this->nombre]);
+
+        $query->orderBy(['id_catalogo'=>SORT_ASC,'nombre'=>SORT_ASC]);
 
         return $dataProvider;
     }

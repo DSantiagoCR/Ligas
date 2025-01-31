@@ -2,9 +2,12 @@
 
 namespace backend\controllers;
 
+use common\models\Campeonato;
+use common\models\Directivos;
 use Yii;
 use common\models\Equipo;
 use common\models\search\EquipoSearch;
+use common\models\Util\HelperGeneral;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -253,6 +256,50 @@ class EquipoController extends Controller
        
     }
 
+    public function actionModalContenido($id)
+    {
+        $request = Yii::$app->request;     
+        $id_contenido =2;
+        switch ($id_contenido) {
+            case 1:
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return [
+                    'title'=> "Crear Nuevo Jugador",
+                    'content'=>$this->contenidoCatGenero($id),
+                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
+                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+        
+                ]; 
+                //$content = $this->contenidoCatGenero($id);
+              
+                break;
+            case 2:
+                $content = $this->contenidoDirectivos($id);
+                break;
+            case 3:
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return [
+                    'title'=> "Crear Nuevo Jugador",
+                    'content'=>$this->contenidoJugadores($id),
+                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
+                                //Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+        
+                ];
+                //$content = $this->contenidoJugadores($id_equipo);
+                break;
+                // Puedes agregar más casos si es necesario
+            default:
+                //$content = "Contenido por defecto o no encontrado";
+                $content = $this->renderPartial('default', [
+                    'message' => 'Contenido no encontrado',
+                ]);
+                break;
+        }
+
+        return $content; // O podrías renderizar una vista parcial si lo prefieres
+    }
+ 
+
     /**
      * Finds the Equipo model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -267,5 +314,48 @@ class EquipoController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function contenidoDirectivos($id)
+    {
+        //$model->setAttribute('id', $request->post('Equipo')['id']);
+        $modelEquipo = Equipo::find()->where(['id' => $id])->one();
+        $modelCampeonato = Campeonato::find()
+            ->where(['estado' => 1])
+            ->one();
+        //**catalogos */
+        $modelListCategoria = HelperGeneral::obtenerListaCatalogoPorIdCatalogo(21);
+        $modelListTipoDirectivos = HelperGeneral::obtenerListaCatalogoPorIdCatalogo(1);
+
+        //** directivos */
+        $modelDirectivos = Directivos::find()
+            ->where(['estado' => 1])
+            ->all();
+
+        return $this->renderAjax('directivos', [
+            'modelDirectivos' => $modelDirectivos,
+            'modelListCategoria' => $modelListCategoria,
+            'modelListTipoDirectivos' => $modelListTipoDirectivos,
+            'modelCampeonato' => $modelCampeonato,
+            'modelEquipo' => $modelEquipo,
+        ]);
+    }
+    public function contenidoCatGenero($id)
+    {
+        $modelEquipo = Equipo::find()->where(['id' => $id])->one();
+        //**catalogos */
+        $modelListCategoria = HelperGeneral::obtenerListaCatalogoPorIdCatalogo(21);
+        $modelListGenero = HelperGeneral::obtenerListaCatalogoPorIdCatalogo(17);
+
+        $modelCampeonato = Campeonato::find()->where(['estado' => 1])->one();
+
+        // Renderizamos una vista parcial (sin layout)
+        return $this->renderAjax('categoria-genero', [
+            // Pasamos datos si es necesario
+            'modelListCategoria' => $modelListCategoria,
+            'modelListGenero' => $modelListGenero,
+            'modelEquipo' => $modelEquipo,
+            'modelCampeonato' => $modelCampeonato,
+        ]);
     }
 }

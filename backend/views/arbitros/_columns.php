@@ -7,10 +7,10 @@ $modelNucleoArbitros = NucleArbitros::find()->where(['estado'=>true])->all();
 $arrayNucleoArbitros = ArrayHelper::map($modelNucleoArbitros,'id','nombre');
 
 return [
-    [
-        'class' => 'kartik\grid\CheckboxColumn',
-        'width' => '20px',
-    ],
+    // [
+    //     'class' => 'kartik\grid\CheckboxColumn',
+    //     'width' => '20px',
+    // ],
     [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',

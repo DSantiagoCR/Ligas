@@ -54,8 +54,8 @@ class CabeceraFechas extends \yii\db\ActiveRecord
             'id' => 'ID',
             'dia' => 'Dia',
             'fecha' => 'Fecha',
-            'id_campeonato' => 'Id Campeonato',
-            'id_estado_fecha' => 'Id Estado Fecha',
+            'id_campeonato' => 'Campeonato',
+            'id_estado_fecha' => 'Estado Fecha',
             'estado' => 'Estado',
         ];
     }

@@ -18,7 +18,7 @@ class DirectivosSearch extends Directivos
     public function rules()
     {
         return [
-            [['id', 'id_estado_civil'], 'integer'],
+            [['id', 'id_estado_civil','id_equipo'], 'integer'],
             [['code', 'nombre', 'apellido', 'fecha_nacimiento', 'cedula'], 'safe'],
             [['estado'], 'boolean'],
         ];
@@ -61,13 +61,14 @@ class DirectivosSearch extends Directivos
             'fecha_nacimiento' => $this->fecha_nacimiento,
             'id_estado_civil' => $this->id_estado_civil,
             'estado' => $this->estado,
+            'id_equipo' => $this->id_equipo,
         ]);
 
         $query->andFilterWhere(['like', 'code', $this->code])
-            ->andFilterWhere(['like', 'nombre', $this->nombre])
-            ->andFilterWhere(['like', 'apellido', $this->apellido])
+            ->andFilterWhere(['like', 'upper(nombre)', strtoupper( $this->nombre??'')])
+            ->andFilterWhere(['like', 'upper(apellido)', strtoupper($this->apellido??'')])
             ->andFilterWhere(['like', 'cedula', $this->cedula]);
-
+           
         return $dataProvider;
     }
 }

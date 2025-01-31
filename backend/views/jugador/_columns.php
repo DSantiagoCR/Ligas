@@ -11,12 +11,16 @@ use yii\helpers\Html;
 $modelsEstadoCivil = Catalogos::find()->where(['id_catalogo'=>10])->all();
 $arrayEstadoCivil = ArrayHelper::map($modelsEstadoCivil,'id','valor');
 
+$modelEquipos = Equipo::find()->where(['activo'=>1,'id_campeonato' => $modelCampeonato->id])->all();
+$arrayEquipos = ArrayHelper::map($modelEquipos, 'id', function($model) {  
+    return $model->nombre . ' - ' . $model->categoria->valor . ' - '. $model->genero->valor;
+});
 
 return [
-    [
-        'class' => 'kartik\grid\CheckboxColumn',
-        'width' => '20px',
-    ],
+    // [
+    //     'class' => 'kartik\grid\CheckboxColumn',
+    //     'width' => '20px',
+    // ],
     [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
@@ -40,6 +44,19 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'fecha_nacimiento',
+        'filter' => \kartik\date\DatePicker::widget([
+            'model' => $searchModel,
+            'attribute' => 'fecha_nacimiento',
+            'type' => \kartik\date\DatePicker::TYPE_INPUT,
+            'options' => [
+            'id' => 'fecha-nacimiento-filter', // ID único
+        ],
+            'pluginOptions' => [
+                'autoclose' => true,
+                'format' => 'yyyy-mm-dd', // Asegúrate de que coincida con el formato de tu base de datos
+            ],
+        ]),
+        'format' => ['date', 'php:Y-m-d'], // Formato para mostrar en la tabla
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
@@ -78,9 +95,11 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'id_equipo',
+        'label'=>'Equipos',
+        'filter'=>$arrayEquipos,
         'value'=>function($data)
         {
-            return $data->equipo->nombre;
+            return $data->equipo->nombre . ' - '.$data->equipo->genero->valor . ' - '.$data->equipo->categoria->valor;
         }
     ],
     [

@@ -2,6 +2,7 @@
 
 namespace common\models\search;
 
+use common\models\Campeonato;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -41,7 +42,8 @@ class DocumentosSearch extends Documentos
      */
     public function search($params)
     {
-        $query = Documentos::find();
+        $modelsCampeonato = Campeonato::find()->where(['estado' => true])->one();
+        $query = Documentos::find()->where(['id_campeonato'=>$modelsCampeonato->id]);;
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

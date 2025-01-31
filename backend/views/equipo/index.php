@@ -1,7 +1,6 @@
 <?php
 
 use common\models\Campeonato;
-use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\bootstrap4\Modal;
 use kartik\grid\GridView;
@@ -17,6 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);
 $modelCampeonato = Campeonato::find()->where(['estado' => true])->one();
+
+
 ?>
 <div class="equipo-index">
     <div class="card">
