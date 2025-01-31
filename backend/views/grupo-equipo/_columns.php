@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 return [
     // [
@@ -39,6 +40,15 @@ return [
         'value'=>function($model)
         {
             return $model->equipo->nombre;
+        }
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'label'=>'Logo',
+        'format'=>'html',
+        'value'=>function($model)
+        {
+            return Html::img($model->equipo->link_logotipo,['width'=>'40px']) ;
         }
     ],
     [
