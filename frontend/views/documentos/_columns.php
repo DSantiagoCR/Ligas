@@ -1,22 +1,11 @@
 <?php
-
-use Codeception\PHPUnit\ResultPrinter\HTML as ResultPrinterHTML;
-use common\models\Campeonato;
-use common\models\Catalogos;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
-use yii\helpers\Html;
-
-$modelCampeonato = Campeonato::find()->where(['estado'=>true])->all();
-$arrayCampeonato = ArrayHelper::map($modelCampeonato,'id','nombre');
-$modelsCatalogo = Catalogos::find()->where(['id_catalogo'=>25])->all();
-$arrayCatalogo = ArrayHelper::map($modelsCatalogo,'id','valor');
 
 return [
-    // [
-    //     'class' => 'kartik\grid\CheckboxColumn',
-    //     'width' => '20px',
-    // ],
+    [
+        'class' => 'kartik\grid\CheckboxColumn',
+        'width' => '20px',
+    ],
     [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
@@ -28,32 +17,14 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'id_campeonato',
-        'label'=>'Campeonato',
-        'filter'=>$arrayCampeonato,
-        'value'=>function($model)
-            {
-                return $model->campeonato->nombre . " / ".$model->campeonato->anio;
-            }
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'id_tipo_documento',
-        'filter'=>$arrayCatalogo,
-        'label'=>'Tipo Documento',
-        'value'=>function($model)
-            {
-                return $model->tipoDocumento->valor;
-            }
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'link',
-        'format' => 'html',
-        'value' => function ($data) {
-            //return HTML::img( $data->link, ['width' => '300px']);
-            return Html::a(substr($data->link,0,50).'...', $data->link, ['target' => '_blank','rel' => 'noopener noreferrer']);
-
-        },
     ],
     [
         'class'=>'\kartik\grid\DataColumn',

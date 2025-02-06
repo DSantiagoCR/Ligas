@@ -5,17 +5,18 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'bov4zECSN9LVaedRYS-xb5mxsnMNFqWI',
-            'baseUrl' => '/book',
+            'baseUrl' => '/ligas',
             'csrfParam' => '_csrf-frontend',
             'enableCsrfValidation' => true,
         ],
         'urlManager' => [
-            'baseUrl' => '/book',
+            'baseUrl' => '/ligas',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
                 '<controller>/<action>/<id:\d+>' => '<controller>/<action>',
             ],
+            //'homeUrl' => '/site/index', // Cambia esta URL según lo que necesites
         ],
     ],
 ];

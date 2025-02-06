@@ -5,12 +5,12 @@
 use yii\helpers\Html;
 use yii\bootstrap5\ActiveForm;
 
-$this->registerCssFile('@web/css/body_login.css');
+$this->registerCssFile('@web/css/body_login2.css');
 ?>
 <div class="" align="center">
 <div class="login-box" style="width: 25rem;" align="center">
-    <div class="body-content" align="center">
-        <img class="img-responsive hidden-xs" src="<?= Yii::getAlias('@web') ?>/img/logo-34-anos-vertical.png" alt="logo"/>
+    <div class="body-content p-5" align="center">
+        <img class="img-responsive hidden-xs" src="<?= Yii::getAlias('@web') ?>/img/balontierra.png" alt="logo" width="250px" style="border-radius: 50%;"/>
     </div>
 
     <div class="login-box-body">
@@ -20,7 +20,7 @@ $this->registerCssFile('@web/css/body_login.css');
         <?php $form = \yii\bootstrap4\ActiveForm::begin(['id' => 'login-form','class'=>'signin-form']) ?>
         <?= $form->field($model,'username', [
             'options' => ['class' => 'form-group has-feedback'],
-            'inputTemplate' => '{input}<div class="input-group-append" ><span class="input-group-text" >@example.com</span></div></div>',
+            'inputTemplate' => '{input}<div class="input-group-append" >',//<span class="input-group-text" >@example.com</span></div></div>',
             'template' => '{beginWrapper}{input}{error}{endWrapper}',
             'wrapperOptions' => ['class' => 'input-group mb-3']
         ])
@@ -61,9 +61,11 @@ $this->registerCssFile('@web/css/body_login.css');
 <!--            </button>-->
 <!--        </div>-->
         <div class="my-1 mx-0" style="color:#999;">
-            If you forgot your password you can <?= Html::a('Reset it', ['site/request-password-reset']) ?>.
+            <scan style="color:aliceblue"><b>Si olvido su contraseña, puede restablecerla</b></scan>  
             <br>
-<!--            Need new verification email? --><?php //= Html::a('Resend', ['site/resend-verification-email']) ?>
+            <?= Html::a('Click Aquí', ['site/request-password-reset']) ?>.
+            <br>
+           <!-- Need new verification email?<?php //= Html::a('Resend', ['site/resend-verification-email']) ?> -->
         </div>
 
         <?php

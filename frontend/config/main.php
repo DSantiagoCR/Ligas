@@ -8,7 +8,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-frontend',
-    'name' => 'Book GoGalapagos',
+    'name' => 'Ligas',
     'language' => 'en',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -59,5 +59,6 @@ return [
         ],
     ],
     'params' => $params,
-//    'defaultRoute' => '/default/index',
+    //'defaultRoute' => '/site/login',
+
 ];

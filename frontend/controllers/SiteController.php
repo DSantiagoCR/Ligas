@@ -75,9 +75,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $this->layout = "layoutBooking";
-        return $this->render('bookingNow');
-//        return $this->render('index');
+        //$this->layout = "layoutBooking";    
+       return $this->render('index');
     }
 
 
@@ -113,7 +112,8 @@ class SiteController extends Controller
     {
         Yii::$app->user->logout();
 
-        return $this->goHome();
+        //return $this->goHome();
+        return $this->redirect('login');
     }
 
     /**
@@ -147,117 +147,6 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
-    }
-
-    /**
-     * Displays booking now page.
-     *
-     * @return mixed
-     */
-    public function actionBookingNow()
-    {
-        $this->layout = "layoutBooking";
-        return $this->render('bookingNow');
-    }
-
-    /**
-     * Displays booking now step 1 page.
-     *
-     * @return mixed
-     */
-    public function actionBookingNowStep1()
-    {
-        $this->layout = "layoutBooking";
-        return $this->render('bookingNowStep1');
-    }
-
-    /**
-     * Displays booking now step 2 page.
-     *
-     * @return mixed
-     */
-    public function actionBookingNowStep2()
-    {
-        $this->layout = "layoutBooking";
-        return $this->render('bookingNowStep2');
-    }
-
-    /**
-     * Displays booking now step 3 page.
-     *
-     * @return mixed
-     */
-    public function actionBookingNowStep3()
-    {
-        $this->layout = "layoutBooking";
-        return $this->render('bookingNowStep3');
-    }
-
-    /**
-     * Displays booking now step 4 page.
-     *
-     * @return mixed
-     */
-    public function actionBookingNowStep4()
-    {
-        $this->layout = "layoutBooking";
-        return $this->render('bookingNowStep4');
-    }
-
-    /**
-     * Displays booking now step 5 page.
-     *
-     * @return mixed
-     */
-    public function actionBookingNowStep5()
-    {
-        $this->layout = "layoutBooking";
-        return $this->render('bookingNowStep5');
-    }
-
-    /**
-     * Displays booking now step 6 page.
-     *
-     * @return mixed
-     */
-    public function actionBookingNowStep6()
-    {
-        $this->layout = "layoutBooking";
-        return $this->render('bookingNowStep6');
-    }
-
-    /**
-     * Displays booking now pay page.
-     *
-     * @return mixed
-     */
-    public function actionBookingNowPay()
-    {
-        $this->layout = "layoutBooking";
-        return $this->render('bookingNowPay');
-    }
-
-    /**
-     * Displays booking now hold page.
-     *
-     * @return mixed
-     */
-    public function actionBookingNowHold()
-    {
-        $this->layout = "layoutBooking";
-        return $this->render('bookingNowHold');
-    }
-
-
-    /**
-     * Displays booking now quote page.
-     *
-     * @return mixed
-     */
-    public function actionBookingNowQuote()
-    {
-        $this->layout = "layoutBooking";
-        return $this->render('bookingNowQuote');
     }
 
 
@@ -371,4 +260,11 @@ class SiteController extends Controller
             'model' => $model
         ]);
     }
+
+    public function actionLlamaListDocumentos()
+    {
+        $request = Yii::$app->request;
+        return $this->redirect(['documentos/list-documentos']);
+    }
+
 }
