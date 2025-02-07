@@ -2,8 +2,10 @@
 
 namespace common\models\Util;
 
+use common\models\Campeonato;
+use Yii;
 use common\models\Catalogos;
-use common\models\Grupos;
+use common\models\UserEquipo;
 use yii\helpers\ArrayHelper;
 
 class HelperGeneral
@@ -33,5 +35,22 @@ class HelperGeneral
         $modelhorasPartido = Catalogos::find()->where(['id_catalogo' => 56, 'estado' => true])->all();
         $arrayHorasPartido = ArrayHelper::map($modelhorasPartido, 'id', 'valor');
         return $arrayHorasPartido;
+    }
+    public static function devuelveEquipoUsuario()
+    {       
+        $id_user = Yii::$app->user->identity ? Yii::$app->user->identity->id : null;
+
+        if ($id_user)
+        {
+            $modelUserEquipo = UserEquipo::find()
+            ->where(['id_user'=>$id_user,'estado'=>1])->all();
+            return $modelUserEquipo;
+        }
+        return null; 
+    }
+    public static function devuelveCampeonatoActual()
+    {       
+        $modelCampeonato = Campeonato::find()->where(['estado'=>1])->one();
+        return $modelCampeonato;
     }
 }
