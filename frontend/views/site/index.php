@@ -19,10 +19,10 @@ $this->title = 'Ligas';
                     echo $this->render('_liga_barrial');
                     ?>
                     </br></br>
-                    <b> Campeonato:</b>
+                    <b> <scan style="font-size: 20px;">Campeonato:</scan></b>
                     <?= $modelCampeonato->nombre?>
                     </br>
-                    <b>Periodo:</b>
+                    <b><scan style="font-size: 20px;">Periodo:</scan></b>
                     <?= $modelCampeonato->anio?>
                 </div>
                 <div class="col">    
@@ -35,7 +35,7 @@ $this->title = 'Ligas';
                         {
                     ?>
                     <div class="col">                
-                        <div><?= Html::a( $model->equipo->nombre,['controller/acction']); ?></div>
+                        <div><?= Html::a( $model->equipo->nombre,['/principal/index','id'=>$model->id]); ?></div>
                         <div><?= Html::img($model->equipo->link_logotipo, ['width' => '100px']); ?></div>                    
                     </div>
                     <?php
@@ -51,37 +51,4 @@ $this->title = 'Ligas';
 
     </div>
 
-    <div class="body-content">
-        <div>
-            <div class="row">
-                <div class="col-lg-4 ">
-                    <h2>Mi Equipo</h2>
-                    <ul>
-                        <li>Jugadores</li>
-                        <li>Directiva</li>
-                        <li>Mi Equipo</li>
-                    </ul>
-                </div>
-                <div class="col-lg-4">
-                    <h2>Estadisticas</h2>
-                    <ul>
-                        <li>Proximas Fechas</li>
-                        <li>Estadisticas</li>
-                        <li>Históricos</li>
-                        <li>Vocalias</li>
-
-                    </ul>
-                </div>
-                <div class="col-lg-4">
-
-                    <?php
-                    echo $this->render('_lista_docu');
-                    ?>
-                </div>
-            </div>
-        </div>
-
-
-
-    </div>
 </div>

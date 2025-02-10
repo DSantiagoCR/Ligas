@@ -10,6 +10,7 @@ use yii\helpers\Html;
 
 backend\assets\AppAsset::register($this);
 \hail812\adminlte3\assets\PluginAsset::register($this)->add(['sweetalert2', 'toastr']);
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -22,7 +23,9 @@ backend\assets\AppAsset::register($this);
     <title><?= Html::encode('Ligas - '.$this->title) ?></title>
     <link rel="shortcut icon" type="image/ico"  href="<?=Yii::getAlias('@web')?>/img/pi.jps">
     <?php $this->head() ?>
+    
     <link href="<?= Yii::getAlias('@web') ?>/css/bootstrap4/css/bootstrap-glyphicons.min.css" rel="stylesheet" type="text/css" />
+
 </head>
 <body class="hold-transition sidebar-mini">
 <?php $this->beginBody() ?>

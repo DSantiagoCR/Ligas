@@ -16,7 +16,7 @@ $this->title = 'Login';
     <!-- <p>Please fill out the following fields to login:</p> -->
     <br>
     <div class="row">
-        <div class="col-lg-5">
+        <div class="col-lg">
             <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 
             <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
@@ -28,8 +28,8 @@ $this->title = 'Login';
             <div class="my-1 mx-0" style="color:#999;">
                 <scan style="color:red">Si olvido su contraseña, puede restablecerla </scan><?= Html::a('click aqui', ['site/request-password-reset']) ?>
                 <br>
-                
-               
+
+
                 <!-- Need new verification email? <?= Html::a('Resend', ['site/resend-verification-email']) ?> -->
             </div>
             <br>
@@ -42,6 +42,11 @@ $this->title = 'Login';
             </div>
 
             <?php ActiveForm::end(); ?>
+        </div>
+        <div class="col-lg">
+            <div class="body-content p-5" align="center">
+                <img class="img-responsive hidden-xs" src="<?= Yii::getAlias('@web') ?>/backend/web/img/balontierra.png" alt="logo" width="250px" style="border-radius: 50%;" />
+            </div>
         </div>
     </div>
 </div>
