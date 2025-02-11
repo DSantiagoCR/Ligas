@@ -1,8 +1,8 @@
 <?php
 
 use common\models\Campeonato;
-use common\models\Catalogos;
 use common\models\Equipo;
+use common\models\Util\HelperGeneral;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 //use yii\widgets\ActiveForm;
@@ -12,8 +12,8 @@ use yii\bootstrap5\ActiveForm;
 /* @var $model common\models\Jugador */
 /* @var $form yii\widgets\ActiveForm */
 
-$modelsEstadoCivil = Catalogos::find()->where(['id_catalogo' => 10])->all();
-$arrayEstadoCivil = ArrayHelper::map($modelsEstadoCivil, 'id', 'valor');
+
+$arrayEstadoCivil = HelperGeneral::devuelveArrayEstadoCivil();
 
 $modelCampeonato = Campeonato::find()->where(['estado' => true])->one();
 // $modelEquipos = Equipo::find()->where(['id_campeonato' => $modelCampeonato->id])->all();
@@ -34,6 +34,8 @@ $arrayEquipos = ArrayHelper::map($modelEquipos, 'id', function($model) {
     <?= $form->field($model, 'nombres')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'apellidos')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'num_camiseta')->textInput(['type' => 'number']) ?>
 
     <?= $form->field($model, 'fecha_nacimiento')->textInput(['type' => 'date']) ?>
 

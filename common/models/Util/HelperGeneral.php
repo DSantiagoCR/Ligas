@@ -37,20 +37,25 @@ class HelperGeneral
         return $arrayHorasPartido;
     }
     public static function devuelveEquipoUsuario()
-    {       
+    {
         $id_user = Yii::$app->user->identity ? Yii::$app->user->identity->id : null;
 
-        if ($id_user)
-        {
+        if ($id_user) {
             $modelUserEquipo = UserEquipo::find()
-            ->where(['id_user'=>$id_user,'estado'=>1])->all();
+                ->where(['id_user' => $id_user, 'estado' => 1])->all();
             return $modelUserEquipo;
         }
-        return null; 
+        return null;
     }
     public static function devuelveCampeonatoActual()
-    {       
-        $modelCampeonato = Campeonato::find()->where(['estado'=>1])->one();
+    {
+        $modelCampeonato = Campeonato::find()->where(['estado' => 1])->one();
         return $modelCampeonato;
+    }
+    public static function devuelveArrayEstadoCivil()
+    {
+        $modelsEstadoCivil = Catalogos::find()->where(['id_catalogo' => 10])->all();
+        $arrayEstadoCivil = ArrayHelper::map($modelsEstadoCivil, 'id', 'valor');
+        return $arrayEstadoCivil;
     }
 }

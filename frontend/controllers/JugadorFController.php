@@ -42,7 +42,7 @@ class JugadorFController extends Controller
     {    
        
         $searchModel = new JugadorSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->searchFront(Yii::$app->request->queryParams,$id);
         $modelUE = UserEquipo::findOne($id);
         return $this->render('index', [
             'searchModel' => $searchModel,

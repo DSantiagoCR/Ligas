@@ -26,6 +26,7 @@ use Yii;
  * @property int|null $tr_actuales
  * @property int|null $goles
  * @property string|null $link_ficha
+ * @property int|null $num_camiseta 
  *
  * @property DetalleVocalia[] $detalleVocalias
  * @property Equipo $equipo
@@ -49,8 +50,8 @@ class Jugador extends \yii\db\ActiveRecord
         return [
             [['nombres', 'apellidos', 'estado'], 'required'],
             [['fecha_nacimiento'], 'safe'],
-            [['id_estado_civil', 'hijos', 'id_equipo', 'ta_acumulada', 'ta_actuales', 'tr_acumulada', 'tr_actuales', 'goles'], 'default', 'value' => null],
-            [['id_estado_civil', 'hijos', 'id_equipo', 'ta_acumulada', 'ta_actuales', 'tr_acumulada', 'tr_actuales', 'goles'], 'integer'],
+            [['id_estado_civil', 'hijos', 'id_equipo', 'ta_acumulada', 'ta_actuales', 'tr_acumulada', 'tr_actuales', 'goles','num_camiseta'], 'default', 'value' => null],
+            [['id_estado_civil', 'hijos', 'id_equipo', 'ta_acumulada', 'ta_actuales', 'tr_acumulada', 'tr_actuales', 'goles','num_camiseta'], 'integer'],
             [['estado', 'puede_jugar'], 'boolean'],
             [['code'], 'string', 'max' => 20],
             [['nombres', 'apellidos'], 'string', 'max' => 100],
@@ -86,6 +87,7 @@ class Jugador extends \yii\db\ActiveRecord
             'tr_actuales' => 'Tr Actuales',
             'goles' => 'Goles',
             'link_ficha' => 'Link Ficha',
+            'num_camiseta'=>'Num Camiseta',
         ];
     }
 

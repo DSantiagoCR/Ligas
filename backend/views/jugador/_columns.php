@@ -43,6 +43,10 @@ return [
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'num_camiseta',
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'fecha_nacimiento',
         'filter' => \kartik\date\DatePicker::widget([
             'model' => $searchModel,

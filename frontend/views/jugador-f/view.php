@@ -10,25 +10,57 @@ use yii\widgets\DetailView;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'code',
+            //'id',
+            //'code',
+             //'id_equipo',
+             [
+                'label'=>'Equipo',
+                'value'=>function($data){                   
+                    return $data->equipo->nombre;                   
+                }
+            ],
             'nombres',
             'apellidos',
+            'num_camiseta',
             'fecha_nacimiento',
             'cedula',
             'celular',
-            'id_estado_civil',
+            // 'id_estado_civil',
+            [
+                'label'=>'Estado Civil',
+                'value'=>function($data){                   
+                    return $data->estadoCivil->valor;                   
+                }
+            ],
             'hijos',
-            'estado:boolean',
-            'link_foto',
-            'id_equipo',
-            'puede_jugar:boolean',
+            //'estado:boolean',
+            [
+                'label'=>'Estado',
+                'value'=>function($data){                   
+                    return ($data->estado)?'Activado':'Desactivado';                   
+                }
+            ],
+           // 'link_foto',
+           
+            // 'puede_jugar:boolean',
+            [
+                'label'=>'Puede Jugar',
+                'value'=>function($data){                   
+                    return ($data->puede_jugar)?'SI':'NO';                   
+                }
+            ],
             'ta_acumulada',
             'ta_actuales',
             'tr_acumulada',
             'tr_actuales',
-            'goles',
-            'link_ficha',
+            //'goles',
+            [
+                'label'=>'Goles',
+                'value'=>function($data){                   
+                    return ($data->goles)?$data->goles:'0';                   
+                }
+            ],
+            //'link_ficha',
         ],
     ]) ?>
 

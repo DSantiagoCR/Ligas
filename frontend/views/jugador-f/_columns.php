@@ -2,10 +2,10 @@
 use yii\helpers\Url;
 
 return [
-    [
-        'class' => 'kartik\grid\CheckboxColumn',
-        'width' => '20px',
-    ],
+    // [
+    //     'class' => 'kartik\grid\CheckboxColumn',
+    //     'width' => '20px',
+    // ],
     [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
@@ -14,10 +14,10 @@ return [
         // 'class'=>'\kartik\grid\DataColumn',
         // 'attribute'=>'id',
     // ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'code',
-    ],
+    // [
+    //     'class'=>'\kartik\grid\DataColumn',
+    //     'attribute'=>'code',
+    // ],
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'nombres',
@@ -28,8 +28,12 @@ return [
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'fecha_nacimiento',
+        'attribute'=>'num_camiseta',
     ],
+    // [
+    //     'class'=>'\kartik\grid\DataColumn',
+    //     'attribute'=>'fecha_nacimiento',
+    // ],
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'cedula',
@@ -46,10 +50,10 @@ return [
         // 'class'=>'\kartik\grid\DataColumn',
         // 'attribute'=>'hijos',
     // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'estado',
-    // ],
+    [
+        'class'=>'\kartik\grid\BooleanColumn',
+        'attribute'=>'estado',
+    ],
     // [
         // 'class'=>'\kartik\grid\DataColumn',
         // 'attribute'=>'link_foto',
@@ -58,30 +62,35 @@ return [
         // 'class'=>'\kartik\grid\DataColumn',
         // 'attribute'=>'id_equipo',
     // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'puede_jugar',
-    // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'ta_acumulada',
-    // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'ta_actuales',
-    // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'tr_acumulada',
-    // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'tr_actuales',
-    // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'goles',
-    // ],
+    [
+        'class'=>'\kartik\grid\BooleanColumn',
+        'attribute'=>'puede_jugar',
+        
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'ta_acumulada',
+        'label'=>'T.A.A'
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'ta_actuales',
+        'label'=>'T.A.'
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'tr_acumulada',
+        'label'=>'T.R.A'
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'tr_actuales',
+        'label'=>'T.R'
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'goles',
+    ],
     // [
         // 'class'=>'\kartik\grid\DataColumn',
         // 'attribute'=>'link_ficha',

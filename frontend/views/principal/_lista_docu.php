@@ -12,7 +12,7 @@ $modelDocumetos = Documentos::find()->where(['estado'=>1,'id_campeonato'=>$model
 
 
 
-<h2>Documentos</h2>
+<h3>Documentos</h3>
     <ul>
         <?php
         foreach($modelDocumetos as $docu )
