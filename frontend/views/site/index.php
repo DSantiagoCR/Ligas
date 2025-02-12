@@ -2,51 +2,57 @@
 
 /** @var yii\web\View $this */
 
-$this->title = 'My Yii Application';
+use common\models\Util\HelperGeneral;
+use yii\helpers\Html;
+
+$modelUserEquipo = HelperGeneral::devuelveEquipoUsuario();
+
+$this->title = 'Ligas';
 ?>
 <div class="site-index">
     <div class="p-5 mb-4 bg-transparent rounded-3">
-        <div class="container-fluid py-5 text-center">
-            <h1 class="display-4">Congratulations!</h1>
-            <p class="fs-5 fw-light"><?= Yii::t('app/error', '404-No-Found')?></p>
-            <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
+        <div class="container-fluid py-5 ">
+            <div class="row text-center">
+                <div class="col">
+                    <h1 class="display-4">Bienvenido!</h1>
+                    <?php
+                    echo $this->render('_liga_barrial');
+                    ?>
+                </div>
+                <div class="col">
+                    <scan><b>Equipos Asociados</b></scan>
+
+                    <div class="row p-3">
+                        <?php
+                        if ($modelUserEquipo) {
+                            foreach ($modelUserEquipo as $model) {
+                        ?>
+                                <div class="col">
+                                    <div class="card" style=" padding: 10px;">
+                                        <div class="card-body">
+                                            <div class="col-12 col-md-12 ">
+                                                <div><?= Html::a($model->equipo->nombre, ['/principal/index', 'id' => $model->id]); ?></div>
+                                                <div><?= Html::img($model->equipo->link_logotipo, [
+                                                            'width' => '100%',
+                                                            'height' => '150px',
+                                                            'class' => 'card-img-top card-sm',
+                                                        ]); ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <!-- <p class="fs-5 fw-light"><?= Yii::t('app/error', '404-No-Found') ?></p> -->
+            <!-- <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p> -->
         </div>
+
     </div>
 
-    <div class="body-content">
-
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-        </div>
-
-    </div>
 </div>

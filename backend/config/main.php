@@ -8,7 +8,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-backend',
-    'name' => 'Ligas Barriales',
+    'name' => 'Ligas',
     'timeZone' => 'America/Guayaquil',
     'language' => 'es',
     'basePath' => dirname(__DIR__),

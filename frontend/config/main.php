@@ -8,11 +8,13 @@ $params = array_merge(
 
 return [
     'id' => 'app-frontend',
-    'name' => 'Book GoGalapagos',
+    'name' => 'Ligas',
+    'timeZone' => 'America/Guayaquil',
     'language' => 'en',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
@@ -21,6 +23,7 @@ return [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
+            'authTimeout' => 480,
         ],
         'session' => [
             // this is the name of the session cookie used for login on the frontend
@@ -56,8 +59,25 @@ return [
                     'css' => [],
                 ]
             ],
+        ],      
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+            'defaultRoles' => ['guest', 'user'],
         ],
     ],
+    'modules' => [
+        'admin' => [
+            'class' => 'mdm\admin\Module',
+            'mainLayout' => '@app/views/layouts/main.php',
+            'menus' => [
+                'rule' => null, // disable menu
+                'assignment' => null,
+                'menu' => null
+            ],
+        ],
+     
+    ],
     'params' => $params,
-//    'defaultRoute' => '/default/index',
+    //'defaultRoute' => '/site/login',
+
 ];

@@ -51,7 +51,7 @@ return [
         'format' => 'html',
         'value' => function ($data) {
             //return HTML::img( $data->link, ['width' => '300px']);
-            return Html::a(substr($data->link,0,50).'...', $data->link, ['target' => '_blank']);
+            return Html::a(substr($data->link,0,50).'...', $data->link, ['target' => '_blank','rel' => 'noopener noreferrer']);
 
         },
     ],

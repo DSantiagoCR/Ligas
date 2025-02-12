@@ -2,7 +2,9 @@
 
 use common\models\Catalogos;
 use common\models\GrupoEquipo;
+use common\models\Util;
 use common\models\Grupos;
+use common\models\Util\HelperGeneral;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
@@ -17,15 +19,10 @@ use kartik\depdrop\DepDrop;
 /* @var $model common\models\DetalleFecha */
 /* @var $form yii\widgets\ActiveForm */
 
-$modelEtapas = Catalogos::find()->where(['id_catalogo' => 27])->all();
-$arrayEtapas = ArrayHelper::map($modelEtapas, 'id', 'valor');
+// $modelEtapas = Catalogos::find()->where(['id_catalogo' => 27,'estado'=>true])->all();
+// $arrayEtapas = ArrayHelper::map($modelEtapas, 'id', 'valor');
 
-$modelEstadoPardito = Catalogos::find()->where(['id_catalogo' => 50])->all();
-$arrayEstadoPartido = ArrayHelper::map($modelEstadoPardito, 'id', 'valor');
-
-$modelhorasPartido = Catalogos::find()->where(['id_catalogo' => 56])->all();
-$arrayHorasPartido = ArrayHelper::map($modelhorasPartido, 'id', 'valor');
-
+$objHelper = new HelperGeneral();
 $arrayGrupos = [];
 if ($model->id_grupo) {
     $modelGrupo = Grupos::find()->where(['id_catalogo' => $model->grupo->id_catalogo, 'id_genero' => $model->grupo->id_genero])->all();
@@ -49,11 +46,7 @@ if ($model->id_grupo) {
     });
 }
 
-
-
 ?>
-
-
 <div class="detalle-fecha-form">
 
     <?php if (Yii::$app->session->hasFlash('A1')): ?>
@@ -66,7 +59,7 @@ if ($model->id_grupo) {
 
     <?= $form->field($model, 'id_cabecera_fecha')->hiddenInput()->label(false) ?>
 
-    <?= $form->field($model, 'id_etapa')->dropDownList($arrayEtapas, ['id' => 'id_etapa1', 'prompt' => 'Seleccione...']) ?>
+    <?= $form->field($model, 'id_etapa')->dropDownList($objHelper->helperArrayEtapas(), ['id' => 'id_etapa1', 'prompt' => 'Seleccione...']) ?>
 
     <?= $form->field($model, 'id_grupo')->dropDownList(
         $arrayGrupos,
@@ -86,11 +79,11 @@ if ($model->id_grupo) {
 
 
     <?= $form->field($model, 'hora_inicio')->dropDownList(
-        $arrayHorasPartido,
+        $objHelper->helperArrayHoraPartido(),
         ['id' => 'idHoraInicio', 'type' => 'time', 'prompt' => 'Seleccione...']
     ) ?>
 
-    <?= $form->field($model, 'id_estado_partido')->dropDownList($arrayEstadoPartido, ['prompt' => 'Seleccione..'])->label('Estado Partido') ?>
+    <?= $form->field($model, 'id_estado_partido')->dropDownList($objHelper->helperArrayEstadoPartido(), ['prompt' => 'Seleccione..'])->label('Estado Partido') ?>
     <div class="form-check form-switch">
         <?= $form->field($model, 'estado')->checkbox()->label('Activado') ?>
     </div>
@@ -107,55 +100,55 @@ if ($model->id_grupo) {
     <?php ActiveForm::end(); ?>
     <?php
     $this->registerJs("
-$('#id_etapa1').change(function() {
-    var etapa_id = $(this).val();
-    $.ajax({
-        type:'POST',
-        url: '" . Url::to(['busqueda-etapa-grupo']) . "',
-        data: {id_etapa1: etapa_id},
-        success: function(data) {
-            $('#drop_grupos').empty().append('<option value=\"\">Seleccione...</option>');
-            $.each(data, function(index, item) {
-                $('#drop_grupos').append('<option value=\"' + item.id + '\">' + item.name + '</option>');
+            $('#id_etapa1').change(function() {
+                var etapa_id = $(this).val();
+                $.ajax({
+                    type:'POST',
+                    url: '" . Url::to(['busqueda-etapa-grupo']) . "',
+                    data: {id_etapa1: etapa_id},
+                    success: function(data) {
+                        $('#drop_grupos').empty().append('<option value=\"\">Seleccione...</option>');
+                        $.each(data, function(index, item) {
+                            $('#drop_grupos').append('<option value=\"' + item.id + '\">' + item.name + '</option>');
+                        });
+                    }
+                });
             });
-        }
-    });
-});
-");
+    ");
 
     $this->registerJs("
-$('#drop_grupos').change(function() {
-    var id_grupo = $(this).val();
-    $.ajax({
-        type:'POST',
-        url: '" . Url::to(['busqueda-grupo-equipo1']) . "',
-        data: {id_grupo1: id_grupo},
-        success: function(data) {
-            $('#drop_equipo1').empty().append('<option value=\"\">Seleccione...</option>');
-            $.each(data, function(index, item) {
-                $('#drop_equipo1').append('<option value=\"' + item.id + '\">' + item.name + '</option>');
+            $('#drop_grupos').change(function() {
+                var id_grupo = $(this).val();
+                $.ajax({
+                    type:'POST',
+                    url: '" . Url::to(['busqueda-grupo-equipo1']) . "',
+                    data: {id_grupo1: id_grupo},
+                    success: function(data) {
+                        $('#drop_equipo1').empty().append('<option value=\"\">Seleccione...</option>');
+                        $.each(data, function(index, item) {
+                            $('#drop_equipo1').append('<option value=\"' + item.id + '\">' + item.name + '</option>');
+                        });
+                    }
+                });
             });
-        }
-    });
-});
-");
+    ");
 
     $this->registerJs("
-$('#drop_equipo1').change(function() {
-    var id_grupo_equipo1 = $(this).val();
-    $.ajax({
-        type:'POST',
-        url: '" . Url::to(['busqueda-grupo-equipo2']) . "',
-        data: {id_grupo_equipo1: id_grupo_equipo1},
-        success: function(data) {
-            $('#drop_equipo2').empty().append('<option value=\"\">Seleccione...</option>');
-            $.each(data, function(index, item) {
-                $('#drop_equipo2').append('<option value=\"' + item.id + '\">' + item.name + '</option>');
+            $('#drop_equipo1').change(function() {
+                var id_grupo_equipo1 = $(this).val();
+                $.ajax({
+                    type:'POST',
+                    url: '" . Url::to(['busqueda-grupo-equipo2']) . "',
+                    data: {id_grupo_equipo1: id_grupo_equipo1},
+                    success: function(data) {
+                        $('#drop_equipo2').empty().append('<option value=\"\">Seleccione...</option>');
+                        $.each(data, function(index, item) {
+                            $('#drop_equipo2').append('<option value=\"' + item.id + '\">' + item.name + '</option>');
+                        });
+                    }
+                });
             });
-        }
-    });
-});
-");
+    ");
 
     $this->registerJs("
 $('#drop_equipo2').change(function() {
