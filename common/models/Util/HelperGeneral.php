@@ -6,6 +6,7 @@ use common\models\Campeonato;
 use Yii;
 use common\models\Catalogos;
 use common\models\UserEquipo;
+use DateTime;
 use yii\helpers\ArrayHelper;
 
 class HelperGeneral
@@ -57,5 +58,17 @@ class HelperGeneral
         $modelsEstadoCivil = Catalogos::find()->where(['id_catalogo' => 10])->all();
         $arrayEstadoCivil = ArrayHelper::map($modelsEstadoCivil, 'id', 'valor');
         return $arrayEstadoCivil;
+    }
+    public static function calcularEdadCompleta($fechaNacimiento) {
+
+        if($fechaNacimiento)
+        {
+            $fechaNac = new DateTime($fechaNacimiento);
+            $hoy = new DateTime();
+            $diferencia = $hoy->diff($fechaNac);
+        
+            return "{$diferencia->y} años, {$diferencia->m} meses y {$diferencia->d} días";
+        }
+        return ''; 
     }
 }

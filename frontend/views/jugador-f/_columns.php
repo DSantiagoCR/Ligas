@@ -53,6 +53,10 @@ return [
     [
         'class'=>'\kartik\grid\BooleanColumn',
         'attribute'=>'estado',
+        'value'=>function($data)
+        {
+            return $data->estado?'<scan style="color:green">ACTIVADO</scan>':'<scan style="color:red">DESACTIVADO</scan>';
+        }
     ],
     // [
         // 'class'=>'\kartik\grid\DataColumn',

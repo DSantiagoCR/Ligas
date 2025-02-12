@@ -10,15 +10,23 @@ use common\models\Util\HelperGeneral;
 /* @var $form yii\widgets\ActiveForm */
 
 $arrayEstadoCivil = HelperGeneral::devuelveArrayEstadoCivil();
-
+$aniosJugador =  HelperGeneral::calcularEdadCompleta($model->fecha_nacimiento);
 
 ?>
 
 <div class="jugador-form">
 
     <?php $form = ActiveForm::begin(['layout' => 'horizontal']); ?>
+   <?php
+   
+//    if ($model->hasErrors()) {
+//     print_r($model->getErrors());
+// }
+   ?> 
 
-    <?= $form->field($model, 'id_equipo')->textInput(['value'=>$model->equipo->nombre,'disabled'=>true])->label('Equipo') ?>
+
+    <?= $form->field($model, 'id_equipo')->textInput(['value' => $model->equipo->nombre, 'disabled' => true])->label('Equipo') ?>
+
 
 
     <?= $form->field($model, 'code')->hiddenInput(['value' => '-'])->label(false) ?>
@@ -29,7 +37,8 @@ $arrayEstadoCivil = HelperGeneral::devuelveArrayEstadoCivil();
 
     <?= $form->field($model, 'num_camiseta')->textInput(['type' => 'number']) ?>
 
-    <?= $form->field($model, 'fecha_nacimiento')->textInput(['type' => 'date']) ?>
+    <?= $form->field($model, 'fecha_nacimiento')->textInput(['type' => 'date'])->hint($aniosJugador, ['class' => 'text-success small ']) ?>
+
 
     <?= $form->field($model, 'cedula')->textInput(['maxlength' => true]) ?>
 
@@ -42,9 +51,9 @@ $arrayEstadoCivil = HelperGeneral::devuelveArrayEstadoCivil();
         <?= $form->field($model, 'estado')->checkbox(['disabled' => true]) ?>
     </div>
 
-  
+
     <div class="form-check form-switch">
-        <?= $form->field($model, 'puede_jugar')->checkbox() ?>
+        <?= $form->field($model, 'puede_jugar')->checkbox(['disabled' => true]) ?>
     </div>
 
 

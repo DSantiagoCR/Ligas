@@ -1,7 +1,9 @@
 <?php
 
 use yii\helpers\Html;
-
+use frontend\assets\AppAsset;
+$assetDir = Yii::getAlias("@web");
+AppAsset::register($this);
 ?>
 <!-- Navbar -->
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">

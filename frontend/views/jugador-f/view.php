@@ -1,5 +1,6 @@
 <?php
 
+use common\models\Util\HelperGeneral;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -22,7 +23,16 @@ use yii\widgets\DetailView;
             'nombres',
             'apellidos',
             'num_camiseta',
-            'fecha_nacimiento',
+            //'fecha_nacimiento',
+            [
+                'label'=>'Fecha Nacimiento',
+                'format'=>'raw',
+                'value'=>function($data){                   
+                    $aniosJugador =  HelperGeneral::calcularEdadCompleta($data->fecha_nacimiento);
+                    $aniosJugador = '<scan style="color:green"><b>('.$aniosJugador.')</b></scan>';
+                    return ($data->fecha_nacimiento)?($data->fecha_nacimiento.' '.$aniosJugador.''):'';               
+                }
+            ],
             'cedula',
             'celular',
             // 'id_estado_civil',
@@ -36,8 +46,10 @@ use yii\widgets\DetailView;
             //'estado:boolean',
             [
                 'label'=>'Estado',
-                'value'=>function($data){                   
-                    return ($data->estado)?'Activado':'Desactivado';                   
+                'format'=>'raw',
+                'value'=>function($data)
+                {
+                    return $data->estado?'<scan style="color:green"><b>ACTIVADO</b></scan>':'<scan style="color:red"><b>DESACTIVADO</b></scan>';
                 }
             ],
            // 'link_foto',
@@ -45,14 +57,43 @@ use yii\widgets\DetailView;
             // 'puede_jugar:boolean',
             [
                 'label'=>'Puede Jugar',
+                'format'=>'raw',
                 'value'=>function($data){                   
-                    return ($data->puede_jugar)?'SI':'NO';                   
+                    return $data->puede_jugar?'<scan style="color:green"><b>SI</b></scan>':'<scan style="color:red"><b>NO</b></scan>';                
                 }
             ],
-            'ta_acumulada',
-            'ta_actuales',
-            'tr_acumulada',
-            'tr_actuales',
+            // 'ta_acumulada',
+            [
+                'label'=>'T.A Acumulada',
+                'format'=>'raw',
+                'value'=>function($data){                   
+                    return $data->ta_acumulada;              
+                }
+            ],
+            //'ta_actuales',
+            [
+                'label'=>'T.A Actuales',
+                'format'=>'raw',
+                'value'=>function($data){                   
+                    return $data->ta_actuales;              
+                }
+            ],
+            //'tr_acumulada',
+            [
+                'label'=>'T.R Acumulada',
+                'format'=>'raw',
+                'value'=>function($data){                   
+                    return $data->tr_acumulada;              
+                }
+            ],
+            //'tr_actuales',
+            [
+                'label'=>'T.R Actuales',
+                'format'=>'raw',
+                'value'=>function($data){                   
+                    return $data->tr_actuales;              
+                }
+            ],
             //'goles',
             [
                 'label'=>'Goles',

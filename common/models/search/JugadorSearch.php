@@ -20,7 +20,7 @@ class JugadorSearch extends Jugador
     public function rules()
     {
         return [
-            [['id', 'id_estado_civil', 'hijos','id_equipo','num_camiseta'], 'integer'],
+            [['id', 'id_estado_civil', 'hijos','id_equipo','num_camiseta','puede_jugar'], 'integer'],
             [['code', 'nombres', 'apellidos', 'fecha_nacimiento', 'cedula', 'celular','num_camiseta'], 'safe'],
             [['estado'], 'boolean'],
         ];

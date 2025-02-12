@@ -22,7 +22,10 @@ AppAsset::register($this);
                                 'height' => '100px',
                                 'class' => 'card-img-top card-sm',
                             ]); ?>
-                        </div>
+                        </div>                                       
+                        <div><?= Html::tag('p', $modelUE->equipo->genero->valor, ['style' => 'color: blue; font-size: 12px;']) ?></div>
+                        <div><?= Html::tag('p', $modelUE->equipo->categoria->valor, ['style' => 'color: blue; font-size: 12px;']) ?></div>
+
                     </div>
                 </div>
             </div>
@@ -54,7 +57,7 @@ AppAsset::register($this);
             <div class="col-lg ">
                 <h3>Mi Equipo</h3>
                 <ul>           
-                    <li><?= Html::a('Jugadores', ['/jugador-f/index', 'id' => 1]) ?></li>
+                    <li><?= Html::a('Jugadores', ['/jugador-f/index', 'id' => $modelUE->id_equipo]) ?></li>
 
                     <li>Directiva</li>
                     <li>Mi Equipo</li>
