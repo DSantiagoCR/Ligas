@@ -30,10 +30,10 @@ $this->title = 'Ligas';
                                 <div class="col">
                                     <div class="card" style=" padding: 10px;">
                                         <div class="card-body">
-                                            <div class="col-12 col-md-12 ">
+                                            <div class="col">
                                                 <div><?= Html::a($model->equipo->nombre, ['/principal/index', 'id' => $model->id]); ?></div>
                                                 <div><?= Html::img($model->equipo->link_logotipo, [
-                                                            'width' => '100%',
+                                                         //   'width' => '500px',
                                                             'height' => '150px',
                                                             'class' => 'card-img-top card-sm',
                                                         ]); ?>

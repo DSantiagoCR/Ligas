@@ -47,15 +47,7 @@ $aniosJugador =  HelperGeneral::calcularEdadCompleta($model->fecha_nacimiento);
     <?= $form->field($model, 'id_estado_civil')->dropDownList($arrayEstadoCivil, ['prompt' => 'Seleccione..'])->label('Estado Cívil') ?>
 
     <?= $form->field($model, 'hijos')->textInput() ?>
-    <div class="form-check form-switch">
-        <?= $form->field($model, 'estado')->checkbox(['disabled' => true]) ?>
-    </div>
-
-
-    <div class="form-check form-switch">
-        <?= $form->field($model, 'puede_jugar')->checkbox(['disabled' => true]) ?>
-    </div>
-
+ 
 
     <?php if (!Yii::$app->request->isAjax) { ?>
         <div class="form-group">

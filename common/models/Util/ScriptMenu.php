@@ -9,10 +9,11 @@ use function PHPUnit\Framework\isNull;
 
 class ScriptMenu
 {
-    public function obtenerMenu()
+    public function obtenerMenuBackend()
     {
         $arrayMenuPantalla=[];
-        $arrayIdMunuPadres=$this->scriptBddMenusPadre();
+        $tipo = 0; //0 = backend
+        $arrayIdMunuPadres=$this->scriptBddMenusPadre($tipo);
 
         $modelMenusPrincipal = Menu::find()
             ->where(['in','id',$arrayIdMunuPadres])
@@ -24,15 +25,36 @@ class ScriptMenu
                 'label' => strtoupper($menu->name),
                 'icon' => $menu->icon,
                 'badge' => '',
-                'items' => $this->obtenerMenuHijos($menu->id),
+                'items' => $this->obtenerMenuHijos($menu->id,$tipo),
             ];
         }
         return $arrayMenuPantalla;
     }
-    private function obtenerMenuHijos($idMenuPadre)
+    public function obtenerMenuFrontend()
+    {
+        $arrayMenuPantalla=[];
+        $tipo = 1; //1 = frontend
+        $arrayIdMunuPadres=$this->scriptBddMenusPadre($tipo);
+
+        $modelMenusPrincipal = Menu::find()
+            ->where(['in','id',$arrayIdMunuPadres])
+            ->all();
+
+        foreach ($modelMenusPrincipal as $menu)
+        {
+            $arrayMenuPantalla[]=[
+                'label' => strtoupper($menu->name),
+                'icon' => $menu->icon,
+                'badge' => '',
+                'items' => $this->obtenerMenuHijos($menu->id,$tipo),
+            ];
+        }
+        return $arrayMenuPantalla;
+    }
+    private function obtenerMenuHijos($idMenuPadre,$tipo)
     {
         $arrayItems=[];
-        $arrayMunuHijos=$this->scriptBddMenusHijos();
+        $arrayMunuHijos=$this->scriptBddMenusHijos($tipo);
 
         foreach ($arrayMunuHijos as $array)
         {
@@ -43,15 +65,15 @@ class ScriptMenu
         }
         return $arrayItems;
     }
-    private function scriptBddMenusPadre()
+    private function scriptBddMenusPadre($tipo)
     {
         $idUser = '-1';
         if(isset(Yii::$app->user->identity))
         {
             $idUser=Yii::$app->user->identity->getId();
         }
-        $query ="select distinct parent
-                            from menu where route IN(
+        $query ="select distinct parent 
+                            from menu where route IN (
                             select distinct child from auth_item_child where parent in 
                             (
                                     select distinct child from auth_item_child where parent in 
@@ -61,14 +83,14 @@ class ScriptMenu
                                     )
                             )
                     )
-                    and estado =1
+                    and menu.estado =1 and menu.tipo = $tipo
                     order by parent;
                 ";
         $con = Yii::$app->db;
         $resultado = $con->createCommand($query)->queryColumn();
         return $resultado;
     }
-    private function scriptBddMenusHijos()
+    private function scriptBddMenusHijos($tipo)
     {
         $idUser = '-1';
         if(isset(Yii::$app->user->identity))
@@ -88,7 +110,7 @@ class ScriptMenu
                                     )
                             )
                     )
-                    and estado =1
+                    and menu.estado =1 and menu.tipo = $tipo
                     order by menu.parent,menu.order;
                 ";
         $con = Yii::$app->db;

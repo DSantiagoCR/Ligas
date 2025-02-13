@@ -47,8 +47,8 @@ class JugadorFController extends Controller
     {    
        
         $searchModel = new JugadorSearch();
-        
-        $dataProvider = $searchModel->searchFront(Yii::$app->request->queryParams,$id);
+       
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$id);
         $modelUE = UserEquipo::findOne($id);
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -169,7 +169,7 @@ class JugadorFController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Actualziar Jugador",
+                    'title'=> "Actualizar Jugador",
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -188,7 +188,7 @@ class JugadorFController extends Controller
                 ];    
             }else{
                  return [
-                    'title'=> "Actualziar Jugador",
+                    'title'=> "Actualizar Jugador",
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),

@@ -20,8 +20,8 @@ class JugadorSearch extends Jugador
     public function rules()
     {
         return [
-            [['id', 'id_estado_civil', 'hijos','id_equipo','num_camiseta','puede_jugar'], 'integer'],
-            [['code', 'nombres', 'apellidos', 'fecha_nacimiento', 'cedula', 'celular','num_camiseta'], 'safe'],
+            [['id', 'id_estado_civil', 'hijos', 'id_equipo', 'num_camiseta', 'puede_jugar'], 'integer'],
+            [['code', 'nombres', 'apellidos', 'fecha_nacimiento', 'cedula', 'celular', 'num_camiseta'], 'safe'],
             [['estado'], 'boolean'],
         ];
     }
@@ -42,12 +42,15 @@ class JugadorSearch extends Jugador
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $idUserEquipo = null)
     {
-        // echo '<pre>';
-        // print_r($params);
-        // die();
+
         $query = Jugador::find();
+        if ($idUserEquipo) {
+            $query = Jugador::find()
+                ->where(['id_equipo' => $idUserEquipo]);
+        }
+
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -60,15 +63,13 @@ class JugadorSearch extends Jugador
             // $query->where('0=1');
             return $dataProvider;
         }
-        if($this->fecha_nacimiento!='')
-        {
-            if(!$this->validarFecha($this->fecha_nacimiento??null))
-            {
+        if ($this->fecha_nacimiento != '') {
+            if (!$this->validarFecha($this->fecha_nacimiento ?? null)) {
                 $this->fecha_nacimiento = null; //date('Y-m-d');
             }
         }
-       
-       
+
+
         $query->andFilterWhere([
             'id' => $this->id,
             'fecha_nacimiento' => $this->fecha_nacimiento,
@@ -77,70 +78,71 @@ class JugadorSearch extends Jugador
             'estado' => $this->estado,
             'id_equipo' => $this->id_equipo,
             'num_camiseta' => $this->num_camiseta,
+            'puede_jugar' => $this->puede_jugar,
 
         ]);
 
         $query->andFilterWhere(['like', 'code', $this->code])
-            ->andFilterWhere(['like', 'upper(nombres)', strtoupper(($this->nombres??''))])
-            ->andFilterWhere(['like', 'upper(apellidos)', strtoupper($this->apellidos??'')])
+            ->andFilterWhere(['like', 'upper(nombres)', strtoupper(($this->nombres ?? ''))])
+            ->andFilterWhere(['like', 'upper(apellidos)', strtoupper($this->apellidos ?? '')])
             ->andFilterWhere(['like', 'cedula', $this->cedula])
-            ->andFilterWhere(['like', 'celular', $this->celular]);     
+            ->andFilterWhere(['like', 'celular', $this->celular]);
 
         return $dataProvider;
     }
-    private function validarFecha($fecha, $formato = 'Y-m-d') {
-        if($fecha==null)
-        {
+    private function validarFecha($fecha, $formato = 'Y-m-d')
+    {
+        if ($fecha == null) {
             return false;
         }
         $d = DateTime::createFromFormat($formato, $fecha);
         return $d && $d->format($formato) === $fecha;
     }
-    public function searchFront($params,$idUserEquipo)
-    {
-        // echo '<pre>';
-        // print_r($params);
-        // die();
-        $query = Jugador::find()
-        ->where(['id_equipo'=>$idUserEquipo]);
+    // public function searchFront($params,$idUserEquipo)
+    // {
+    //     // echo '<pre>';
+    //     // print_r($params);
+    //     // die();
+    //     $query = Jugador::find()
+    //     ->where(['id_equipo'=>$idUserEquipo]);
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
+    //     $dataProvider = new ActiveDataProvider([
+    //         'query' => $query,
+    //     ]);
 
-        $this->load($params);
+    //     $this->load($params);
 
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
-        if($this->fecha_nacimiento!='')
-        {
-            if(!$this->validarFecha($this->fecha_nacimiento??null))
-            {
-                $this->fecha_nacimiento = null; //date('Y-m-d');
-            }
-        }
-       
-       
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'fecha_nacimiento' => $this->fecha_nacimiento,
-            'id_estado_civil' => $this->id_estado_civil,
-            'hijos' => $this->hijos,
-            'estado' => $this->estado,
-            'id_equipo' => $this->id_equipo,
-            'num_camiseta' => $this->num_camiseta,
-        ]);
+    //     if (!$this->validate()) {
+    //         // uncomment the following line if you do not want to return any records when validation fails
+    //         // $query->where('0=1');
+    //         return $dataProvider;
+    //     }
+    //     if($this->fecha_nacimiento!='')
+    //     {
+    //         if(!$this->validarFecha($this->fecha_nacimiento??null))
+    //         {
+    //             $this->fecha_nacimiento = null; //date('Y-m-d');
+    //         }
+    //     }
 
-        $query->andFilterWhere(['like', 'code', $this->code])
-            ->andFilterWhere(['like', 'upper(nombres)', strtoupper(($this->nombres??''))])
-            ->andFilterWhere(['like', 'upper(apellidos)', strtoupper($this->apellidos??'')])
-            ->andFilterWhere(['like', 'cedula', $this->cedula])
-            ->andFilterWhere(['like', 'celular', $this->celular]);
-            //->andFilterWhere(['like', 'num_camiseta', $this->num_camiseta]);
 
-        return $dataProvider;
-    }
+    //     $query->andFilterWhere([
+    //         'id' => $this->id,
+    //         'fecha_nacimiento' => $this->fecha_nacimiento,
+    //         'id_estado_civil' => $this->id_estado_civil,
+    //         'hijos' => $this->hijos,
+    //         'estado' => $this->estado,
+    //         'id_equipo' => $this->id_equipo,
+    //         'puede_jugar' => $this->puede_jugar,
+    //         'num_camiseta' => $this->num_camiseta,
+    //     ]);
+
+    //     $query->andFilterWhere(['like', 'code', $this->code])
+    //         ->andFilterWhere(['like', 'upper(nombres)', strtoupper(($this->nombres??''))])
+    //         ->andFilterWhere(['like', 'upper(apellidos)', strtoupper($this->apellidos??'')])
+    //         ->andFilterWhere(['like', 'cedula', $this->cedula])
+    //         ->andFilterWhere(['like', 'celular', $this->celular]);
+
+    //     return $dataProvider;
+    // }
 }

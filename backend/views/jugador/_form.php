@@ -51,6 +51,9 @@ $arrayEquipos = ArrayHelper::map($modelEquipos, 'id', function($model) {
     <div class="form-check form-switch">
         <?= $form->field($model, 'estado')->checkbox(['label' => 'Activado']) ?>
     </div>
+    <div class="form-check form-switch">
+        <?= $form->field($model, 'puede_jugar')->checkbox() ?>
+    </div>
 
 
     <?php if (!Yii::$app->request->isAjax) { ?>

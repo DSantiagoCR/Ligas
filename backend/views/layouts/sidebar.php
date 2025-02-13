@@ -2,7 +2,7 @@
 use \common\models\Util\ScriptMenu;
 //Utilizamos la CLase MemuLogic, para traer el listaoo de menus
 $objMenuLogic = new ScriptMenu();
-$arrayMenuItems = $objMenuLogic->obtenerMenu();
+$arrayMenuItems = $objMenuLogic->obtenerMenuBackend();
 ?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <div class="">

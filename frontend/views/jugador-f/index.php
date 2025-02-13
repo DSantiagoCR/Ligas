@@ -12,19 +12,21 @@ use frontend\assets\AppAsset;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\search\JugadorSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+
 AppAsset::register($this);
-// $this->title = 'Jugadors';
-//  $this->params['breadcrumbs'][] = $this->title;
+ $this->title = 'Jugadores';
+ //$this->params['breadcrumbs'][] = $this->title;
 
 $modelCampeonato = HelperGeneral::devuelveCampeonatoActual();
 CrudAsset::register($this);
-
 ?>
 
 
 <div class="jugador-index">
     <div class="row">
-      
+        <div class="col-2">
+            <?= $this->render('/principal/index', ['modelUE' => $modelUE, 'submenu' => null]) ?>
+        </div>
         <div class="col">
             <div class="card">
                 <div class="card-header">
@@ -48,8 +50,8 @@ CrudAsset::register($this);
                                     'content' =>
                                     Html::a(
                                         '<i class="glyphicon glyphicon-plus"></i>',
-                                        ['create','id_equipo'=>$modelUE->id],
-                                        ['role' => 'modal-remote', 'title' => 'Create new Jugadors', 'class' => 'btn btn-default']
+                                        ['create', 'id_equipo' => $modelUE->id],
+                                        ['role' => 'modal-remote', 'title' => 'Crear Nuevo Jugador', 'class' => 'btn btn-default']
                                     ) .
                                         // Html::a(
                                         //     '<i class="glyphicon glyphicon-repeat"></i>',
@@ -65,7 +67,7 @@ CrudAsset::register($this);
                             'responsive' => true,
                             'panel' => [
                                 'type' => 'primary',
-                                'heading' => '<i class="glyphicon glyphicon-list"></i> Jugadors listing',
+                                'heading' => '<i class="glyphicon glyphicon-list"></i> Listado Jugadores '.$modelUE->equipo->nombre,
                                 'before' => '<em>* Resize table columns just like a spreadsheet by dragging the column edges.</em>',
                                 // 'after' => BulkButtonWidget::widget([
                                 //     'buttons' => Html::a(

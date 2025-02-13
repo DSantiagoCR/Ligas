@@ -20,6 +20,7 @@ use bedezign\yii2\audit\AuditTrailBehavior;
  * @property string $icon
  * @property string $option
  * @property int $estado
+ * @property int|null $tipo
  * @property Menu[] $menus
  * @property Menu $parent0
  */
@@ -46,11 +47,11 @@ class Menu extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name','parent','route','order','estado'], 'required'],
+            [['name','parent','route','order','estado','tipo'], 'required'],
             [['parent_name'], 'in',
                 'range' => static::find()->select(['name'])->column(),
                 'message' => 'Menu "{value}" not found.'],
-            [['parent', 'order'], 'integer'],
+            [['parent', 'order','tipo'], 'integer'],
             [['data'], 'string'],
             [['name'], 'string', 'max' => 128],
             [['route'], 'string', 'max' => 255],

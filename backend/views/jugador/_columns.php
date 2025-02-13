@@ -77,7 +77,7 @@ return [
         'filter'=>$arrayEstadoCivil,
         'value'=>function($model)
             {
-                return ($model->estadoCivil)?$model->estadoCivil->valor:'';
+                return ($model->id_estado_civil)?$model->estadoCivil->valor:'';
             }
     ],
     // [
@@ -109,6 +109,10 @@ return [
     [
         'class'=>'\kartik\grid\BooleanColumn',
         'attribute'=>'estado',
+    ],
+    [
+        'class'=>'\kartik\grid\BooleanColumn',
+        'attribute'=>'puede_jugar',        
     ],
     [
         'class' => 'kartik\grid\ActionColumn',

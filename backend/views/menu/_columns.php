@@ -16,6 +16,15 @@ return [
     // ],
     [
         'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'tipo',
+        'label'=>'Tipo',
+        'value'=>function($data)
+        {
+            return $data->tipo==0?'Backend':'Frontend';
+        }
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'name',
     ],
     [

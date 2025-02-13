@@ -39,7 +39,7 @@ use yii\widgets\DetailView;
             [
                 'label'=>'Estado Civil',
                 'value'=>function($data){                   
-                    return $data->estadoCivil->valor;                   
+                    return ($data->id_estado_civil)?$data->estadoCivil->valor:'';                   
                 }
             ],
             'hijos',
