@@ -132,7 +132,7 @@ use yii\helpers\Html;
 <!--            </div>-->
 <!--        </li>-->
         <li class="nav-item">
-         <?= Html::a('<strong style="color:red">Logout </strong><i style="color:red" class="fas fa-sign-out-alt"></i>', ['/site/logout'], ['data-method' => 'post', 'class' => 'nav-link']) ?>
+         <?= Html::a('<strong style="color:red">Logout('.Yii::$app->user->name.') </strong><i style="color:red" class="fas fa-sign-out-alt"></i>', ['/site/logout'], ['data-method' => 'post', 'class' => 'nav-link']) ?>
         </li>
 <!--        <li class="nav-item">-->
 <!--            <a class="nav-link" data-widget="fullscreen" href="#" role="button">-->

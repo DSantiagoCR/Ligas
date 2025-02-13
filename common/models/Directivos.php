@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\models\Util\HelperGeneral;
 use Yii;
 
 /**
@@ -42,7 +43,7 @@ class Directivos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre', 'apellido', 'fecha_nacimiento', 'cedula', 'id_estado_civil', 'estado'], 'required'],
+            [['nombre', 'apellido', 'fecha_nacimiento', 'cedula', 'id_estado_civil', 'estado','id_equipo','id_tipo_directivo', 'id_campeonato'], 'required'],
             [['fecha_nacimiento'], 'safe'],
             [['id_estado_civil', 'id_equipo', 'id_tipo_directivo', 'id_campeonato'], 'default', 'value' => null],
             [['id_estado_civil', 'id_equipo', 'id_tipo_directivo', 'id_campeonato'], 'integer'],
@@ -54,6 +55,7 @@ class Directivos extends \yii\db\ActiveRecord
             [['id_estado_civil'], 'exist', 'skipOnError' => true, 'targetClass' => Catalogos::class, 'targetAttribute' => ['id_estado_civil' => 'id']],
             [['id_tipo_directivo'], 'exist', 'skipOnError' => true, 'targetClass' => Catalogos::class, 'targetAttribute' => ['id_tipo_directivo' => 'id']],
             [['id_equipo'], 'exist', 'skipOnError' => true, 'targetClass' => Equipo::class, 'targetAttribute' => ['id_equipo' => 'id']],
+            ['cedula', 'validarCedula'],
         ];
     }
 
@@ -129,5 +131,41 @@ class Directivos extends \yii\db\ActiveRecord
     public function nombreApellido()
     {
         return ($this->nombre. " " .$this->apellido);
+    }
+
+    public  function validarCedula($attribute)
+    {
+        $modelCampeonatoActual = HelperGeneral::devuelveCampeonatoActual();
+
+        $modelJugadorBuscado = Directivos::find()
+            ->where(['cedula' => $this->cedula])
+            ->all();
+
+        if ($this->id) {
+            $modelJugadorBuscado = Directivos::find()
+                ->where(['cedula' => $this->cedula])
+                ->andWhere(['not in','id',[$this->id]])
+                ->all();
+
+                
+        }
+
+        if ($modelJugadorBuscado) {
+            $equiposCampeonato = Equipo::find()
+                ->where(['id_campeonato' => $modelCampeonatoActual->id])
+                ->andWhere(['activo' => true])
+                //->andWhere(['<>', 'id', $this->id_equipo])
+                ->all();
+
+            foreach ($modelJugadorBuscado as $jugador) {
+                foreach ($equiposCampeonato as $equipo) {
+                    if ($jugador->id_equipo == $equipo->id) {
+                        $this->addError($attribute, 'La cédula que quiere ingresar ya esta registrada.');
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

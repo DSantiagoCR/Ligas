@@ -62,8 +62,7 @@ AppAsset::register($this);
                     <h3>Mi Equipo</h3>
                     <ul>
                         <li><?= Html::a('Jugadores', ['/jugador-f/index', 'id' => $modelUE->id_equipo]) ?></li>
-
-                        <li>Directiva</li>
+                        <li><?= Html::a('Directivos', ['/directivos-f/index', 'id' => $modelUE->id_equipo]) ?></li>                      
                         <li>Mi Equipo</li>
                     </ul>
                 </div>

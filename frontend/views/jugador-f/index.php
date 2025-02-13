@@ -53,11 +53,11 @@ CrudAsset::register($this);
                                         ['create', 'id_equipo' => $modelUE->id],
                                         ['role' => 'modal-remote', 'title' => 'Crear Nuevo Jugador', 'class' => 'btn btn-default']
                                     ) .
-                                        // Html::a(
-                                        //     '<i class="glyphicon glyphicon-repeat"></i>',
-                                        //     [''],
-                                        //     ['data-pjax' => 1, 'class' => 'btn btn-default', 'title' => 'Reset Grid']
-                                        // ) .
+                                        Html::a(
+                                            '<i class="glyphicon glyphicon-repeat"></i>',
+                                            ['', 'id' => $modelUE->id],
+                                            ['data-pjax' => 1, 'class' => 'btn btn-default', 'title' => 'Reset Grid']
+                                        ) .
                                         '{toggleData}' .
                                         '{export}'
                                 ],

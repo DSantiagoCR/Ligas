@@ -176,7 +176,8 @@ AppAsset::register($this);
             </div>
         </li> -->
         <li class="nav-item">
-         <?= Html::a('<strong style="color:red">Logout </strong><i style="color:red" class="fas fa-sign-out-alt"></i>', ['/site/logout'], ['data-method' => 'post', 'class' => 'nav-link']) ?>
+            <?php $userName = isset(Yii::$app->user->identity->username)?strtoupper(Yii::$app->user->identity->username):'';?>
+         <?= Html::a('<strong style="color:red">Logout('.$userName.')  </strong><i style="color:red" class="fas fa-sign-out-alt"></i>', ['/site/logout'], ['data-method' => 'post', 'class' => 'nav-link']) ?>
         </li>
         <!-- <li class="nav-item">
             <a class="nav-link" data-widget="fullscreen" href="#" role="button">
