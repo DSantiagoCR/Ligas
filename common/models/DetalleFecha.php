@@ -134,4 +134,13 @@ class DetalleFecha extends \yii\db\ActiveRecord
     {
         return $this->hasOne(GrupoEquipo::class, ['id' => 'id_grupo_equipo2']);
     }
+     /**
+     * Gets query for [[HoraInicio]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getHoraInicio()
+    {
+        return $this->hasOne(Catalogos::class, ['id' => 'hora_inicio']);
+    }
 }

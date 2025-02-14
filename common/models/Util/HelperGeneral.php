@@ -56,13 +56,25 @@ class HelperGeneral
     }
     public static function devuelveArrayEstadoCivil()
     {
-        $models = Catalogos::find()->where(['id_catalogo' => 10])->all();
+        $models = Catalogos::find()->where(['id_catalogo' => 10,'estado'=>true])->all();
         $array = ArrayHelper::map($models, 'id', 'valor');
         return $array;
     }
     public static function devuelveTipoDirectivo()
     {
-        $models = Catalogos::find()->where(['id_catalogo' => 1])->all();
+        $models = Catalogos::find()->where(['id_catalogo' => 1,'estado'=>true])->all();
+        $array = ArrayHelper::map($models, 'id', 'valor');
+        return $array;
+    }
+    public static function devuelveCategoriasEquipos()
+    {
+        $models = Catalogos::find()->where(['id_catalogo' => 21,'estado'=>true])->all();
+        $array = ArrayHelper::map($models, 'id', 'valor');
+        return $array;
+    }
+    public static function devuelveGenerosEquipos()
+    {
+        $models = Catalogos::find()->where(['id_catalogo' => 17,'estado'=>true])->all();
         $array = ArrayHelper::map($models, 'id', 'valor');
         return $array;
     }
