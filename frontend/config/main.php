@@ -11,10 +11,21 @@ return [
     'name' => 'Ligas',
     'timeZone' => 'America/Guayaquil',
     'language' => 'en',
-    'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'basePath' => dirname(__DIR__),   
     'controllerNamespace' => 'frontend\controllers',
-    
+    'bootstrap' => ['log'],
+    'modules' => [
+        'admin' => [
+            'class' => 'mdm\admin\Module',
+            'mainLayout' => '@app/views/layouts/main.php',
+            'menus' => [
+                'rule' => null, // disable menu
+                'assignment' => null,
+                'menu' => null
+            ],
+        ],
+     
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
@@ -41,6 +52,10 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+            'defaultRoles' => ['guest', 'user'],
+        ],
         'i18n' => [
             'translations' => [
                 '*' => [
@@ -53,30 +68,38 @@ return [
                 ],
             ],
         ],
+        'imageUploader' => [
+            'class' => 'yii\helpers\BaseFileHelper',
+            'basePath' => '@webroot/uploads', // Ruta absoluta a la carpeta de destino
+            'baseUrl' => '@web/uploads', // URL base de la carpeta de destino
+        ],
         'assetManager' => [
             'bundles' => [
-                'yii\bootstrap5\BootstrapAsset' => [
+                'yii\bootstrap\BootstrapAsset' => [
                     'css' => [],
-                ]
+                    'bsVersion'=>'4.x',
+                ],
+                'dmstr\web\AdminLteAsset' => [
+                    'css' => [],
+                ],
             ],
         ],      
-        'authManager' => [
-            'class' => 'yii\rbac\DbManager',
-            'defaultRoles' => ['guest', 'user'],
-        ],
+        
     ],
-    'modules' => [
-        'admin' => [
-            'class' => 'mdm\admin\Module',
-            'mainLayout' => '@app/views/layouts/main.php',
-            'menus' => [
-                'rule' => null, // disable menu
-                'assignment' => null,
-                'menu' => null
+    'as beforeRequest' => [
+        'class' => 'yii\filters\AccessControl',
+        'rules' => [
+            [
+                'actions' => ['login', 'error', 'request-password-reset', 'reset-password', 'logout','verify-email'],
+                'allow' => true,
+            ],
+            [
+                'allow' => true,
+                'roles' => ['@'],
             ],
         ],
-     
     ],
+ 
     'params' => $params,
     //'defaultRoute' => '/site/login',
 

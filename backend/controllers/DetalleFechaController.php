@@ -206,7 +206,7 @@ class DetalleFechaController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if ($request->isGet) {
                 return [
-                    'title' => "Update DetalleFecha #" . $id,
+                    'title' => "Actualizar Detalle Fecha",
                     'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -216,7 +216,7 @@ class DetalleFechaController extends Controller
             } else if ($model->load($request->post()) && $model->save()) {
                 return [
                     'forceReload' => '#crud-datatable-pjax',
-                    'title' => "DetalleFecha #" . $id,
+                    'title' =>  "Actualizar Detalle Fecha",
                     'content' => $this->renderAjax('view', [
                         'model' => $model,
                     ]),
@@ -225,7 +225,7 @@ class DetalleFechaController extends Controller
                 ];
             } else {
                 return [
-                    'title' => "Update DetalleFecha #" . $id,
+                    'title' => "Actualizar Detalle Fecha",
                     'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),

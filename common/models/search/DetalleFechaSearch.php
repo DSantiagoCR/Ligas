@@ -19,7 +19,7 @@ class DetalleFechaSearch extends DetalleFecha
     public function rules()
     {
         return [
-            [['id', 'id_cabecera_fecha', 'id_grupo', 'id_grupo_equipo1', 'id_grupo_equipo2', 'goles_equipo1', 'goles_equipo2', 'id_estado_partido'], 'integer'],
+            [['id', 'id_cabecera_fecha', 'id_grupo', 'id_grupo_equipo1', 'id_grupo_equipo2', 'goles_equipo1', 'goles_equipo2', 'id_estado_partido','id_etapa'], 'integer'],
             [['hora_inicio'], 'safe'],
             [['estado'], 'boolean'],
         ];
@@ -67,6 +67,7 @@ class DetalleFechaSearch extends DetalleFecha
             'goles_equipo2' => $this->goles_equipo2,
             'id_estado_partido' => $this->id_estado_partido,
             'estado' => $this->estado,
+            'id_etapa' => $this->id_etapa, 
         ]);
 
         $query->andFilterWhere(['like', 'hora_inicio', $this->hora_inicio]);

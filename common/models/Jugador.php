@@ -132,11 +132,20 @@ class Jugador extends \yii\db\ActiveRecord
             ->where(['cedula' => $this->cedula])
             ->all();
 
+        if ($this->id) {
+            $modelJugadorBuscado = Jugador::find()
+                ->where(['cedula' => $this->cedula])
+                ->andWhere(['not in','id',[$this->id]])
+                ->all();
+
+                
+        }
+
         if ($modelJugadorBuscado) {
             $equiposCampeonato = Equipo::find()
                 ->where(['id_campeonato' => $modelCampeonatoActual->id])
                 ->andWhere(['activo' => true])
-                ->andWhere(['<>', 'id', $this->id_equipo])
+                //->andWhere(['<>', 'id', $this->id_equipo])
                 ->all();
 
             foreach ($modelJugadorBuscado as $jugador) {
@@ -152,9 +161,10 @@ class Jugador extends \yii\db\ActiveRecord
     }
     public  function validarNumCamiseta($attribute)
     {
-       $modelJugadorBuscado = Jugador::find()
+        $modelJugadorBuscado = Jugador::find()
             ->where(['num_camiseta' => $this->num_camiseta])
             ->andWhere(['id_equipo' => $this->id_equipo])
+            ->andWhere(['not in', 'id', [$this->id]])
             ->all();
 
         if ($modelJugadorBuscado) {

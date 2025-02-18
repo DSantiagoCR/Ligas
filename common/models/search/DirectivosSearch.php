@@ -18,7 +18,7 @@ class DirectivosSearch extends Directivos
     public function rules()
     {
         return [
-            [['id', 'id_estado_civil','id_equipo'], 'integer'],
+            [['id', 'id_estado_civil','id_equipo', 'id_tipo_directivo', 'id_campeonato'], 'integer'],
             [['code', 'nombre', 'apellido', 'fecha_nacimiento', 'cedula'], 'safe'],
             [['estado'], 'boolean'],
         ];
@@ -40,9 +40,13 @@ class DirectivosSearch extends Directivos
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $idUserEquipo = null)
     {
         $query = Directivos::find();
+        if ($idUserEquipo) {
+            $query = Directivos::find()
+                ->where(['id_equipo' => $idUserEquipo]);
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

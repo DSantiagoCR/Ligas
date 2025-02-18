@@ -21,6 +21,8 @@ $arrayActDesct = ['0'=>'Desactivado','1'=>'Activado'];
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->field($model, 'tipo')->dropDownList(['0'=>'Backend','1'=>'Frontend'],['prompt'=>'Seleccione..']) ?>
+
     <?= $form->field($model, 'name')->textInput(['maxlength' => true])->label('Menú') ?>
 
     <?= $form->field($model, 'parent')->dropDownList($arrayMenuPadres)->label('Menú Padre')?>

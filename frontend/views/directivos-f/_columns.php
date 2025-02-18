@@ -1,5 +1,20 @@
 <?php
 use yii\helpers\Url;
+use common\models\Equipo;
+use common\models\Campeonato;
+use common\models\Catalogos;
+use yii\helpers\ArrayHelper;
+$modelEquipos = Equipo::find()->all();
+$arrayEquipos = ArrayHelper::map($modelEquipos, 'id', function($data)
+{
+    return $data->nombre.' - '. $data->genero->valor . ' - '.$data->categoria->valor;
+});
+
+$modelListTipoDirectivos = Catalogos::find()->where(['id_catalogo' => 1])->andWhere(['estado' => true])->all();
+$arrayDirectivo = ArrayHelper::map($modelListTipoDirectivos, 'id', 'valor');
+
+$modelCampeonato = Campeonato::find()->where(['estado' => 1])->one();
+
 
 return [
     // [
@@ -20,81 +35,73 @@ return [
     // ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'nombres',
+        'attribute'=>'nombre',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'apellidos',
+        'attribute'=>'apellido',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'num_camiseta',
+        'attribute'=>'fecha_nacimiento',
     ],
-    // [
-    //     'class'=>'\kartik\grid\DataColumn',
-    //     'attribute'=>'fecha_nacimiento',
-    // ],
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'cedula',
     ],
     // [
         // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'celular',
-    // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
         // 'attribute'=>'id_estado_civil',
-    // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'hijos',
     // ],
     [
         'class'=>'\kartik\grid\BooleanColumn',
         'attribute'=>'estado',
-      
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'id_equipo',
+        'label'=>'Equipos',
+        'filter'=>$arrayEquipos,
+        'value'=>function($data)
+        {
+            return $data->equipo->nombre.' - '. $data->equipo->genero->valor . ' - '.$data->equipo->categoria->valor;
+        }
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        //'attribute'=>'id_equipo',
+        'label'=>'Categoria',
+        'filter'=>$arrayEquipos,
+        'value'=>function($data)
+        {
+            return $data->equipo->genero->valor . ' - '.$data->equipo->categoria->valor;
+        }
+    ],
+    [
+        'class' => '\kartik\grid\DataColumn',
+        'attribute' => 'id_tipo_directivo',
+        'label' => 'Cargo',
+        'filter' => $arrayDirectivo,
+        'value' => function ($model) {
+            return ($model->id_tipo_directivo) ? $model->tipoDirectivo->valor : '';
+        }
+    ],
+    [
+        'class' => '\kartik\grid\DataColumn',
+        'attribute' => 'id_campeonato',
+        'label' => 'Campeonato',
+        'format' => 'html',
+        'value' => function ($model) {
+            return ($model->id_campeonato) ? '<span style="color:red"><b>' . $model->campeonato->nombre . '</b></span>' : '';
+        }
     ],
     // [
         // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'link_foto',
+        // 'attribute'=>'id_tipo_directivo',
     // ],
     // [
         // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'id_equipo',
-    // ],
-    [
-        'class'=>'\kartik\grid\BooleanColumn',
-        'attribute'=>'puede_jugar',
-        
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'ta_acumulada',
-        'label'=>'T.A.A'
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'ta_actuales',
-        'label'=>'T.A.'
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'tr_acumulada',
-        'label'=>'T.R.A'
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'tr_actuales',
-        'label'=>'T.R'
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'goles',
-    ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'link_ficha',
+        // 'attribute'=>'id_campeonato',
     // ],
     [
         'class' => 'kartik\grid\ActionColumn',

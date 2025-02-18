@@ -2,13 +2,17 @@
 use \common\models\Util\ScriptMenu;
 //Utilizamos la CLase MemuLogic, para traer el listaoo de menus
 $objMenuLogic = new ScriptMenu();
-$arrayMenuItems = $objMenuLogic->obtenerMenu();
+$arrayMenuItems = $objMenuLogic->obtenerMenuFrontend();
+
+// echo '<pre>';
+// print_r($arrayMenuItems);
+// die();
 ?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <div class="">
     <!-- Brand Logo -->
         <a href="<?=Yii::getAlias('@web')?>/site/index" class="brand-link">
-            <img src="<?=Yii::getAlias('@web')?>/img/pi.jpg" alt="Logo Ligas" class="brand-image img-circle elevation-3" style="opacity: 10">
+            <img src="<?=Yii::getAlias('@web')?>/administrator/img/pi.jpg" alt="Logo Ligas" class="brand-image img-circle elevation-3" style="opacity: 10">
             <span class="brand-text font-weight-light"><b>Ligas</b></span>
         </a>
     </div>
@@ -20,7 +24,7 @@ $arrayMenuItems = $objMenuLogic->obtenerMenu();
                 <div class="m-0 row justify-content-center">
                     <div class="col">
                         <div class="image">
-                            <img src="<?=Yii::getAlias('@web')?>/img/user_imagen.jpg" class="img-circle elevation-5 align-content-md-center" alt="User Image">
+                            <img src="<?=Yii::getAlias('@web')?>/administrator//img/user_imagen.jpg" class="img-circle elevation-5 align-content-md-center" alt="User Image">
                         </div>
                     </div>
                     <div class="col">

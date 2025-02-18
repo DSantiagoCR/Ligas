@@ -11,6 +11,8 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->field($model, 'tipo')->dropDownList(['0'=>'Backend','1'=>'Frontend'],['prompt'=>'Seleccione..']) ?>
+
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'parent')->textInput() ?>
@@ -26,6 +28,8 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'option')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'estado')->textInput() ?>
+
+   
 
   
 	<?php if (!Yii::$app->request->isAjax){ ?>

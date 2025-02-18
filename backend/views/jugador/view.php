@@ -18,12 +18,12 @@ use yii\widgets\DetailView;
             'cedula',
             'celular',
             //'id_estado_civil',
-            [
-                'label'=>'Estado Civil',
-                'value'=>function($data){                   
-                    return $data->estadoCivil->valor;                   
-                }
-            ],
+            // [
+            //     'label'=>'Estado Civil',
+            //     'value'=>function($data){                   
+            //         return ($data->id_estado_civil)?$data->estadoCivil->valor:'';                   
+            //     }
+            // ],
             'hijos',
             //'estado:boolean',
             [

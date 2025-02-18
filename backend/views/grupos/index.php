@@ -23,16 +23,7 @@ $modelEtapas = Catalogos::find()->where(['id_catalogo' => 27])->all();
 <div class="grupos-index">
     <div class="equipo-index">
         <div class="card">
-            <div class="card-header">
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon3"><b>Campeonato: </b></span>
-                    <span class="input-group-text" id="basic-addon3"><?= $modelCampeonato->nombre ?> </span>
-                    <span class="input-group-text" id="basic-addon3"><b>Año: </b></span>
-                    <span class="input-group-text" id="basic-addon3"><?= $modelCampeonato->anio ?> </span>
-                </div>
-            </div>
             <div class="card-body">
-
 
                 <div id="ajaxCrudDatatable">
                     <?= GridView::widget([

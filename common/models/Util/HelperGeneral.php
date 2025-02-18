@@ -5,6 +5,7 @@ namespace common\models\Util;
 use common\models\Campeonato;
 use Yii;
 use common\models\Catalogos;
+use common\models\Equipo;
 use common\models\UserEquipo;
 use DateTime;
 use yii\helpers\ArrayHelper;
@@ -55,20 +56,48 @@ class HelperGeneral
     }
     public static function devuelveArrayEstadoCivil()
     {
-        $modelsEstadoCivil = Catalogos::find()->where(['id_catalogo' => 10])->all();
-        $arrayEstadoCivil = ArrayHelper::map($modelsEstadoCivil, 'id', 'valor');
-        return $arrayEstadoCivil;
+        $models = Catalogos::find()->where(['id_catalogo' => 10,'estado'=>true])->all();
+        $array = ArrayHelper::map($models, 'id', 'valor');
+        return $array;
     }
-    public static function calcularEdadCompleta($fechaNacimiento) {
+    public static function devuelveTipoDirectivo()
+    {
+        $models = Catalogos::find()->where(['id_catalogo' => 1,'estado'=>true])->all();
+        $array = ArrayHelper::map($models, 'id', 'valor');
+        return $array;
+    }
+    public static function devuelveCategoriasEquipos()
+    {
+        $models = Catalogos::find()->where(['id_catalogo' => 21,'estado'=>true])->all();
+        $array = ArrayHelper::map($models, 'id', 'valor');
+        return $array;
+    }
+    public static function devuelveGenerosEquipos()
+    {
+        $models = Catalogos::find()->where(['id_catalogo' => 17,'estado'=>true])->all();
+        $array = ArrayHelper::map($models, 'id', 'valor');
+        return $array;
+    }
+    public static function devuelveEquiposCampeonatoActual()
+    {
+        $modelCampeonato = self::devuelveCampeonatoActual();
+        $modelEquipos = Equipo::find()->where(['activo' => 1, 'id_campeonato' => $modelCampeonato->id])->all();
+        $arrayEquipo = ArrayHelper::map($modelEquipos, 'id', function ($model) {
+            return $model->nombre . ' - ' . $model->categoria->valor . ' - ' . $model->genero->valor;
+        });
 
-        if($fechaNacimiento)
-        {
+        return $arrayEquipo;
+    }
+    public static function calcularEdadCompleta($fechaNacimiento)
+    {
+
+        if ($fechaNacimiento) {
             $fechaNac = new DateTime($fechaNacimiento);
             $hoy = new DateTime();
             $diferencia = $hoy->diff($fechaNac);
-        
+
             return "{$diferencia->y} años, {$diferencia->m} meses y {$diferencia->d} días";
         }
-        return ''; 
+        return '';
     }
 }

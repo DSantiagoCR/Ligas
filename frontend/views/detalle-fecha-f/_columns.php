@@ -16,45 +16,44 @@ return [
     // ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'tipo',
-        'label'=>'Tipo',
-        'value'=>function($data)
-        {
-            return $data->tipo==0?'Backend':'Frontend';
-        }
+        'attribute'=>'id_cabecera_fecha',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'name',
+        'attribute'=>'id_grupo',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'parent',
+        'attribute'=>'id_grupo_equipo1',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'route',
+        'attribute'=>'id_grupo_equipo2',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'order',
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'data',
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'icon',
+        'attribute'=>'goles_equipo1',
     ],
     // [
         // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'option',
+        // 'attribute'=>'goles_equipo2',
     // ],
-    [
-        'class'=>'\kartik\grid\BooleanColumn',
-        'attribute'=>'estado',
-    ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'hora_inicio',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'id_estado_partido',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'estado',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'id_etapa',
+    // ],
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,

@@ -22,6 +22,16 @@ return [
     // ],
     [
         'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'tipo',
+        'label'=>'Tipo',
+        'filter'=>['0'=>'Backend','1'=>'Frontend'],
+        'value'=>function($data)
+        {
+            return $data->tipo==0?'Backend':'Frontend';
+        }
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'name',
         'label'=>'Menú',
     ],

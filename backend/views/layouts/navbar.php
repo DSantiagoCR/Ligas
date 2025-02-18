@@ -1,13 +1,21 @@
 <?php
-
+use common\models\Util\HelperGeneral;
 use yii\helpers\Html;
-
+$modelCampeonato =HelperGeneral::devuelveCampeonatoActual();
 ?>
 <!-- Navbar -->
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <ul class="navbar-nav">
         <li class="nav-item">
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item">
+        <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon3"><b>Campeonato: </b></span>
+                <span class="input-group-text" id="basic-addon3"><?= $modelCampeonato->nombre ?> </span>
+                <span class="input-group-text" id="basic-addon3"><b>Año: </b></span>
+                <span class="input-group-text" id="basic-addon3"><?= $modelCampeonato->anio ?> </span>
+            </div>
         </li>
     </ul>
     <!-- SEARCH FORM -->
@@ -132,7 +140,8 @@ use yii\helpers\Html;
 <!--            </div>-->
 <!--        </li>-->
         <li class="nav-item">
-         <?= Html::a('<strong style="color:red">Logout </strong><i style="color:red" class="fas fa-sign-out-alt"></i>', ['/site/logout'], ['data-method' => 'post', 'class' => 'nav-link']) ?>
+        <?php $userName = isset(Yii::$app->user->identity->username)?strtoupper(Yii::$app->user->identity->username):'';?>
+         <?= Html::a('<strong style="color:red">Logout('.$userName.') </strong><i style="color:red" class="fas fa-sign-out-alt"></i>', ['/site/logout'], ['data-method' => 'post', 'class' => 'nav-link']) ?>
         </li>
 <!--        <li class="nav-item">-->
 <!--            <a class="nav-link" data-widget="fullscreen" href="#" role="button">-->
