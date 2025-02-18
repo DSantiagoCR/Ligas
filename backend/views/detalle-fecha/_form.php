@@ -71,14 +71,14 @@ if ($model->id_grupo) {
         $arrayEquipo1,
         ['id' => 'drop_equipo1', 'prompt' => 'Seleccione...']
     )->label('Equipo1') ?>
-      <?= $form->field($model, 'goles_equipo1')->textInput(['type' => 'number'])->label('Goles Equipo 1') ?>
+    <?= $form->field($model, 'goles_equipo1')->textInput(['type' => 'number'])->label('Goles Equipo 1') ?>
 
     <?= $form->field($model, 'id_grupo_equipo2')->dropDownList(
         $arrayEquipo2,
         ['id' => 'drop_equipo2', 'prompt' => 'Seleccione...']
     )->label('Equipo2') ?>
-  
-  <?= $form->field($model, 'goles_equipo2')->textInput(['type' => 'number'])->label('Goles Equipo 2')  ?>
+
+    <?= $form->field($model, 'goles_equipo2')->textInput(['type' => 'number'])->label('Goles Equipo 2')  ?>
 
 
     <?= $form->field($model, 'hora_inicio')->dropDownList(
@@ -90,7 +90,7 @@ if ($model->id_grupo) {
     <div class="form-check form-switch">
         <?= $form->field($model, 'estado')->checkbox()->label('Activado') ?>
     </div>
-  
+
 
 
     <?php if (!Yii::$app->request->isAjax) { ?>
@@ -99,9 +99,9 @@ if ($model->id_grupo) {
         </div>
     <?php } ?>
 
-    
 
-<?= $form->field($model, 'goles_equipo2')->textInput() ?>
+
+  
 
     <?php ActiveForm::end(); ?>
     <?php

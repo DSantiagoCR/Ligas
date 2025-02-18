@@ -44,33 +44,49 @@ foreach ($modelCabFechas as $modelCab) {
                         if ($modelDet->id_cabecera_fecha == $modelCab->id) {
 
                     ?>
-                            <div class="card p-2 bg-info text-white  ">
+                            <div class="card p-2  text-white  " style="background:#0076e6">
                                 <div class="row justify-content-between ">
                                     <div class="col">
-                                        <scan class="fw-bold bg-green"><?= $modelDet->estadoPartido->valor ?></scan>
-                                        <scan class="fw-bold bg-green"> <?= $modelDet->horaInicio->valor ?></scan>
+                                        <scan class="fw-bold bg-light  rounded-pill"><?= $modelDet->estadoPartido->valor ?></scan>
+                                        <scan class="fw-bold bg-light  rounded-pill"> <?= $modelDet->horaInicio->valor ?></scan>
                                     </div>
                                     <div class="col">
                                         <div> <?= Html::img($modelDet->grupoEquipo1->equipo->link_logotipo, ['width' => '40px']) ?></div>
-                                        <?= $modelDet->grupoEquipo1->equipo->nombre ?>
+                                        <div><?= $modelDet->grupoEquipo1->equipo->nombre ?></div>
+                                        <?php
+                                        $iconoBandera = "";
+                                        if ($modelDet->ganador1 == 1) {
+                                            $iconoBandera = '<i class="fas fa-flag" style="color:#84e600"></i>';
+                                        }
+
+                                        ?>
+                                        <div><?= $iconoBandera?></div>
                                     </div>
                                     <div class="col">
-                                        <div class="badge bg-warning rounded-pill">
+                                        <div class="badge bg-danger rounded-pill">
                                             <span class="bg-grey-300 text-xl font-medium px-2  rounded-full	whitespace-pre">
                                                 <?= $modelDet->goles_equipo1 ?>
                                                 -
                                                 <?= $modelDet->goles_equipo2 ?>
                                             </span>
                                         </div>
-                                        
+
                                         <div class="fw-bold"><?= $modelDet->grupo->genero->valor ?></div>
-                                        <div class="fw-bold"><?= $modelDet->grupo->categoria->valor ?></div>                                     
+                                        <div class="fw-bold"><?= $modelDet->grupo->categoria->valor ?></div>
 
                                     </div>
 
                                     <div class="col">
                                         <div> <?= Html::img($modelDet->grupoEquipo2->equipo->link_logotipo, ['width' => '40px']) ?></div>
-                                        <?= $modelDet->grupoEquipo2->equipo->nombre ?>
+                                        <div> <?= $modelDet->grupoEquipo2->equipo->nombre ?></div>
+                                        <?php
+                                        $iconoBandera = "";
+                                        if ($modelDet->ganador2 == 1) {
+                                            $iconoBandera = '<i class="fas fa-flag" style="color:#84e600"></i>';
+                                        }
+
+                                        ?>
+                                        <div> <?= $iconoBandera?></div>
                                     </div>
                                     <div class="col">
                                         <?= $modelDet->etapa->valor ?>

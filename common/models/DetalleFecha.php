@@ -18,6 +18,8 @@ use Yii;
  * @property int $id_estado_partido
  * @property bool $estado
  * @property int|null $id_etapa
+ * @property int|null $ganador1 
+ * @property int|null $ganador2 
  *
  * @property CabeceraFechas $cabeceraFecha
  * @property Catalogos $estadoPartido
@@ -43,7 +45,7 @@ class DetalleFecha extends \yii\db\ActiveRecord
     {
         return [
             [['id_cabecera_fecha', 'id_grupo', 'id_grupo_equipo1', 'id_grupo_equipo2', 'goles_equipo1', 'goles_equipo2', 'hora_inicio', 'id_estado_partido', 'estado', 'id_etapa'], 'required'],
-            [['id_cabecera_fecha', 'id_grupo', 'id_grupo_equipo1', 'id_grupo_equipo2', 'goles_equipo1', 'goles_equipo2', 'id_estado_partido'], 'default', 'value' => null],
+            [['id_cabecera_fecha', 'id_grupo', 'id_grupo_equipo1', 'id_grupo_equipo2', 'goles_equipo1', 'goles_equipo2', 'id_estado_partido','ganador1','ganador2'], 'default', 'value' => null],
             [['id_cabecera_fecha', 'id_grupo', 'id_grupo_equipo1', 'id_grupo_equipo2', 'goles_equipo1', 'goles_equipo2', 'id_estado_partido', 'id_etapa'], 'integer'],
             [['estado'], 'boolean'],
             [['hora_inicio'], 'string', 'max' => 20],
@@ -72,6 +74,9 @@ class DetalleFecha extends \yii\db\ActiveRecord
             'id_estado_partido' => 'Estado Partido',
             'estado' => 'Estado',
             'id_etapa' => 'Etapa',
+            'ganador1' => 'Ganador1',
+            'ganador2' => 'Ganador2',
+
         ];
     }
 
@@ -134,7 +139,7 @@ class DetalleFecha extends \yii\db\ActiveRecord
     {
         return $this->hasOne(GrupoEquipo::class, ['id' => 'id_grupo_equipo2']);
     }
-     /**
+    /**
      * Gets query for [[HoraInicio]].
      *
      * @return \yii\db\ActiveQuery
