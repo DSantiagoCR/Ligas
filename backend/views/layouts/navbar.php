@@ -1,13 +1,21 @@
 <?php
-
+use common\models\Util\HelperGeneral;
 use yii\helpers\Html;
-
+$modelCampeonato =HelperGeneral::devuelveCampeonatoActual();
 ?>
 <!-- Navbar -->
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <ul class="navbar-nav">
         <li class="nav-item">
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item">
+        <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon3"><b>Campeonato: </b></span>
+                <span class="input-group-text" id="basic-addon3"><?= $modelCampeonato->nombre ?> </span>
+                <span class="input-group-text" id="basic-addon3"><b>Año: </b></span>
+                <span class="input-group-text" id="basic-addon3"><?= $modelCampeonato->anio ?> </span>
+            </div>
         </li>
     </ul>
     <!-- SEARCH FORM -->

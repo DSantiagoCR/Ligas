@@ -20,14 +20,7 @@ $this->title = 'Próxima Fecha ';
 CrudAsset::register($this);
 AppAsset::register($this);
 ?>
-<div class="card-header">
-    <div class="input-group mb-3">
-        <span class="input-group-text" id="basic-addon3"><b>Campeonato: </b></span>
-        <span class="input-group-text" id="basic-addon3"><?= $modelCampeonato->nombre ?> </span>
-        <span class="input-group-text" id="basic-addon3"><b>Año: </b></span>
-        <span class="input-group-text" id="basic-addon3"><?= $modelCampeonato->anio ?> </span>
-    </div>
-</div>
+
 <h1 class="text-center">Próximas Fechas</h1>
 
 <?php

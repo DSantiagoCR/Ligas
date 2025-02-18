@@ -1,9 +1,10 @@
 <?php
-
+use common\models\Util\HelperGeneral;
 use yii\helpers\Html;
 use frontend\assets\AppAsset;
 $assetDir = Yii::getAlias("@web");
 AppAsset::register($this);
+$modelCampeonato = HelperGeneral::devuelveCampeonatoActual();
 ?>
 <!-- Navbar -->
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -14,6 +15,14 @@ AppAsset::register($this);
         </li>
         <li class="nav-item d-none d-sm-inline-block">
             <a href="<?=\yii\helpers\Url::home()?>" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+        <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon3"><b>Campeonato: </b></span>
+                        <span class="input-group-text" id="basic-addon3"><?= $modelCampeonato->nombre ?> </span>
+                        <span class="input-group-text" id="basic-addon3"><b>Año: </b></span>
+                        <span class="input-group-text" id="basic-addon3"><?= $modelCampeonato->anio ?> </span>
+                    </div>
         </li>
         <!-- <li class="nav-item d-none d-sm-inline-block">
             <a href="#" class="nav-link">Contact</a>
