@@ -12,7 +12,7 @@ $modelCampeonato = HelperGeneral::devuelveCampeonatoActual();
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <?php
-        if (Yii::$app->user->isGuest) {
+        if (Yii::$app->user->identity) {
         ?>
             <li class="nav-item">
                 <div class="input-group mb-3">

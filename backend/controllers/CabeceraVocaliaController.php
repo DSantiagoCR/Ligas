@@ -2,12 +2,21 @@
 
 namespace backend\controllers;
 
+use common\models\Arbitros;
+use common\models\CabeceraFechas;
 use Yii;
 use common\models\CabeceraVocalia;
+use common\models\DetalleFecha;
+use common\models\Equipo;
+use common\models\LigaBarrial;
+use common\models\NucleArbitros;
 use common\models\search\CabeceraVocaliaSearch;
+use common\models\search\EquipoSearch;
+use common\models\Util\HelperGeneral;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use \yii\web\Response;
 use yii\helpers\Html;
 
@@ -36,16 +45,108 @@ class CabeceraVocaliaController extends Controller
      * Lists all CabeceraVocalia models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($dia=null)
     {    
+        //$this->generaRegistrosVocalia();
         $searchModel = new CabeceraVocaliaSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$dia);        
+        
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+
+        // return $this->render('vocalias',[
+        //     'modelCabFechas'=>null,
+        //     'modelDetFechas'=>null,
+        // ]);
+
     }
+    public function generaRegistrosVocalia()
+    {
+        $modelCabFechas = CabeceraFechas::find()
+        ->where(['estado'=>true])
+        ->andWhere(['in','id_estado_fecha',[45,49]])           
+        ->orderBy(['fecha'=>SORT_ASC]) 
+        ->all();     
+
+        $modelDetFechas = DetalleFecha::find()
+        ->where(['in','id_cabecera_fecha',ArrayHelper::map($modelCabFechas,'id','id')])
+        ->orderBy(['hora_inicio'=>SORT_ASC])
+        ->all();
+
+        foreach($modelDetFechas as $model)
+        {
+            $modelCabVocalia = new CabeceraVocalia();
+            
+            $modelCabVocalia->id_campeonato = $model->cabeceraFecha->id_campeonato;          
+            $modelCabVocalia->id_estado_vocalia = 51;
+            $modelCabVocalia->id_equipo_1 = $model->grupoEquipo1->id_equipo;
+            $modelCabVocalia->id_equipo_2 = $model->grupoEquipo2->id_equipo;   
+            $modelCabVocalia->id_cab_fecha =  $model->id_cabecera_fecha;  
+            $modelCabVocalia->id_det_fecha =  $model->id;      
+            $modelCabVocalia->save();      
+        }
+
+    }
+    public function actionFechas($dia)
+    {    
+      
+        $modelCabFechas = CabeceraFechas::find()
+        ->where(['estado'=>true])
+        ->andWhere(['in','id_estado_fecha',[45,49]])    
+        ->andWhere(['dia'=>$dia])
+        ->orderBy(['fecha'=>SORT_ASC]) 
+        ->all();     
+
+        $modelDetFechas = DetalleFecha::find()
+        ->where(['in','id_cabecera_fecha',ArrayHelper::map($modelCabFechas,'id','id')])
+        ->orderBy(['hora_inicio'=>SORT_ASC])
+        ->all();
+
+        return $this->render('vocalias',[
+            'modelCabFechas'=>$modelCabFechas,
+            'modelDetFechas'=>$modelDetFechas,
+        ]);
+    }
+
+    public function actionVocalia($idDetFec)
+    { 
+        $modelDetFec = DetalleFecha::findOne($idDetFec);
+        $modelCabFec = CabeceraFechas::findOne($modelDetFec->id_cabecera_fecha);
+       
+        $modelLigaBarrial = LigaBarrial::find()->one();
+
+        $modelCampeonato = HelperGeneral::devuelveCampeonatoActual();
+        $modelArbitros = Arbitros::find()
+        ->innerJoin('nucleo_arbitros', 'nucleo_arbitros.id = arbitros.id_nucleo_arbitro')
+        ->where([
+            'arbitros.estado' => true,
+            'nucleo_arbitros.estado' => true
+        ])
+        ->all();
+    
+        $modelEstadoVocalia = HelperGeneral::devuelveEstadoVocaliaObj();
+        $modelEquipos = Equipo::find()
+        ->where(['id_genero'=>$modelDetFec->grupoEquipo1->equipo->id_genero])
+        ->where(['id_categoria'=>$modelDetFec->grupoEquipo1->equipo->id_categoria])
+        ->all();
+        
+        $modelCabVocalia = new CabeceraVocalia();
+
+
+        return $this->render('vocalia-partido',[
+            'modelLigaBarrial'=>$modelLigaBarrial,
+            'modelCabFec'=>$modelCabFec,
+            'modelDetFec'=>$modelDetFec,
+            'modelCampeonato'=> $modelCampeonato,
+            'modelArbitros'=>$modelArbitros,
+            'modelEstadoVocalia'=>$modelEstadoVocalia,
+            'modelEquipos'=>$modelEquipos,
+            'modelCabVocalia'=>$modelCabVocalia,
+        ]);
+    }   
+ 
 
 
     /**
@@ -59,12 +160,12 @@ class CabeceraVocaliaController extends Controller
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> "CabeceraVocalia #".$id,
+                    'title'=> "Vocalia",
                     'content'=>$this->renderAjax('view', [
                         'model' => $this->findModel($id),
                     ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
+                            Html::a('Editar',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
                 ];    
         }else{
             return $this->render('view', [
@@ -91,31 +192,31 @@ class CabeceraVocaliaController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Create new CabeceraVocalia",
+                    'title'=> "Crear Vocalia",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
+                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
         
                 ];         
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Create new CabeceraVocalia",
+                    'title'=> "Crear Vocalia",
                     'content'=>'<span class="text-success">Create CabeceraVocalia success</span>',
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
+                            Html::a('Crear Nuevo',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
         
                 ];         
             }else{           
                 return [
-                    'title'=> "Create new CabeceraVocalia",
+                    'title'=> "Crear Vocalia",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
+                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
         
                 ];         
             }
@@ -153,31 +254,31 @@ class CabeceraVocaliaController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Update CabeceraVocalia #".$id,
+                    'title'=> "Actualizar Vocalia",
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
+                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
                 ];         
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "CabeceraVocalia #".$id,
+                    'title'=> "Vocalia",
                     'content'=>$this->renderAjax('view', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
+                            Html::a('Editar',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
                 ];    
             }else{
                  return [
-                    'title'=> "Update CabeceraVocalia #".$id,
+                    'title'=> "Actualizar Vocalia",
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
+                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
                 ];        
             }
         }else{

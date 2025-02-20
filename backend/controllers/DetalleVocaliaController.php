@@ -41,10 +41,12 @@ class DetalleVocaliaController extends Controller
         $searchModel = new DetalleVocaliaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        // return $this->render('index', [
+        //     'searchModel' => $searchModel,
+        //     'dataProvider' => $dataProvider,
+        // ]);
+        return $this->render('vocalias');
+
     }
 
 

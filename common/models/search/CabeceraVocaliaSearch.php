@@ -2,10 +2,13 @@
 
 namespace common\models\search;
 
+use common\models\CabeceraFechas;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\CabeceraVocalia;
+use common\models\DetalleFecha;
+use yii\helpers\ArrayHelper;
 
 /**
  * CabeceraVocaliaSearch represents the model behind the search form about `common\models\CabeceraVocalia`.
@@ -39,9 +42,40 @@ class CabeceraVocaliaSearch extends CabeceraVocalia
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $dia = null)
     {
-        $query = CabeceraVocalia::find();
+        // $modelCabFechas = CabeceraFechas::find()
+        //     ->where(['dia' => $dia])
+        //     ->andWhere(['estado' => true])
+        //     ->andWhere(['in', 'id_estado_fecha', [45, 46]])
+        //     ->all();
+        // $arrayCabFechas = ArrayHelper::map($modelCabFechas, 'id', 'id');
+
+        // $modelDetFecha = DetalleFecha::find()
+        //     ->where(['in', 'id_cabecera_fecha', $arrayCabFechas])
+        //     ->all();
+        // $arrayDetFecha = ArrayHelper::map($modelDetFecha, 'id', 'id');
+
+
+        // $query = CabeceraVocalia::find()
+        //     ->where(['id_det_fecha' => $arrayDetFecha]);
+
+
+
+        $query = CabeceraVocalia::find()
+            ->where([
+                'id_det_fecha' => DetalleFecha::find()
+                    ->select('id')
+                    ->where([
+                        'id_cabecera_fecha' => CabeceraFechas::find()
+                            ->select('id')
+                            ->where([
+                                'dia' => $dia,
+                                'estado' => true
+                            ])
+                            ->andWhere(['in', 'id_estado_fecha', [45, 46]])
+                    ])
+            ]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

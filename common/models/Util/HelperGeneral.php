@@ -78,6 +78,40 @@ class HelperGeneral
         $array = ArrayHelper::map($models, 'id', 'valor');
         return $array;
     }
+    public static function devuelveDiasHabilesObj()
+    {
+        $models = Catalogos::find()
+        ->where(['id_catalogo' => 31,'estado'=>true])
+        ->orderBy(['id'=>SORT_ASC])
+        ->all();
+        return $models;
+    }
+    public static function devuelveDiasHabiles()
+    {
+        $models = Catalogos::find()
+        ->where(['id_catalogo' => 31,'estado'=>true])
+        ->orderBy(['id'=>SORT_ASC])
+        ->all();
+        $array = ArrayHelper::map($models, 'id', 'valor');
+        return $array;
+    }
+    public static function devuelveEstadoVocalia()
+    {
+        $models = Catalogos::find()
+        ->where(['id_catalogo' => 50,'estado'=>true])
+        ->orderBy(['id'=>SORT_ASC])
+        ->all();
+        $array = ArrayHelper::map($models, 'id', 'valor');
+        return $array;
+    }
+    public static function devuelveEstadoVocaliaObj()
+    {
+        $models = Catalogos::find()
+        ->where(['id_catalogo' => 50,'estado'=>true])
+        ->orderBy(['id'=>SORT_ASC])
+        ->all();
+        return $models;
+    }
     public static function devuelveEquiposCampeonatoActual()
     {
         $modelCampeonato = self::devuelveCampeonatoActual();

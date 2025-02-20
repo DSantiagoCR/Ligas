@@ -1,59 +1,78 @@
 <?php
+
+use common\models\Arbitros;
+use common\models\Equipo;
+use common\models\NucleArbitros;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+//use yii\widgets\ActiveForm;
+use yii\bootstrap5\ActiveForm;
+use kartik\editors\Summernote;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\CabeceraVocalia */
 /* @var $form yii\widgets\ActiveForm */
+
+$modelEquipos = Equipo::find()
+->where(['id_genero'=>$model->equipo1->id_genero,'id_categoria'=>$model->equipo1->id_categoria,'id_campeonato'=>$model->equipo1->id_campeonato])
+->all();
+$arrayEquipos = ArrayHelper::map($modelEquipos,'id','nombre');
+
+$modelNucleoArbitro = NucleArbitros::find()->where(['estado'=>true])->one();
+$modelArbitros = Arbitros::find()->where(['estado'=>true,'id_nucleo_arbitro'=>$modelNucleoArbitro->id])->all();
+$arrayArbitro = ArrayHelper::map($modelArbitros,'id',function($data)
+{
+    return $data->nombre.' - '.$data->apellido;
+});
 ?>
 
 <div class="cabecera-vocalia-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['layout'=>'horizontal']); ?>
 
-    <?= $form->field($model, 'id_campeonato')->textInput() ?>
+    <?= $form->field($model, 'id_campeonato')->hiddenInput()->label(false) ?>
+
+    <?= $form->field($model, 'id_equipo_1')->textInput(['value'=>$model->equipo1->nombre,'disabled'=>true]) ?>
 
     <?= $form->field($model, 'ta_e1')->textInput() ?>
 
-    <?= $form->field($model, 'ta_e2')->textInput() ?>
-
     <?= $form->field($model, 'tr_e1')->textInput() ?>
+
+    <?= $form->field($model, 'id_equipo_2')->textInput(['value'=>$model->equipo2->nombre,'disabled'=>true]) ?>
+
+    <?= $form->field($model, 'ta_e2')->textInput() ?>
 
     <?= $form->field($model, 'tr_e2')->textInput() ?>
 
-    <?= $form->field($model, 'informe_vocal')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'informe_vocal')->textarea(['raw' => '3']) ?>
 
-    <?= $form->field($model, 'informe_veedor')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'informe_veedor')->textarea(['raw' => '3']) ?>
 
-    <?= $form->field($model, 'id_arbitro')->textInput() ?>
+    <?= $form->field($model, 'id_arbitro')->dropDownList($arrayArbitro,['prompt'=>'Seleccione...']) ?>
 
-    <?= $form->field($model, 'informe_arbitro')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'informe_arbitro')->textarea(['raw' => '3']) ?>
 
-    <?= $form->field($model, 'novedades_equipo_1')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'novedades_equipo_1')->textarea(['raw' => '3']) ?>
 
-    <?= $form->field($model, 'novedades_equipo_2')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'novedades_equipo_2')->textarea(['raw' => '3']) ?>
 
-    <?= $form->field($model, 'novedades_generales')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'novedades_generales')->textarea(['raw' => '3']) ?>
 
-    <?= $form->field($model, 'novedades_directiva')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'novedades_directiva')->textarea(['raw' => '3']) ?>
 
-    <?= $form->field($model, 'id_estado_vocalia')->textInput() ?>
+    <?= $form->field($model, 'id_estado_vocalia')->textInput(['value'=>$model->estadoVocalia->valor,'disabled'=>true]) ?>
 
     <?= $form->field($model, 'link_documento')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'hora_empieza')->textInput() ?>
+    <?= $form->field($model, 'hora_empieza')->textInput(['disabled'=>true]) ?>
 
-    <?= $form->field($model, 'hora_termina')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'hora_termina')->textInput(['disabled' => true]) ?>   
 
-    <?= $form->field($model, 'id_equipo_1')->textInput() ?>
+    <?= $form->field($model, 'id_equipo_vocal')->dropDownList($arrayEquipos,['prompt'=>'Seleccione...']) ?>
 
-    <?= $form->field($model, 'id_equipo_2')->textInput() ?>
+    <?= $form->field($model, 'id_equipo_veedor')->dropDownList($arrayEquipos,['prompt'=>'Seleccione...'])  ?>
 
-    <?= $form->field($model, 'id_equipo_vocal')->textInput() ?>
-
-    <?= $form->field($model, 'id_equipo_veedor')->textInput() ?>
-
-    <?= $form->field($model, 'id_cab_fecha')->textInput() ?>
+    <?= $form->field($model, 'id_cab_fecha')->hiddenInput()->label(false) ?>
 
   
 	<?php if (!Yii::$app->request->isAjax){ ?>

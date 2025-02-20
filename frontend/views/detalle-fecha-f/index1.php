@@ -13,7 +13,7 @@ use common\models\Util\HelperGeneral;
 /* @var $searchModel common\models\search\DetalleFechaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$modelCampeonato = HelperGeneral::devuelveCampeonatoActual();
+
 $this->title = 'Próxima Fecha ';
 // $this->params['breadcrumbs'][] = $this->title;
 
