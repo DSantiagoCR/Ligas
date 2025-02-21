@@ -1,7 +1,9 @@
 <?php
 
+use Codeception\PHPUnit\ResultPrinter\HTML as ResultPrinterHTML;
 use common\models\Util\HelperGeneral;
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 $arrayEstadoVocalia = HelperGeneral::devuelveEstadoVocalia();
 $arrayDiasHabiles = HelperGeneral::devuelveDiasHabiles();
@@ -49,9 +51,12 @@ return [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'id_equipo_1',
         'label'=>'Equipo 1',
+        'format'=>'html',
+        'contentOptions'=>['style'=>'text-align: center; vertical-align: middle;'],
         'value'=>function($model){
             // return \yii\helpers\Html::a('Ver Equipo', ['equipo/view', 'id'=>$model->id]);
-            return $model->equipo1->nombre;
+            return  HTML::img($model->equipo1->link_logotipo, ['width' => '40px',]).'<br>'.
+            $model->equipo1->nombre;
         }
     ],
     [
@@ -64,14 +69,15 @@ return [
         'attribute'=>'tr_e1',
         'label'=>'T.R E1',
 
-    ],
-   
+    ],   
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'id_equipo_2',
         'label'=>'Equipo 2',
+        'format'=>'html',
+        'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
         'value'=>function($model){
-            return $model->equipo2->nombre;
+            return  HTML::img($model->equipo2->link_logotipo, ['width' => '40px',]).'<br>'. $model->equipo2->nombre;
         }
     ],
     [
@@ -100,7 +106,7 @@ return [
         'label'=>'Arbitro',
         'value'=>function($model){
             // return \yii\helpers\Html::a('Ver Equipo', ['equipo/view', 'id'=>$model->id]);
-            return ($model->id_arbitro)?$model->arbitro->nombre:'';
+            return ($model->id_arbitro)?$model->arbitro->nombre.' '.$model->arbitro->apellido:'';
         }
 
     ],

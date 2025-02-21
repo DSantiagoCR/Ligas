@@ -12,6 +12,7 @@ use Yii;
  * @property string $nombre
  * @property string|null $fecha_fundacion
  * @property bool $estado
+ * @property string|null $link_logo
  *
  * @property DirectivaLiga[] $directivaLigas
  */
@@ -36,6 +37,7 @@ class LigaBarrial extends \yii\db\ActiveRecord
             [['estado'], 'boolean'],
             [['code'], 'string', 'max' => 20],
             [['nombre'], 'string', 'max' => 200],
+            [['link_logo'], 'string', 'max' => 5000],
         ];
     }
 
@@ -50,6 +52,7 @@ class LigaBarrial extends \yii\db\ActiveRecord
             'nombre' => 'Nombre',
             'fecha_fundacion' => 'Fecha Fundacion',
             'estado' => 'Estado',
+            'link_logo' => 'Link Logo',
         ];
     }
 

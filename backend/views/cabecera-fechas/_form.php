@@ -22,9 +22,13 @@ $arrayDiasSemana = ArrayHelper::map($modelDiasSemana, 'valor', 'valor');
 $modelEstadoFechasCalendario = Catalogos::find()->where(['id_catalogo' => 43, 'estado' => true])->all();
 $arrayEstadoFechasCalendario = ArrayHelper::map($modelEstadoFechasCalendario, 'id', 'valor');
 
+$keys = array_keys($arrayEstadoFechasCalendario);
+
 $modelsCampeonato = Campeonato::find()->where(['estado' => true])->one();
 $modelsCampeonatoALL = Campeonato::find()->where(['estado' => true])->all();
 $arrayCampeonato = ArrayHelper::map($modelsCampeonatoALL, 'id', 'nombre');
+
+
 ?>
 
 <div class="cabecera-fechas-form">
@@ -43,8 +47,9 @@ $arrayCampeonato = ArrayHelper::map($modelsCampeonatoALL, 'id', 'nombre');
 
     <?php
     if ($model->isNewRecord) {
+        
     ?>
-        <?= $form->field($model, 'id_estado_fecha')->dropDownList($arrayEstadoFechasCalendario, ['disabled' => true])->label('Estado Fecha') ?>
+        <?= $form->field($model, 'id_estado_fecha')->dropDownList($arrayEstadoFechasCalendario,['prompt'=>'Seleccione'])->label('Estado Fecha') ?>
         <div class="form-check form-switch">
             <?= $form->field($model, 'estado')->checkbox(['label' => 'Activado', 'checked' => true]) ?>
         </div>

@@ -74,8 +74,10 @@ class CabeceraVocaliaSearch extends CabeceraVocalia
                                 'estado' => true
                             ])
                             ->andWhere(['in', 'id_estado_fecha', [45, 46]])
-                    ])
+                    ])    
+                    ->orderBy(['hora_inicio'=>SORT_ASC])
             ]);
+
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

@@ -1,18 +1,19 @@
 <?php
 
+use common\models\CabeceraVocalia;
 use common\models\Util\HelperGeneral;
 use yii\bootstrap5\Html;
 
 $modelDiasHabiles = HelperGeneral::devuelveDiasHabilesObj();
 $this->title = "Vocalias";
 ?>
-<h3>Vocalias</h3>
+
 <div class="container-fluid bg-light p-3">
 
 
     <div class="card d-inline-block">
         <div class="card-header">
-            <h4 class="text-center">Próximas Fechas</h4>
+            <h4 class="text-center">Ingresar a Vocalia</h4>
         </div>
         <div class="card-body">
             <div class="row ">
@@ -52,13 +53,14 @@ $this->title = "Vocalias";
                             <?php
                             foreach ($modelDetFechas as $modelDet) {
                                 if ($modelDet->id_cabecera_fecha == $modelCab->id) {
+                                    $modelCabVocalia = CabeceraVocalia::find()->where(['id_det_fecha' => $modelDet->id])->one();
 
                             ?>
                                     <div class="card p-2  text-blue" style="background:#d7d7df">
                                         <div class="row justify-content-between ">
                                             <div class="col">
-                                                <scan class="fw-bold bg-light  rounded-pill"><?= $modelDet->estadoPartido->valor ?></scan>
-                                                <scan class="fw-bold bg-light  rounded-pill"> <?= $modelDet->horaInicio->valor ?></scan>
+                                                <scan class="fw-bold bg-light  rounded-pill p-1"><?= $modelDet->estadoPartido->valor ?></scan>
+                                                <scan class="fw-bold bg-light  rounded-pill p-1"> <?= $modelDet->horaInicio->valor ?></scan>
                                             </div>
                                             <div class="col">
                                                 <div> <?= Html::img($modelDet->grupoEquipo1->equipo->link_logotipo, ['width' => '40px']) ?></div>
@@ -74,6 +76,14 @@ $this->title = "Vocalias";
                                             </div>
                                             <div class="col">
                                                 <?= $modelDet->etapa->valor ?>
+                                            </div>
+                                            <div class="col-2">
+                                                <p style="color:green;font-size:12px">Vocal</p>
+                                                <span class="bg-green p-1"><?= $modelCabVocalia->id_equipo_vocal ? $modelCabVocalia->equipoVocal->nombre : '' ?></span>
+                                            </div>
+                                            <div class="col-2">
+                                            <p style="color:green;font-size:12px">Veedor</p> 
+                                            <span class="bg-green p-1"><?= $modelCabVocalia->id_equipo_veedor ? $modelCabVocalia->equipoVeedor->nombre : '' ?></span>
                                             </div>
                                             <div class="col">
                                                 <?= Html::a('Vocalia <i class="fas fa-hand-point-right"></i>', ['vocalia', 'idDetFec' => $modelDet->id], ['class' => 'btn btn-primary rounded-pill']) ?>

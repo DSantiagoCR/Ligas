@@ -2,17 +2,13 @@
 
 namespace backend\controllers;
 
-use common\models\Arbitros;
+
 use common\models\CabeceraFechas;
 use Yii;
 use common\models\CabeceraVocalia;
 use common\models\DetalleFecha;
-use common\models\Equipo;
-use common\models\LigaBarrial;
-use common\models\NucleArbitros;
 use common\models\search\CabeceraVocaliaSearch;
-use common\models\search\EquipoSearch;
-use common\models\Util\HelperGeneral;
+
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -47,7 +43,7 @@ class CabeceraVocaliaController extends Controller
      */
     public function actionIndex($dia=null)
     {    
-        //$this->generaRegistrosVocalia();
+        $this->generaRegistrosVocalia();
         $searchModel = new CabeceraVocaliaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$dia);        
         
@@ -72,6 +68,9 @@ class CabeceraVocaliaController extends Controller
 
         $modelDetFechas = DetalleFecha::find()
         ->where(['in','id_cabecera_fecha',ArrayHelper::map($modelCabFechas,'id','id')])
+        ->where(['not in','id',CabeceraVocalia::find()
+                ->select('id_det_fecha')                
+                ])
         ->orderBy(['hora_inicio'=>SORT_ASC])
         ->all();
 
@@ -89,63 +88,7 @@ class CabeceraVocaliaController extends Controller
         }
 
     }
-    public function actionFechas($dia)
-    {    
-      
-        $modelCabFechas = CabeceraFechas::find()
-        ->where(['estado'=>true])
-        ->andWhere(['in','id_estado_fecha',[45,49]])    
-        ->andWhere(['dia'=>$dia])
-        ->orderBy(['fecha'=>SORT_ASC]) 
-        ->all();     
-
-        $modelDetFechas = DetalleFecha::find()
-        ->where(['in','id_cabecera_fecha',ArrayHelper::map($modelCabFechas,'id','id')])
-        ->orderBy(['hora_inicio'=>SORT_ASC])
-        ->all();
-
-        return $this->render('vocalias',[
-            'modelCabFechas'=>$modelCabFechas,
-            'modelDetFechas'=>$modelDetFechas,
-        ]);
-    }
-
-    public function actionVocalia($idDetFec)
-    { 
-        $modelDetFec = DetalleFecha::findOne($idDetFec);
-        $modelCabFec = CabeceraFechas::findOne($modelDetFec->id_cabecera_fecha);
-       
-        $modelLigaBarrial = LigaBarrial::find()->one();
-
-        $modelCampeonato = HelperGeneral::devuelveCampeonatoActual();
-        $modelArbitros = Arbitros::find()
-        ->innerJoin('nucleo_arbitros', 'nucleo_arbitros.id = arbitros.id_nucleo_arbitro')
-        ->where([
-            'arbitros.estado' => true,
-            'nucleo_arbitros.estado' => true
-        ])
-        ->all();
-    
-        $modelEstadoVocalia = HelperGeneral::devuelveEstadoVocaliaObj();
-        $modelEquipos = Equipo::find()
-        ->where(['id_genero'=>$modelDetFec->grupoEquipo1->equipo->id_genero])
-        ->where(['id_categoria'=>$modelDetFec->grupoEquipo1->equipo->id_categoria])
-        ->all();
-        
-        $modelCabVocalia = new CabeceraVocalia();
-
-
-        return $this->render('vocalia-partido',[
-            'modelLigaBarrial'=>$modelLigaBarrial,
-            'modelCabFec'=>$modelCabFec,
-            'modelDetFec'=>$modelDetFec,
-            'modelCampeonato'=> $modelCampeonato,
-            'modelArbitros'=>$modelArbitros,
-            'modelEstadoVocalia'=>$modelEstadoVocalia,
-            'modelEquipos'=>$modelEquipos,
-            'modelCabVocalia'=>$modelCabVocalia,
-        ]);
-    }   
+   
  
 
 
