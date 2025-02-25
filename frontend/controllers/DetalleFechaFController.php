@@ -340,27 +340,49 @@ class DetalleFechaFController extends Controller
 
         $modelJugadores1 = Jugador::find()
             ->where(['id_equipo' => $modelDetFec->grupoEquipo1->id_equipo])
-            ->andWhere(['puede_jugar' => true])
-            ->andWhere(['estado' => true])
+            //->andWhere(['puede_jugar' => true])
+            //->andWhere(['estado' => true])
             ->all();
 
         $modelJugadores2 = Jugador::find()
             ->where(['id_equipo' => $modelDetFec->grupoEquipo2->id_equipo])
-            ->andWhere(['puede_jugar' => true])
-            ->andWhere(['estado' => true])
+            //->andWhere(['puede_jugar' => true])
+            //->andWhere(['estado' => true])
             ->all();
-
 
         $modelCabVocalia = CabeceraVocalia::find()->where(['id_det_fecha' => $modelDetFec->id])->one();
 
-        $modelDetVocalia = DetalleVocalia::find()->where(['id_cabecera_vocalia' => $modelCabVocalia->id])->one();
+        $modelDetVocalia1A = DetalleVocalia::find()
+            ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
+            ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo1->id_equipo])
+            ->andWhere(['puede_jugar' => true])
 
-        $modelDetVocalia1 = new DetalleVocalia();
-        $modelDetVocalia2 = new DetalleVocalia();
+            ->all();
 
-        if (!$modelDetVocalia) {
+        $modelDetVocalia2A = DetalleVocalia::find()
+            ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
+            ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo2->id_equipo])
+            ->andWhere(['puede_jugar' => true])
+
+            ->all();
+
+        $modelDetVocalia1B = DetalleVocalia::find()
+            ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
+            ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo1->id_equipo])
+            ->andWhere(['puede_jugar' => false])
+            ->all();
+
+        $modelDetVocalia2B = DetalleVocalia::find()
+            ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
+            ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo2->id_equipo])
+            ->andWhere(['puede_jugar' => false])
+            ->all();
+
+
+        if (!$modelDetVocalia1A) {
 
             foreach ($modelJugadores1 as $jugador) {
+                $modelDetVocalia1 = new DetalleVocalia();
                 $modelDetVocalia1->id_cabecera_vocalia = $modelCabVocalia->id;
                 $modelDetVocalia1->ta = 0;
                 $modelDetVocalia1->tr = 0;
@@ -372,9 +394,21 @@ class DetalleFechaFController extends Controller
                 $modelDetVocalia1->estado = $jugador->estado;
                 $modelDetVocalia1->save();
             }
-
-
+            $modelDetVocalia1A = DetalleVocalia::find()
+                ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
+                ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo1->id_equipo])
+                ->andWhere(['puede_jugar' => true])
+                ->all();
+            $modelDetVocalia1B = DetalleVocalia::find()
+                ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
+                ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo1->id_equipo])
+                ->andWhere(['puede_jugar' => true])
+                ->all();
+        }
+        if (!$modelDetVocalia2A) {
             foreach ($modelJugadores2 as $jugador) {
+
+                $modelDetVocalia2 = new DetalleVocalia();
                 $modelDetVocalia2->id_cabecera_vocalia = $modelCabVocalia->id;
                 $modelDetVocalia2->ta = 0;
                 $modelDetVocalia2->tr = 0;
@@ -386,16 +420,25 @@ class DetalleFechaFController extends Controller
                 $modelDetVocalia2->estado = $jugador->estado;
                 $modelDetVocalia2->save();
             }
-        }
-        $modelDetVocalia1 = DetalleVocalia::find()
-            ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
-            ->andWhere(['id_equipo' => $modelCabVocalia->id_equipo_1])
-            ->one();
+            $modelDetVocalia2A = DetalleVocalia::find()
+                ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
+                ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo2->id_equipo])
+                ->andWhere(['puede_jugar' => true])
+                ->all();
 
-        $modelDetVocalia2 = DetalleVocalia::find()
-            ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
-            ->andWhere(['id_equipo' => $modelCabVocalia->id_equipo_2])
-            ->one();
+            $modelDetVocalia2B = DetalleVocalia::find()
+                ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
+                ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo2->id_equipo])
+                ->andWhere(['puede_jugar' => false])
+                ->all();
+        }
+
+
+        // echo '<pre>';
+        // echo 'holaaa';
+        // print_r($modelDetVocalia2);
+        // die();
+
 
         return $this->render('vocalia-partido', [
             'modelLigaBarrial' => $modelLigaBarrial,
@@ -406,11 +449,51 @@ class DetalleFechaFController extends Controller
             'modelEstadoVocalia' => $modelEstadoVocalia,
             'modelEquipos1' => $modelEquipos1,
             'modelEquipos2' => $modelEquipos2,
-            'modelDetVocalia1' => $modelDetVocalia1,
-            'modelDetVocalia2' => $modelDetVocalia2,
+            'modelDetVocalia1A' => $modelDetVocalia1A,
+            'modelDetVocalia2A' => $modelDetVocalia2A,
+            'modelDetVocalia1B' => $modelDetVocalia1B,
+            'modelDetVocalia2B' => $modelDetVocalia2B,
             'modelCabVocalia' => $modelCabVocalia,
         ]);
     }
+
+    public function actionEntregaCarnet()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $id = Yii::$app->request->post('id');
+        $estado = Yii::$app->request->post('estado');
+
+        $model = DetalleVocalia::findOne($id);
+        if ($model) {
+            $model->entrega_carnet = $estado;
+            if ($model->save()) {
+                return ['success' => true];
+            }
+        }
+        return ['success' => false];
+    }
+    public function actionActualizaGoles()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        if (Yii::$app->request->isPost) {
+            $id = Yii::$app->request->post('id'); // Recibimos el id
+            $goles = Yii::$app->request->post('valor'); // Recibimos el valor
+
+            $model = DetalleVocalia::findOne($id); // Ajusta el modelo según tu lógica
+            if ($model) {
+                $model->goles = $goles;
+                if ($model->save()) {
+                    return ['success' => true, 'message' => 'Valor actualizado'];
+                }
+            }
+            return ['success' => false, 'message' => 'No se pudo actualizar'];
+        }
+        return ['success' => false, 'message' => 'Método no permitido'];
+    }
+
+
 
     /**
      * Finds the DetalleFecha model based on its primary key value.

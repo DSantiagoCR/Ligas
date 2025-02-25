@@ -27,7 +27,7 @@ class PrincipalController extends Controller
         // $this->imprimirDie($id);
         $modelUE = UserEquipo::findOne($id);
 
-        //$this->imprimirDie($id);
+        // $this->imprimirDie($modelUE);
         return $this->render(
             'index',
             [

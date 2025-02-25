@@ -19,6 +19,9 @@ AppAsset::register($this);
 
 $modelCampeonato = HelperGeneral::devuelveCampeonatoActual();
 CrudAsset::register($this);
+
+// print_r($modelUE);
+// die();
 ?>
 
 

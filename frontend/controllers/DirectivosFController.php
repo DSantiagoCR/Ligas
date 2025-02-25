@@ -38,10 +38,11 @@ class DirectivosFController extends Controller
      * @return mixed
      */
     public function actionIndex($id)
-    {    
+    { 
+        $modelUE = UserEquipo::findOne($id);   
         $searchModel = new DirectivosSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$id);
-        $modelUE = UserEquipo::findOne($id);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$modelUE->id_equipo);
+        
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

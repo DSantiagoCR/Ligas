@@ -6,6 +6,9 @@ use yii\bootstrap5\Html;
 
 AppAsset::register($this);
 
+// print_r($modelUE);
+// die();
+
 ?>
 
 <div class="principal-index">
@@ -56,8 +59,8 @@ AppAsset::register($this);
                     <div class="card-header fw-bold">Mi Equipo</div>
                     <div class="card-body">
                         <ul>
-                            <li><?= Html::a('Jugadores', ['/jugador-f/index', 'id' => $modelUE->id_equipo]) ?></li>
-                            <li><?= Html::a('Directivos', ['/directivos-f/index', 'id' => $modelUE->id_equipo]) ?></li>
+                            <li><?= Html::a('Jugadores', ['/jugador-f/index', 'id' => $modelUE->id]) ?></li>
+                            <li><?= Html::a('Directivos', ['/directivos-f/index', 'id' => $modelUE->id]) ?></li>
                             <li>Mi Equipo</li>
                         </ul>
                     </div>

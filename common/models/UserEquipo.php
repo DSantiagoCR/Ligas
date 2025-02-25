@@ -11,7 +11,9 @@ use Yii;
  * @property int $id_equipo
  * @property int $id_user
  * @property int $estado
+ * @property int $id_campeonato
  *
+ * @property Campeonato $campeonato
  * @property Equipo $equipo
  * @property User $user
  */
@@ -31,10 +33,10 @@ class UserEquipo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'id_equipo', 'id_user', 'estado'], 'required'],
-            [['id', 'id_equipo', 'id_user', 'estado'], 'default', 'value' => null],
-            [['id', 'id_equipo', 'id_user', 'estado'], 'integer'],
-            [['id'], 'unique'],
+            [['id_equipo', 'id_user', 'estado', 'id_campeonato'], 'required'],
+            [['id_equipo', 'id_user', 'estado', 'id_campeonato'], 'default', 'value' => null],
+            [['id_equipo', 'id_user', 'estado', 'id_campeonato'], 'integer'],
+            [['id_campeonato'], 'exist', 'skipOnError' => true, 'targetClass' => Campeonato::class, 'targetAttribute' => ['id_campeonato' => 'id']],
             [['id_equipo'], 'exist', 'skipOnError' => true, 'targetClass' => Equipo::class, 'targetAttribute' => ['id_equipo' => 'id']],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['id_user' => 'id']],
         ];
@@ -47,10 +49,21 @@ class UserEquipo extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'id_equipo' => 'Id Equipo',
-            'id_user' => 'Id User',
+            'id_equipo' => 'Equipo',
+            'id_user' => 'User',
             'estado' => 'Estado',
+            'id_campeonato' => 'Campeonato',
         ];
+    }
+
+    /**
+     * Gets query for [[Campeonato]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCampeonato()
+    {
+        return $this->hasOne(Campeonato::class, ['id' => 'id_campeonato']);
     }
 
     /**

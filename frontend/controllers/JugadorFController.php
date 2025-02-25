@@ -45,11 +45,15 @@ class JugadorFController extends Controller
      */
     public function actionIndex($id)
     {    
+        // print_r($id);
+        // die();
        
+        $modelUE = UserEquipo::findOne($id);
         $searchModel = new JugadorSearch();
        
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$id);
-        $modelUE = UserEquipo::findOne($id);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$modelUE->id_equipo);       
+
+       
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

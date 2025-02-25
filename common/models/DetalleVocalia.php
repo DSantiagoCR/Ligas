@@ -19,6 +19,7 @@ use Yii;
  * @property bool|null $estado
  *
  * @property CabeceraVocalia $cabeceraVocalia
+ * @property Equipo $equipo
  * @property Jugador $jugador
  */
 class DetalleVocalia extends \yii\db\ActiveRecord
@@ -42,6 +43,7 @@ class DetalleVocalia extends \yii\db\ActiveRecord
             [['id_cabecera_vocalia', 'ta', 'tr', 'goles', 'id_jugador', 'id_equipo'], 'integer'],
             [['entrega_carnet', 'puede_jugar', 'estado'], 'boolean'],
             [['id_cabecera_vocalia'], 'exist', 'skipOnError' => true, 'targetClass' => CabeceraVocalia::class, 'targetAttribute' => ['id_cabecera_vocalia' => 'id']],
+            [['id_equipo'], 'exist', 'skipOnError' => true, 'targetClass' => Equipo::class, 'targetAttribute' => ['id_equipo' => 'id']],
             [['id_jugador'], 'exist', 'skipOnError' => true, 'targetClass' => Jugador::class, 'targetAttribute' => ['id_jugador' => 'id']],
         ];
     }
@@ -73,6 +75,16 @@ class DetalleVocalia extends \yii\db\ActiveRecord
     public function getCabeceraVocalia()
     {
         return $this->hasOne(CabeceraVocalia::class, ['id' => 'id_cabecera_vocalia']);
+    }
+
+    /**
+     * Gets query for [[Equipo]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEquipo()
+    {
+        return $this->hasOne(Equipo::class, ['id' => 'id_equipo']);
     }
 
     /**
