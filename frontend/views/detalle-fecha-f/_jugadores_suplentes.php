@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\web\JsExpression;
 use yii\widgets\Pjax;
 
+//java scrip para cambiar el check de entrega carnet
 $this->registerJs(new JsExpression("
     $(document).on('change', '.ajax-checkbox', function() {
         var id = $(this).data('id'); // ID del registro
@@ -17,6 +18,7 @@ $this->registerJs(new JsExpression("
             success: function(response) {
                 if (response.success) {
                     console.log('Estado cambiado con éxito.');
+                    location.reload();
                 } else {
                     alert('Error al cambiar el estado.');
                 }
@@ -51,13 +53,11 @@ $this->registerJs(new JsExpression("
             <div class="col-1 border bg-secondary text-dark"><b>#.</b></div>
             <div class="col-1 border bg-secondary text-dark"><b>No.</b></div>
             <div class="col-4 border bg-secondary text-dark"><b>Jugador</b></div>
-            <div class="col-3 text-center border bg-secondary text-dark"><b>Gol</b></div>
+            <div class="col-2 text-center border bg-secondary text-dark"><b>Gol</b></div>
             <div class="col-1 text-center border bg-secondary text-dark"><b>T.A</b></div>
             <div class="col-1 text-center border bg-secondary text-dark"><b>T.R</b></div>
             <div class="col-1 text-center border bg-secondary text-dark"><b calss="text-center" style="font-size:10px">Carnet</b></div>
-            <div class="col-1 text-center border bg-secondary text-dark"><b calss="text-center" style="font-size:10px">Cambio X</b></div>
-
-
+            <div class="col-1 text-center border bg-secondary text-dark"><b calss="text-center" style="font-size:10px">Cambio x</b></div>
 
         </div>
         <?php
@@ -68,20 +68,30 @@ $this->registerJs(new JsExpression("
                 <div class="row">
                     <div class="col-1 border bg-secondary text-dark" style="font-size:10px;"><b><?= $cont ?></b></div>
                     <div class="col-1 border"><?= ($model->jugador->num_camiseta) ? $model->jugador->num_camiseta : '' ?></div>
-                    <div class="col-4 border text-xs"><?= $model->jugador->nombres . ' ' . $model->jugador->apellidos ?></div>
-                    <div class="col-3 text-center border">
-                        <div class="d-flex align-items-center ">
-                            <?= Html::button('−', ['class' => 'btn btn-danger btn-sm px-2 py-0', 'id' => 'decrement']) ?>
-                            <?= Html::input('number', 'counter', 0, [
-                                'id' => 'counter',
-                                'class' => 'form-control text-center mx-1 btn-xs',
-                                'style' => 'width: 60px; height: 30px; font-size: 14px',
-                                'disabled' => true,
-                                'min' => 1
-                            ]) ?>
-                            <?= Html::button('+', ['class' => 'btn btn-success btn-sm px-2 py-0', 'id' => 'increment']) ?>
+                    <div class="col-4 border text-ms"><?= $model->jugador->nombres . ' ' . $model->jugador->apellidos ?></div>
+                    <?php if ($model->entrega_carnet) {
+                    ?>
+                        <div class="col-3 text-center border">
+                            <div class="d-flex align-items-center ">
+                                <?= Html::button('−', ['class' => 'btn btn-primary btn-sm px-2 py-0', 'id' => 'decrement' . $i]) ?>
+                                <?= Html::input('number', 'counter', 0, [
+                                    'id' => 'counter' . $i,
+                                    'class' => 'form-control text-center mx-1 btn-xs',
+                                    'style' => 'width: 60px; height: 30px; font-size: 14px',
+                                    'disabled' => true,
+                                    'min' => 1
+                                ]) ?>
+                                <?= Html::button('+', ['class' => 'btn btn-primary btn-sm px-2 py-0', 'id' => 'increment' . $i]) ?>
+                            </div>
                         </div>
-                    </div>
+                    <?php } else {
+                    ?>
+
+                        <div class="col-2 text-center border"><?= $model->goles?></div>                   
+
+                    <?php }
+
+                    ?>
                     <div class="col-1 text-center border">-</div>
                     <div class="col-1 text-center border">-</div>
                     <div class="col-1 text-center border">
@@ -91,9 +101,11 @@ $this->registerJs(new JsExpression("
                             'data-pjax' => 1
                         ]) ?>
                     </div>
+                    <div class="col-1 text-center border"><?= $model->num_jugador_cambio?></div>
                 </div>
         <?php
                 $cont = $cont + 1;
+                $i = $i + 1;
             }
         } ?>
 

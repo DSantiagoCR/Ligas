@@ -33,9 +33,10 @@ $arrayEstadoVocalia = HelperGeneral::devuelveEstadoVocalia();
 
     <?php $form = ActiveForm::begin(['layout' => 'horizontal']); ?>
 
+
     <?= $form->field($model, 'id_campeonato')->hiddenInput()->label(false) ?>
 
-    <?= $form->field($model, 'id_estado_vocalia')->dropDownList($arrayEstadoVocalia,['value' => $model->estadoVocalia->valor]) ?>
+    <?= $form->field($model, 'id_estado_vocalia')->dropDownList($arrayEstadoVocalia,['value' => $model->id_estado_vocalia,'prompt'=>'Seleccione..']) ?>
 
     <span style="color:blue"><b>EQUIPOS</b></span>
     <hr>

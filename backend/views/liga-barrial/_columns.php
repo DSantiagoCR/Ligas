@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 return [
     [
@@ -25,6 +26,15 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'fecha_fundacion',
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'link_logo',
+        'format'=>'raw',
+        'value'=>function($data){
+            return HTML::img($data->link_logo, ['width' => '150px']);
+
+        }
     ],
     [
         'class'=>'\kartik\grid\BooleanColumn',

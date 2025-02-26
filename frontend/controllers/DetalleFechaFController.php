@@ -329,8 +329,8 @@ class DetalleFechaFController extends Controller
             ])
             ->one();
 
-
         $modelEstadoVocalia = HelperGeneral::devuelveEstadoVocaliaObj();
+
         $modelEquipos1 = Equipo::find()
             ->where(['id' => $modelDetFec->grupoEquipo1->id_equipo])
             ->one();
@@ -340,14 +340,10 @@ class DetalleFechaFController extends Controller
 
         $modelJugadores1 = Jugador::find()
             ->where(['id_equipo' => $modelDetFec->grupoEquipo1->id_equipo])
-            //->andWhere(['puede_jugar' => true])
-            //->andWhere(['estado' => true])
             ->all();
 
         $modelJugadores2 = Jugador::find()
             ->where(['id_equipo' => $modelDetFec->grupoEquipo2->id_equipo])
-            //->andWhere(['puede_jugar' => true])
-            //->andWhere(['estado' => true])
             ->all();
 
         $modelCabVocalia = CabeceraVocalia::find()->where(['id_det_fecha' => $modelDetFec->id])->one();
@@ -356,27 +352,38 @@ class DetalleFechaFController extends Controller
             ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
             ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo1->id_equipo])
             ->andWhere(['puede_jugar' => true])
-
+            ->orderBy(['id_jugador' => SORT_ASC])
             ->all();
 
         $modelDetVocalia2A = DetalleVocalia::find()
             ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
             ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo2->id_equipo])
             ->andWhere(['puede_jugar' => true])
-
+            ->orderBy(['id_jugador' => SORT_ASC])
             ->all();
 
         $modelDetVocalia1B = DetalleVocalia::find()
             ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
             ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo1->id_equipo])
             ->andWhere(['puede_jugar' => false])
+            ->orderBy(['id_jugador' => SORT_ASC])
             ->all();
 
         $modelDetVocalia2B = DetalleVocalia::find()
             ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
             ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo2->id_equipo])
             ->andWhere(['puede_jugar' => false])
+            ->orderBy(['id_jugador' => SORT_ASC])
             ->all();
+
+        $goles1A = 0;
+        foreach ($modelDetVocalia1A as $model) {
+            $goles1A = $goles1A + ($model->goles ? $model->goles : 0);
+        }
+        $goles2A = 0;
+        foreach ($modelDetVocalia2A as $model) {
+            $goles2A = $goles2A + ($model->goles ? $model->goles : 0);
+        }
 
 
         if (!$modelDetVocalia1A) {
@@ -394,16 +401,24 @@ class DetalleFechaFController extends Controller
                 $modelDetVocalia1->estado = $jugador->estado;
                 $modelDetVocalia1->save();
             }
+
             $modelDetVocalia1A = DetalleVocalia::find()
                 ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
                 ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo1->id_equipo])
                 ->andWhere(['puede_jugar' => true])
+                ->orderBy(['id_jugador' => SORT_ASC])
                 ->all();
+
             $modelDetVocalia1B = DetalleVocalia::find()
                 ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
                 ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo1->id_equipo])
                 ->andWhere(['puede_jugar' => true])
+                ->orderBy(['id_jugador' => SORT_ASC])
                 ->all();
+
+            foreach ($modelDetVocalia1A as $model) {
+                $goles1A = $goles1A + ($model->goles ? $model->goles : 0);
+            }
         }
         if (!$modelDetVocalia2A) {
             foreach ($modelJugadores2 as $jugador) {
@@ -424,20 +439,21 @@ class DetalleFechaFController extends Controller
                 ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
                 ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo2->id_equipo])
                 ->andWhere(['puede_jugar' => true])
+                ->orderBy(['id_jugador' => SORT_ASC])
                 ->all();
 
             $modelDetVocalia2B = DetalleVocalia::find()
                 ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
                 ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo2->id_equipo])
                 ->andWhere(['puede_jugar' => false])
+                ->orderBy(['id_jugador' => SORT_ASC])
                 ->all();
+
+            foreach ($modelDetVocalia2A as $model) {
+                $goles2A = $goles2A + ($model->goles ? $model->goles : 0);
+            }
         }
 
-
-        // echo '<pre>';
-        // echo 'holaaa';
-        // print_r($modelDetVocalia2);
-        // die();
 
 
         return $this->render('vocalia-partido', [
@@ -454,6 +470,9 @@ class DetalleFechaFController extends Controller
             'modelDetVocalia1B' => $modelDetVocalia1B,
             'modelDetVocalia2B' => $modelDetVocalia2B,
             'modelCabVocalia' => $modelCabVocalia,
+            'goles1A' => $goles1A,
+            'goles2A' => $goles2A,
+
         ]);
     }
 
@@ -479,12 +498,12 @@ class DetalleFechaFController extends Controller
 
         if (Yii::$app->request->isPost) {
             $id = Yii::$app->request->post('id'); // Recibimos el id
-            $goles = Yii::$app->request->post('valor'); // Recibimos el valor
+            $goles = Yii::$app->request->post('valor'); // Recibimos el valor    
 
             $model = DetalleVocalia::findOne($id); // Ajusta el modelo según tu lógica
             if ($model) {
                 $model->goles = $goles;
-                if ($model->save()) {
+                if ($model->entrega_carnet && $model->save()) {
                     return ['success' => true, 'message' => 'Valor actualizado'];
                 }
             }
@@ -492,6 +511,124 @@ class DetalleFechaFController extends Controller
         }
         return ['success' => false, 'message' => 'Método no permitido'];
     }
+    public function actionCambioJugador()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        if (Yii::$app->request->isPost) {
+            $id = Yii::$app->request->post('id'); // Recibimos el id
+            $cambio_x = Yii::$app->request->post('valor'); // Recibimos el valor    
+
+            $model = DetalleVocalia::findOne($id); // Ajusta el modelo según tu lógica
+            if ($model) {
+                $model->num_jugador_cambio = $cambio_x;
+                if ($model->entrega_carnet && $model->save()) {
+                    return ['success' => true, 'message' => 'Valor actualizado'];
+                }
+            }
+            return ['success' => false, 'message' => 'No se pudo actualizar'];
+        }
+        return ['success' => false, 'message' => 'Método no permitido'];
+    }
+    public function actionActualizaEstadoPartido()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $id = Yii::$app->request->post('id');
+        $estado = Yii::$app->request->post('estado');
+       
+        $model = CabeceraVocalia::findOne($id);
+
+        if ($model) {
+            $model->id_estado_vocalia = $estado;
+            if ($model->save()) {
+                $this->sincronizaFinPartido($model);
+                return ['success' => true];
+            }
+        }
+
+        return ['success' => false];
+    }
+
+    public function sincronizaFinPartido($modelCabVocalia)
+    {
+        //sincroniza la suma de tarjetas, goles, en general
+        if($modelCabVocalia)
+        {
+            $this->sincronizaDatosJugador($modelCabVocalia);
+            // $this->sincronizaCabeceraVocalia($modelCabVocalia);
+            $this->sincronizaDetalleFechas($modelCabVocalia);
+
+        }
+
+    }
+    public function sincronizaDetalleFechas($modelCabVocalia)
+    {
+        
+        //sincroniza la suma de tarjetas, goles, en general
+        if($modelCabVocalia)
+        {
+            $modelDetFecha = DetalleFecha::findOne($modelCabVocalia->id_det_fecha);
+            $goles1 = 0;
+            $goles2 = 0;
+
+            $modelDetVocalia = DetalleVocalia::find()
+            ->where(['id_cabecera_vocalia'=>$modelCabVocalia->id,'id_equipo'=>$modelCabVocalia->id_equipo_1])
+            ->all();
+
+            foreach($modelDetVocalia as $model)
+            {   
+                $goles1 = $goles1 + ($model->goles?$model->goles:0);
+            }
+            
+            $modelDetVocalia = DetalleVocalia::find()
+            ->where(['id_cabecera_vocalia'=>$modelCabVocalia->id,'id_equipo'=>$modelCabVocalia->id_equipo_2])
+            ->all();
+
+            foreach($modelDetVocalia as $model)
+            {   
+                $goles2 = $goles2 + ($model->goles?$model->goles:0);
+            }
+
+            $modelDetFecha->goles_equipo2 = $goles2;
+            $modelDetFecha->goles_equipo1 = $goles1;            
+
+            if($goles1>$goles2){
+                $modelDetFecha->ganador1 = 1;
+                $modelDetFecha->ganador2 = 0;
+
+            }
+            if($goles2>$goles1){
+                $modelDetFecha->ganador1 = 0;
+                $modelDetFecha->ganador2 = 1;
+            }
+            if($goles2==$goles1){
+                $modelDetFecha->ganador1 = 2;
+                $modelDetFecha->ganador2 = 2;
+            }
+            
+            $modelDetFecha->save();           
+        }
+
+    }
+    public function sincronizaCabeceraVocalia($modelCabVocalia)
+    {
+        //sincroniza la suma de tarjetas, goles, en general
+        if($modelCabVocalia)
+        {
+
+        }
+
+    }
+    public function sincronizaDatosJugador($modelCabVocalia)
+    {
+        //sincroniza la suma de tarjetas, goles, en general
+        if($modelCabVocalia)
+        {
+
+        }
+    }
+
 
 
 

@@ -46,7 +46,7 @@ return [
         'format' => 'html',
         'width' => '100px',
         'value' => function ($data) {
-            return HTML::img($data->link_logotipo, ['width' => '200px']);
+            return Html::img($data->link_logotipo, ['width' => '200px']);
         }
     ],
     [
