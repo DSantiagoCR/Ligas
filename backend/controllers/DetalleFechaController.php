@@ -12,6 +12,7 @@ use common\models\search\DetalleFechaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use \yii\web\Response;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
@@ -119,7 +120,8 @@ class DetalleFechaController extends Controller
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            if ($request->isGet) {
+            if ($request->isGet) {           
+
                 return [
                     'title' => "Detalle Fechas",
                     'content' => $this->renderAjax('create', [
@@ -339,10 +341,20 @@ class DetalleFechaController extends Controller
     public function actionBusquedaGrupoEquipo1()
     {
         $request = Yii::$app->request;
-        $id_grupo =  $request->post('id_grupo1');        
+        $id_grupo =  $request->post('id_grupo1'); 
+        $id_cab_fecha =  $request->post('id_cabecera_fecha');        
+
+        $modelCF = CabeceraFechas::findone($id_cab_fecha);
+   
+        $modelCFS = CabeceraFechas::find()
+        ->where(['num_fecha'=>$modelCF->num_fecha])
+        ->all();
+
+        $arrayCFS = ArrayHelper::map( $modelCFS,'id','id');
 
         $modelDF = DetalleFecha::find()
         ->where(['id_grupo'=>$id_grupo])
+        ->andWhere(['in','id_cabecera_fecha', $arrayCFS])
         ->all();
 
         $dataDF = [];
@@ -369,11 +381,22 @@ class DetalleFechaController extends Controller
     {
         $request = Yii::$app->request;
         $id_grupo_equipo1 =  $request->post('id_grupo_equipo1');
+        $id_grupo =  $request->post('id_grupo1');
+        $id_cab_fecha =  $request->post('id_cabecera_fecha');
+
+        $modelCF = CabeceraFechas::findone($id_cab_fecha);
+   
+        $modelCFS = CabeceraFechas::find()
+        ->where(['num_fecha'=>$modelCF->num_fecha])
+        ->all();
+
+        $arrayCFS = ArrayHelper::map( $modelCFS,'id','id');       
 
         $GruposEquipo = GrupoEquipo::find()->where(['id' => $id_grupo_equipo1])->one(); 
         
         $modelDF = DetalleFecha::find()
         ->where(['id_grupo'=> $GruposEquipo->id_grupo])
+        ->andWhere(['in','id_cabecera_fecha', $arrayCFS])
         ->all();
 
         $dataDF = [];

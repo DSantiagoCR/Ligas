@@ -19,6 +19,8 @@ use Yii;
  * @property bool|null $estado
  * @property int|null $id_jugador_cambio
  * @property int|null $num_jugador_cambio
+ * @property string|null $nom_jugador
+ * @property string|null $num_jugador
  *
  * @property CabeceraVocalia $cabeceraVocalia
  * @property Equipo $equipo
@@ -45,6 +47,8 @@ class DetalleVocalia extends \yii\db\ActiveRecord
             [['id_cabecera_vocalia', 'ta', 'tr', 'goles', 'id_jugador', 'id_equipo', 'id_jugador_cambio', 'num_jugador_cambio'], 'default', 'value' => null],
             [['id_cabecera_vocalia', 'ta', 'tr', 'goles', 'id_jugador', 'id_equipo', 'id_jugador_cambio', 'num_jugador_cambio'], 'integer'],
             [['entrega_carnet', 'puede_jugar', 'estado'], 'boolean'],
+            [['nom_jugador'], 'string', 'max' => 255],
+            [['num_jugador'], 'string', 'max' => 10],
             [['id_cabecera_vocalia'], 'exist', 'skipOnError' => true, 'targetClass' => CabeceraVocalia::class, 'targetAttribute' => ['id_cabecera_vocalia' => 'id']],
             [['id_equipo'], 'exist', 'skipOnError' => true, 'targetClass' => Equipo::class, 'targetAttribute' => ['id_equipo' => 'id']],
             [['id_jugador'], 'exist', 'skipOnError' => true, 'targetClass' => Jugador::class, 'targetAttribute' => ['id_jugador' => 'id']],
@@ -70,6 +74,8 @@ class DetalleVocalia extends \yii\db\ActiveRecord
             'estado' => 'Estado',
             'id_jugador_cambio' => 'Id Jugador Cambio',
             'num_jugador_cambio' => 'Num Jugador Cambio',
+            'nom_jugador' => 'Nom Jugador',
+            'num_jugador' => 'Num Jugador',
         ];
     }
 

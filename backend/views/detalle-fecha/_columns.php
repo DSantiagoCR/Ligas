@@ -33,6 +33,7 @@ return [
             return $data->grupo->catalogo->valor;
         }
     ],
+
     [
         'class'=>'\kartik\grid\DataColumn',       
         'label'=>'Grupo',
@@ -41,6 +42,7 @@ return [
             return $data->grupo->nombre;
         }
     ],
+  
     [
         'class'=>'\kartik\grid\DataColumn',       
         'label'=>'Categoría',

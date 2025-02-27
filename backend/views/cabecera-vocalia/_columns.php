@@ -40,6 +40,15 @@ return [
             '<span style="color:blue; font-size:12px">'.$model->cabFecha->fecha.'</span>':'';
         }
     ],
+    [
+        'class'=>'\kartik\grid\DataColumn',   
+        'label'=>'Fecha Número ',
+        'format'=>'html',
+        'value'=>function($model){
+            $num = ($model->id_cab_fecha)?$model->cabFecha->num_fecha:"";
+            return '<div style="font-size:15px;" class="text-center text-red text-bold">'.$num.'</div>';
+        }
+    ],
     [        
         'label'=>'Hora',
         'format'=>'html',

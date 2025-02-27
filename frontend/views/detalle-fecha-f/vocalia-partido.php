@@ -75,7 +75,7 @@ if ($defaultValue == $estadoVocalia) {
 
     <div class="row p-2 border border-success">
         <div class="col p-3 border border-success">
-            <div class="row">
+            <div class="row text-center">
                 <div class="col">
                     <h3 class="bg-primary"><b><?= $modelCabVocalia->equipo1->nombre ?></b></h3>
                 </div>

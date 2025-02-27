@@ -13,7 +13,9 @@ use Yii;
  * @property int $id_campeonato
  * @property int $id_estado_fecha
  * @property bool $estado
+ * @property int|null $num_fecha
  *
+ * @property CabeceraVocalia[] $cabeceraVocalias
  * @property Campeonato $campeonato
  * @property DetalleFecha[] $detalleFechas
  * @property Catalogos $estadoFecha
@@ -36,8 +38,8 @@ class CabeceraFechas extends \yii\db\ActiveRecord
         return [
             [['dia', 'fecha', 'id_campeonato', 'id_estado_fecha', 'estado'], 'required'],
             [['fecha'], 'safe'],
-            [['id_campeonato', 'id_estado_fecha'], 'default', 'value' => null],
-            [['id_campeonato', 'id_estado_fecha'], 'integer'],
+            [['id_campeonato', 'id_estado_fecha', 'num_fecha'], 'default', 'value' => null],
+            [['id_campeonato', 'id_estado_fecha', 'num_fecha'], 'integer'],
             [['estado'], 'boolean'],
             [['dia'], 'string', 'max' => 50],
             [['id_campeonato'], 'exist', 'skipOnError' => true, 'targetClass' => Campeonato::class, 'targetAttribute' => ['id_campeonato' => 'id']],
@@ -54,10 +56,21 @@ class CabeceraFechas extends \yii\db\ActiveRecord
             'id' => 'ID',
             'dia' => 'Dia',
             'fecha' => 'Fecha',
-            'id_campeonato' => 'Campeonato',
-            'id_estado_fecha' => 'Estado Fecha',
+            'id_campeonato' => 'Id Campeonato',
+            'id_estado_fecha' => 'Id Estado Fecha',
             'estado' => 'Estado',
+            'num_fecha' => 'Num Fecha',
         ];
+    }
+
+    /**
+     * Gets query for [[CabeceraVocalias]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCabeceraVocalias()
+    {
+        return $this->hasMany(CabeceraVocalia::class, ['id_cab_fecha' => 'id']);
     }
 
     /**

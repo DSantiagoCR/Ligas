@@ -35,6 +35,8 @@ $arrayCampeonato = ArrayHelper::map($modelsCampeonatoALL, 'id', 'nombre');
 
     <?php $form = ActiveForm::begin(['layout' => 'horizontal']); ?>
 
+    <?= $form->field($model, 'num_fecha')->textInput()->label('Num. Fecha') ?>
+
     <?= $form->field($model, 'fecha')->textInput(['type' => 'date', 'id' => 'txt_date']) ?>
 
     <?= $form->field($model, 'dia')->textInput(['id' => 'txt_dia_semana', 'readonly' => true]) ?>

@@ -57,7 +57,7 @@ if ($model->id_grupo) {
 
     <?php $form = ActiveForm::begin(['layout' => 'horizontal']); ?>
 
-    <?= $form->field($model, 'id_cabecera_fecha')->hiddenInput()->label(false) ?>
+    <?= $form->field($model, 'id_cabecera_fecha')->hiddenInput()->label(false)?>
 
     <?= $form->field($model, 'id_etapa')->dropDownList($objHelper->helperArrayEtapas(), ['id' => 'id_etapa1', 'prompt' => 'Seleccione...']) ?>
 
@@ -71,14 +71,14 @@ if ($model->id_grupo) {
         $arrayEquipo1,
         ['id' => 'drop_equipo1', 'prompt' => 'Seleccione...']
     )->label('Equipo1') ?>
-    <?= $form->field($model, 'goles_equipo1')->textInput(['type' => 'number'])->label('Goles Equipo 1') ?>
+    <?= $form->field($model, 'goles_equipo1')->textInput(['type' => 'number','disabled'=>true,'value'=>0])->label('Goles Equipo 1') ?>
 
     <?= $form->field($model, 'id_grupo_equipo2')->dropDownList(
         $arrayEquipo2,
         ['id' => 'drop_equipo2', 'prompt' => 'Seleccione...']
     )->label('Equipo2') ?>
 
-    <?= $form->field($model, 'goles_equipo2')->textInput(['type' => 'number'])->label('Goles Equipo 2')  ?>
+    <?= $form->field($model, 'goles_equipo2')->textInput(['type' => 'number','disabled'=>true,'value'=>0])->label('Goles Equipo 2')  ?>
 
 
     <?= $form->field($model, 'hora_inicio')->dropDownList(
@@ -101,7 +101,7 @@ if ($model->id_grupo) {
 
 
 
-  
+
 
     <?php ActiveForm::end(); ?>
     <?php
@@ -125,10 +125,15 @@ if ($model->id_grupo) {
     $this->registerJs("
             $('#drop_grupos').change(function() {
                 var id_grupo = $(this).val();
+                var id_cabecera_fecha = $('#detallefecha-id_cabecera_fecha').val(); // Capturar el valor del hidden input
+
                 $.ajax({
                     type:'POST',
                     url: '" . Url::to(['busqueda-grupo-equipo1']) . "',
-                    data: {id_grupo1: id_grupo},
+                     data: {
+                            id_grupo1: id_grupo,
+                            id_cabecera_fecha: id_cabecera_fecha // Enviar el valor del hidden input
+                        },
                     success: function(data) {
                         $('#drop_equipo1').empty().append('<option value=\"\">Seleccione...</option>');
                         $.each(data, function(index, item) {
@@ -142,10 +147,17 @@ if ($model->id_grupo) {
     $this->registerJs("
             $('#drop_equipo1').change(function() {
                 var id_grupo_equipo1 = $(this).val();
+                var id_cabecera_fecha = $('#detallefecha-id_cabecera_fecha').val(); // Capturar el valor del hidden input
+                var id_grupo = $(this).val();
                 $.ajax({
                     type:'POST',
                     url: '" . Url::to(['busqueda-grupo-equipo2']) . "',
                     data: {id_grupo_equipo1: id_grupo_equipo1},
+                    data: {
+                            id_grupo1: id_grupo,
+                            id_grupo_equipo1: id_grupo_equipo1,
+                            id_cabecera_fecha: id_cabecera_fecha // Enviar el valor del hidden input
+                        },
                     success: function(data) {
                         $('#drop_equipo2').empty().append('<option value=\"\">Seleccione...</option>');
                         $.each(data, function(index, item) {

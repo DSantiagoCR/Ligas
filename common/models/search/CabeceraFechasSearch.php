@@ -17,8 +17,8 @@ class CabeceraFechasSearch extends CabeceraFechas
      */
     public function rules()
     {
-        return [
-            [['id', 'id_campeonato', 'id_estado_fecha'], 'integer'],
+        return [            
+            [['id', 'id_campeonato', 'id_estado_fecha','num_fecha'], 'integer'],            
             [['dia', 'fecha'], 'safe'],
             [['estado'], 'boolean'],
         ];
@@ -62,6 +62,8 @@ class CabeceraFechasSearch extends CabeceraFechas
             'id_campeonato' => $this->id_campeonato,
             'id_estado_fecha' => $this->id_estado_fecha,
             'estado' => $this->estado,
+            'num_fecha' => $this->num_fecha,
+
         ]);
 
         $query->andFilterWhere(['like', 'dia', $this->dia]);

@@ -44,7 +44,7 @@ class DetalleFecha extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_cabecera_fecha', 'id_grupo', 'id_grupo_equipo1', 'id_grupo_equipo2', 'goles_equipo1', 'goles_equipo2', 'hora_inicio', 'id_estado_partido', 'estado', 'id_etapa'], 'required'],
+            [['id_cabecera_fecha', 'id_grupo', 'id_grupo_equipo1', 'id_grupo_equipo2', 'hora_inicio', 'id_estado_partido', 'estado', 'id_etapa'], 'required'],
             [['id_cabecera_fecha', 'id_grupo', 'id_grupo_equipo1', 'id_grupo_equipo2', 'goles_equipo1', 'goles_equipo2', 'id_estado_partido','ganador1','ganador2'], 'default', 'value' => null],
             [['id_cabecera_fecha', 'id_grupo', 'id_grupo_equipo1', 'id_grupo_equipo2', 'goles_equipo1', 'goles_equipo2', 'id_estado_partido', 'id_etapa'], 'integer'],
             [['estado'], 'boolean'],
