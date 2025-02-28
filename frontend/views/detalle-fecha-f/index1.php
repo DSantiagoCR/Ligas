@@ -47,8 +47,8 @@ foreach ($modelCabFechas as $modelCab) {
                             <div class="card p-2  text-white  " style="background:#0076e6">
                                 <div class="row justify-content-between ">
                                     <div class="col">
-                                        <scan class="fw-bold bg-light  rounded-pill"><?= $modelDet->estadoPartido->valor ?></scan>
-                                        <scan class="fw-bold bg-light  rounded-pill"> <?= $modelDet->horaInicio->valor ?></scan>
+                                        <scan class="fw-bold bg-light  rounded-pill p-1"><?= $modelDet->estadoPartido->valor ?></scan>
+                                        <scan class="fw-bold bg-light  rounded-pill p-1"> <?= $modelDet->horaInicio->valor ?></scan>
                                     </div>
                                     <div class="col">
                                         <div> <?= Html::img($modelDet->grupoEquipo1->equipo->link_logotipo, ['width' => '40px']) ?></div>

@@ -32,7 +32,12 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'num_fecha',
-        'label'=>'Num. Fecha',    
+        'label'=>'Num. Fecha', 
+        'format'=>'raw', 
+        'value'=>function($data)
+        {
+            return '<div class="text-red text-lg text-center">'.$data->num_fecha.'</div>';
+        }  
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
