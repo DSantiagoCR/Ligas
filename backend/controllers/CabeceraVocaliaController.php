@@ -2,19 +2,24 @@
 
 namespace backend\controllers;
 
+
+use common\models\CabeceraFechas;
 use Yii;
-use common\models\LigaBarrial;
-use common\models\search\LigaBarrialSearch;
+use common\models\CabeceraVocalia;
+use common\models\DetalleFecha;
+use common\models\search\CabeceraVocaliaSearch;
+
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use \yii\web\Response;
 use yii\helpers\Html;
 
 /**
- * LigaBarrialController implements the CRUD actions for LigaBarrial model.
+ * CabeceraVocaliaController implements the CRUD actions for CabeceraVocalia model.
  */
-class LigaBarrialController extends Controller
+class CabeceraVocaliaController extends Controller
 {
     /**
      * @inheritdoc
@@ -33,27 +38,62 @@ class LigaBarrialController extends Controller
     }
 
     /**
-     * Lists all LigaBarrial models.
+     * Lists all CabeceraVocalia models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($dia=null)
     {    
-        $searchModel = new LigaBarrialSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $this->generaRegistrosVocalia();
+        $searchModel = new CabeceraVocaliaSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$dia);        
+        
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
-        //  return $this->render('test', [
-        //     'searchModel' => $searchModel,
-        //     'dataProvider' => $dataProvider,
+
+        // return $this->render('vocalias',[
+        //     'modelCabFechas'=>null,
+        //     'modelDetFechas'=>null,
         // ]);
+
     }
+    public function generaRegistrosVocalia()
+    {
+        $modelCabFechas = CabeceraFechas::find()
+        ->where(['estado'=>true])
+        ->andWhere(['in','id_estado_fecha',[45,49]])           
+        ->orderBy(['fecha'=>SORT_ASC]) 
+        ->all();     
+
+        $modelDetFechas = DetalleFecha::find()
+        ->where(['in','id_cabecera_fecha',ArrayHelper::map($modelCabFechas,'id','id')])
+        ->where(['not in','id',CabeceraVocalia::find()
+                ->select('id_det_fecha')                
+                ])
+        ->orderBy(['hora_inicio'=>SORT_ASC])
+        ->all();
+
+        foreach($modelDetFechas as $model)
+        {
+            $modelCabVocalia = new CabeceraVocalia();
+            
+            $modelCabVocalia->id_campeonato = $model->cabeceraFecha->id_campeonato;          
+            $modelCabVocalia->id_estado_vocalia = 51;
+            $modelCabVocalia->id_equipo_1 = $model->grupoEquipo1->id_equipo;
+            $modelCabVocalia->id_equipo_2 = $model->grupoEquipo2->id_equipo;   
+            $modelCabVocalia->id_cab_fecha =  $model->id_cabecera_fecha;  
+            $modelCabVocalia->id_det_fecha =  $model->id;      
+            $modelCabVocalia->save();      
+        }
+
+    }
+   
+ 
 
 
     /**
-     * Displays a single LigaBarrial model.
+     * Displays a single CabeceraVocalia model.
      * @param integer $id
      * @return mixed
      */
@@ -63,7 +103,7 @@ class LigaBarrialController extends Controller
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> "LigaBarrial ",
+                    'title'=> "Vocalia",
                     'content'=>$this->renderAjax('view', [
                         'model' => $this->findModel($id),
                     ]),
@@ -78,7 +118,7 @@ class LigaBarrialController extends Controller
     }
 
     /**
-     * Creates a new LigaBarrial model.
+     * Creates a new CabeceraVocalia model.
      * For ajax request will return json object
      * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
@@ -86,7 +126,7 @@ class LigaBarrialController extends Controller
     public function actionCreate()
     {
         $request = Yii::$app->request;
-        $model = new LigaBarrial();  
+        $model = new CabeceraVocalia();  
 
         if($request->isAjax){
             /*
@@ -95,7 +135,7 @@ class LigaBarrialController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Crear Nuevo LigaBarrial",
+                    'title'=> "Crear Vocalia",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
@@ -106,15 +146,15 @@ class LigaBarrialController extends Controller
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Crear Nuevo LigaBarrial",
-                    'content'=>'<span class="text-success">Creación LigaBarrial Exitosa</span>',
+                    'title'=> "Crear Vocalia",
+                    'content'=>'<span class="text-success">Create CabeceraVocalia success</span>',
                     'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                            Html::a('Crear Mas',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                            Html::a('Crear Nuevo',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
         
                 ];         
             }else{           
                 return [
-                    'title'=> "Crear Nuevo LigaBarrial",
+                    'title'=> "Crear Vocalia",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
@@ -139,7 +179,7 @@ class LigaBarrialController extends Controller
     }
 
     /**
-     * Updates an existing LigaBarrial model.
+     * Updates an existing CabeceraVocalia model.
      * For ajax request will return json object
      * and for non-ajax request if update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
@@ -157,7 +197,7 @@ class LigaBarrialController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Actualizar LigaBarrial ",
+                    'title'=> "Actualizar Vocalia",
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -167,7 +207,7 @@ class LigaBarrialController extends Controller
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "LigaBarrial ",
+                    'title'=> "Vocalia",
                     'content'=>$this->renderAjax('view', [
                         'model' => $model,
                     ]),
@@ -176,7 +216,7 @@ class LigaBarrialController extends Controller
                 ];    
             }else{
                  return [
-                    'title'=> "Actualizar LigaBarrial ",
+                    'title'=> "Actualizar Vocalia",
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -199,7 +239,7 @@ class LigaBarrialController extends Controller
     }
 
     /**
-     * Delete an existing LigaBarrial model.
+     * Delete an existing CabeceraVocalia model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -215,7 +255,7 @@ class LigaBarrialController extends Controller
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceCerrar'=>true,'forceReload'=>'#crud-datatable-pjax'];
+            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
         }else{
             /*
             *   Process for non-ajax request
@@ -227,7 +267,7 @@ class LigaBarrialController extends Controller
     }
 
      /**
-     * Delete multiple existing LigaBarrial model.
+     * Delete multiple existing CabeceraVocalia model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -247,7 +287,7 @@ class LigaBarrialController extends Controller
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceCerrar'=>true,'forceReload'=>'#crud-datatable-pjax'];
+            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
         }else{
             /*
             *   Process for non-ajax request
@@ -258,15 +298,15 @@ class LigaBarrialController extends Controller
     }
 
     /**
-     * Finds the LigaBarrial model based on its primary key value.
+     * Finds the CabeceraVocalia model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return LigaBarrial the loaded model
+     * @return CabeceraVocalia the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = LigaBarrial::findOne($id)) !== null) {
+        if (($model = CabeceraVocalia::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

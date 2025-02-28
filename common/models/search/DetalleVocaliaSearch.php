@@ -5,22 +5,21 @@ namespace common\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\CabeceraFechas;
+use common\models\DetalleVocalia;
 
 /**
- * CabeceraFechasSearch represents the model behind the search form about `\common\models\CabeceraFechas`.
+ * DetalleVocaliaSearch represents the model behind the search form about `common\models\DetalleVocalia`.
  */
-class CabeceraFechasSearch extends CabeceraFechas
+class DetalleVocaliaSearch extends DetalleVocalia
 {
     /**
      * @inheritdoc
      */
     public function rules()
     {
-        return [            
-            [['id', 'id_campeonato', 'id_estado_fecha','num_fecha'], 'integer'],            
-            [['dia', 'fecha'], 'safe'],
-            [['estado'], 'boolean'],
+        return [
+            [['id', 'id_cabecera_vocalia', 'ta', 'tr', 'goles', 'id_jugador'], 'integer'],
+            [['entrega_carnet'], 'boolean'],
         ];
     }
 
@@ -42,7 +41,7 @@ class CabeceraFechasSearch extends CabeceraFechas
      */
     public function search($params)
     {
-        $query = CabeceraFechas::find();
+        $query = DetalleVocalia::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -58,17 +57,13 @@ class CabeceraFechasSearch extends CabeceraFechas
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'fecha' => $this->fecha,
-            'id_campeonato' => $this->id_campeonato,
-            'id_estado_fecha' => $this->id_estado_fecha,
-            'estado' => $this->estado,
-            'num_fecha' => $this->num_fecha,
-
+            'id_cabecera_vocalia' => $this->id_cabecera_vocalia,
+            'ta' => $this->ta,
+            'tr' => $this->tr,
+            'goles' => $this->goles,
+            'entrega_carnet' => $this->entrega_carnet,
+            'id_jugador' => $this->id_jugador,
         ]);
-
-        $query->andFilterWhere(['like', 'dia', $this->dia]);
-
-        $query->orderBy(['fecha'=>SORT_ASC]);
 
         return $dataProvider;
     }

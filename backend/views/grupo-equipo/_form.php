@@ -50,14 +50,6 @@ $modelEquipos = Equipo::find()
 ->andWhere(['not in','id',$arrayGruposEquipo])
 ->all();
 
-// echo '<pre>';
-// // print_r($modelEquipos);
-// foreach($modelEquipos as $model2)
-// {
-//     print_r($model2->nombre);
-//     echo'<br>';
-// }
-// die();
 
 $arrayEquipos = ArrayHelper::map($modelEquipos, 'id', function($model) {  
     return $model->nombre . ' - ' . $model->categoria->valor . ' - '. $model->genero->valor;

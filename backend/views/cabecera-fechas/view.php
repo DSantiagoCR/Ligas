@@ -11,6 +11,7 @@ use yii\widgets\DetailView;
         'model' => $model,
         'attributes' => [
             //'id',
+            'num_fecha',
             'dia',
             'fecha',
             //'id_campeonato',

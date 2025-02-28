@@ -31,6 +31,16 @@ return [
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'num_fecha',
+        'label'=>'Num. Fecha', 
+        'format'=>'raw', 
+        'value'=>function($data)
+        {
+            return '<div class="text-red text-lg text-center">'.$data->num_fecha.'</div>';
+        }  
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'dia',
         'label'=>'Dia Semana',
         
@@ -38,6 +48,7 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'fecha',
+        'label'=>'Fecha Calendario',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
@@ -45,6 +56,14 @@ return [
         'label'=>'Campeonato',
         'value' => function ($data) {
             return ($data->id_campeonato)?$data->campeonato->nombre:'';
+        }
+    ],
+    [
+        'attribute'=>'id_estado_fecha',
+        'label'=>'Estado Fecha',
+        'value'=>function($data)
+        {
+            return $data->estadoFecha->valor;
         }
     ],
 

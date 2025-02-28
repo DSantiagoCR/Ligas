@@ -12,6 +12,7 @@ use common\models\search\DetalleFechaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use \yii\web\Response;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
@@ -88,7 +89,7 @@ class DetalleFechaController extends Controller
         if ($request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                'title' => "DetalleFecha #" . $id,
+                'title' => "Detalle Fecha",
                 'content' => $this->renderAjax('view', [
                     'model' => $this->findModel($id),
                 ]),
@@ -119,7 +120,8 @@ class DetalleFechaController extends Controller
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            if ($request->isGet) {
+            if ($request->isGet) {           
+
                 return [
                     'title' => "Detalle Fechas",
                     'content' => $this->renderAjax('create', [
@@ -131,7 +133,7 @@ class DetalleFechaController extends Controller
                 ];
             } else if ($model->load($request->post()) && $model->validate()) {
                 $alert1 = $alert2 = $alert3 = $alert4 = $alert5 = true;
-
+               
                 if (!$this->verifica_det_fecha_equipos($model)) {
                     Yii::$app->session->setFlash('A1', 'No se puede configurar dos veces el mismo EQUIPO en el mismo DIA');
                     $alert1 = false;
@@ -142,6 +144,10 @@ class DetalleFechaController extends Controller
 
                 }
                 if ($alert1 and $alert2 and $alert3 and $alert4 and $alert5) {
+                    //verifica quien es el ganador
+                    
+                    $model->goles_equipo1 =0;
+                    $model->goles_equipo2=0;
                     $model->save();
                     return [
                         'forceReload' => '#crud-datatable-pjax',
@@ -198,7 +204,7 @@ class DetalleFechaController extends Controller
     {
         $request = Yii::$app->request;
         $model = $this->findModel($id);
-
+    
         if ($request->isAjax) {
             /*
             *   Process for ajax request
@@ -213,7 +219,21 @@ class DetalleFechaController extends Controller
                     'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
                         Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
                 ];
-            } else if ($model->load($request->post()) && $model->save()) {
+            } else if ($model->load($request->post()) && $model->validate()) {
+               
+                if($model->goles_equipo1 > $model->goles_equipo2){
+                    $model->ganador1=1;
+                    $model->ganador2=0;                        
+                }
+                if($model->goles_equipo1 < $model->goles_equipo2){
+                    $model->ganador1=0;
+                    $model->ganador2=1;                        
+                }
+                if($model->goles_equipo1 == $model->goles_equipo2){
+                    $model->ganador1=2;
+                    $model->ganador2=2;                        
+                }
+                $model->save();
                 return [
                     'forceReload' => '#crud-datatable-pjax',
                     'title' =>  "Actualizar Detalle Fecha",
@@ -321,10 +341,20 @@ class DetalleFechaController extends Controller
     public function actionBusquedaGrupoEquipo1()
     {
         $request = Yii::$app->request;
-        $id_grupo =  $request->post('id_grupo1');        
+        $id_grupo =  $request->post('id_grupo1'); 
+        $id_cab_fecha =  $request->post('id_cabecera_fecha');        
+
+        $modelCF = CabeceraFechas::findone($id_cab_fecha);
+   
+        $modelCFS = CabeceraFechas::find()
+        ->where(['num_fecha'=>$modelCF->num_fecha])
+        ->all();
+
+        $arrayCFS = ArrayHelper::map( $modelCFS,'id','id');
 
         $modelDF = DetalleFecha::find()
         ->where(['id_grupo'=>$id_grupo])
+        ->andWhere(['in','id_cabecera_fecha', $arrayCFS])
         ->all();
 
         $dataDF = [];
@@ -351,11 +381,22 @@ class DetalleFechaController extends Controller
     {
         $request = Yii::$app->request;
         $id_grupo_equipo1 =  $request->post('id_grupo_equipo1');
+        $id_grupo =  $request->post('id_grupo1');
+        $id_cab_fecha =  $request->post('id_cabecera_fecha');
+
+        $modelCF = CabeceraFechas::findone($id_cab_fecha);
+   
+        $modelCFS = CabeceraFechas::find()
+        ->where(['num_fecha'=>$modelCF->num_fecha])
+        ->all();
+
+        $arrayCFS = ArrayHelper::map( $modelCFS,'id','id');       
 
         $GruposEquipo = GrupoEquipo::find()->where(['id' => $id_grupo_equipo1])->one(); 
         
         $modelDF = DetalleFecha::find()
         ->where(['id_grupo'=> $GruposEquipo->id_grupo])
+        ->andWhere(['in','id_cabecera_fecha', $arrayCFS])
         ->all();
 
         $dataDF = [];

@@ -5,6 +5,7 @@ use common\models\Catalogos;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
+
 return [
     // [
     //     'class' => 'kartik\grid\CheckboxColumn',
@@ -32,6 +33,7 @@ return [
             return $data->grupo->catalogo->valor;
         }
     ],
+
     [
         'class'=>'\kartik\grid\DataColumn',       
         'label'=>'Grupo',
@@ -40,6 +42,7 @@ return [
             return $data->grupo->nombre;
         }
     ],
+  
     [
         'class'=>'\kartik\grid\DataColumn',       
         'label'=>'Categoría',
@@ -70,8 +73,20 @@ return [
         'label'=>'Logo 1',
         'format'=>'html',      
         'value'=>function($data){
-            return HTML::img($data->grupoEquipo1->equipo->link_logotipo, ['width' => '40px']);
-            //return '<img src="'.$data->grupoEquipo2->equipo->link_logotipo.'"/>';
+            $iconoBandera = "";         
+            if ($data->ganador1 == 1)
+            {
+                $iconoBandera = '<br>'.'<i class="fas fa-flag" style="color:green"></i>';
+            }
+            if ($data->ganador1 == 2)
+            {
+                $iconoBandera = '<br><i class="fas fa-flag" style="color:orange"></i>';
+            }
+        
+            
+            return HTML::img($data->grupoEquipo1->equipo->link_logotipo, ['width' => '40px',]).$iconoBandera;
+           
+          
         }
     ],
     [
@@ -94,8 +109,17 @@ return [
         'label'=>'Logo 2',
         'format'=>'html',      
         'value'=>function($data){
-            return HTML::img($data->grupoEquipo2->equipo->link_logotipo, ['width' => '40px']);
-            //return '<img src="'.$data->grupoEquipo2->equipo->link_logotipo.'"/>';
+            $iconoBandera = "";         
+            if ($data->ganador2 == 1)
+            {
+                $iconoBandera = '<br><i class="fas fa-flag" style="color:green"></i>';
+            }
+            if ($data->ganador2 == 2)
+            {
+                $iconoBandera = '<br><i class="fas fa-flag" style="color:orange"></i>';
+            }
+            return HTML::img($data->grupoEquipo2->equipo->link_logotipo, ['width' => '40px']).$iconoBandera;
+          
         }
     ],
     // [

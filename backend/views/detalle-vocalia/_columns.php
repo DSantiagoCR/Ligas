@@ -1,6 +1,5 @@
 <?php
 use yii\helpers\Url;
-use yii\helpers\Html;
 
 return [
     [
@@ -17,29 +16,28 @@ return [
     // ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'code',
+        'attribute'=>'id_cabecera_vocalia',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'nombre',
+        'attribute'=>'ta',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'fecha_fundacion',
+        'attribute'=>'tr',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'link_logo',
-        'format'=>'raw',
-        'value'=>function($data){
-            return HTML::img($data->link_logo, ['width' => '150px']);
-
-        }
+        'attribute'=>'goles',
     ],
     [
-        'class'=>'\kartik\grid\BooleanColumn',
-        'attribute'=>'estado',
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'entrega_carnet',
     ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'id_jugador',
+    // ],
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,

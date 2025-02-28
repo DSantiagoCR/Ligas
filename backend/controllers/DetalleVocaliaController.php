@@ -3,8 +3,8 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\LigaBarrial;
-use common\models\search\LigaBarrialSearch;
+use common\models\DetalleVocalia;
+use common\models\search\DetalleVocaliaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -12,9 +12,9 @@ use \yii\web\Response;
 use yii\helpers\Html;
 
 /**
- * LigaBarrialController implements the CRUD actions for LigaBarrial model.
+ * DetalleVocaliaController implements the CRUD actions for DetalleVocalia model.
  */
-class LigaBarrialController extends Controller
+class DetalleVocaliaController extends Controller
 {
     /**
      * @inheritdoc
@@ -33,27 +33,25 @@ class LigaBarrialController extends Controller
     }
 
     /**
-     * Lists all LigaBarrial models.
+     * Lists all DetalleVocalia models.
      * @return mixed
      */
     public function actionIndex()
     {    
-        $searchModel = new LigaBarrialSearch();
+        $searchModel = new DetalleVocaliaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-        //  return $this->render('test', [
+        // return $this->render('index', [
         //     'searchModel' => $searchModel,
         //     'dataProvider' => $dataProvider,
         // ]);
+        return $this->render('vocalias');
+
     }
 
 
     /**
-     * Displays a single LigaBarrial model.
+     * Displays a single DetalleVocalia model.
      * @param integer $id
      * @return mixed
      */
@@ -63,12 +61,12 @@ class LigaBarrialController extends Controller
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> "LigaBarrial ",
+                    'title'=> "DetalleVocalia #".$id,
                     'content'=>$this->renderAjax('view', [
                         'model' => $this->findModel($id),
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                            Html::a('Editar',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                            Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
                 ];    
         }else{
             return $this->render('view', [
@@ -78,7 +76,7 @@ class LigaBarrialController extends Controller
     }
 
     /**
-     * Creates a new LigaBarrial model.
+     * Creates a new DetalleVocalia model.
      * For ajax request will return json object
      * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
@@ -86,7 +84,7 @@ class LigaBarrialController extends Controller
     public function actionCreate()
     {
         $request = Yii::$app->request;
-        $model = new LigaBarrial();  
+        $model = new DetalleVocalia();  
 
         if($request->isAjax){
             /*
@@ -95,31 +93,31 @@ class LigaBarrialController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Crear Nuevo LigaBarrial",
+                    'title'=> "Create new DetalleVocalia",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
         
                 ];         
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Crear Nuevo LigaBarrial",
-                    'content'=>'<span class="text-success">Creación LigaBarrial Exitosa</span>',
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                            Html::a('Crear Mas',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                    'title'=> "Create new DetalleVocalia",
+                    'content'=>'<span class="text-success">Create DetalleVocalia success</span>',
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                            Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
         
                 ];         
             }else{           
                 return [
-                    'title'=> "Crear Nuevo LigaBarrial",
+                    'title'=> "Create new DetalleVocalia",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
         
                 ];         
             }
@@ -139,7 +137,7 @@ class LigaBarrialController extends Controller
     }
 
     /**
-     * Updates an existing LigaBarrial model.
+     * Updates an existing DetalleVocalia model.
      * For ajax request will return json object
      * and for non-ajax request if update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
@@ -157,31 +155,31 @@ class LigaBarrialController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Actualizar LigaBarrial ",
+                    'title'=> "Update DetalleVocalia #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
                 ];         
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "LigaBarrial ",
+                    'title'=> "DetalleVocalia #".$id,
                     'content'=>$this->renderAjax('view', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                            Html::a('Editar',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                            Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
                 ];    
             }else{
                  return [
-                    'title'=> "Actualizar LigaBarrial ",
+                    'title'=> "Update DetalleVocalia #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
                 ];        
             }
         }else{
@@ -199,7 +197,7 @@ class LigaBarrialController extends Controller
     }
 
     /**
-     * Delete an existing LigaBarrial model.
+     * Delete an existing DetalleVocalia model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -215,7 +213,7 @@ class LigaBarrialController extends Controller
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceCerrar'=>true,'forceReload'=>'#crud-datatable-pjax'];
+            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
         }else{
             /*
             *   Process for non-ajax request
@@ -227,7 +225,7 @@ class LigaBarrialController extends Controller
     }
 
      /**
-     * Delete multiple existing LigaBarrial model.
+     * Delete multiple existing DetalleVocalia model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -247,7 +245,7 @@ class LigaBarrialController extends Controller
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceCerrar'=>true,'forceReload'=>'#crud-datatable-pjax'];
+            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
         }else{
             /*
             *   Process for non-ajax request
@@ -258,15 +256,15 @@ class LigaBarrialController extends Controller
     }
 
     /**
-     * Finds the LigaBarrial model based on its primary key value.
+     * Finds the DetalleVocalia model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return LigaBarrial the loaded model
+     * @return DetalleVocalia the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = LigaBarrial::findOne($id)) !== null) {
+        if (($model = DetalleVocalia::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

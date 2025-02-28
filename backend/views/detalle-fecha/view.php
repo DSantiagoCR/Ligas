@@ -47,7 +47,13 @@ use yii\widgets\DetailView;
                     return $data->goles_equipo2;
                 }
             ],
-            'hora_inicio',
+            //'hora_inicio',
+            [
+                'label' => 'Hora Inicio',
+                'value' => function ($data) {
+                    return $data->horaInicio->valor;
+                }
+            ],
 
             //'id_estado_partido',
             [
