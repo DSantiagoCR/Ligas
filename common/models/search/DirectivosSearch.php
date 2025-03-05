@@ -2,6 +2,7 @@
 
 namespace common\models\search;
 
+use common\models\Campeonato;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -42,10 +43,12 @@ class DirectivosSearch extends Directivos
      */
     public function search($params, $idUserEquipo = null)
     {
-        $query = Directivos::find();
+        $modelsCampeonato = Campeonato::find()->where(['estado' => true])->one();
+        
+        $query = Directivos::find()->where(['id_campeonato'=>$modelsCampeonato->id]);
         if ($idUserEquipo) {
             $query = Directivos::find()
-                ->where(['id_equipo' => $idUserEquipo]);
+                ->where(['id_equipo' => $idUserEquipo,'id_campeonato'=>$modelsCampeonato->id]);
         }
 
         $dataProvider = new ActiveDataProvider([

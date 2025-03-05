@@ -31,15 +31,17 @@ $arrayEquipos = ArrayHelper::map($modelEquipos, 'id', function($model) {
 
     <!-- <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?> -->
 
+    <?= $form->field($model, 'id_campeonato')->hiddenInput(['value' => $modelCampeonato->id])->label(false) ?> 
+
     <?= $form->field($model, 'nombres')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'apellidos')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'num_camiseta')->textInput(['type' => 'number']) ?>
+    <?= $form->field($model, 'num_camiseta')->textInput(['type' => 'number'])->label('Número') ?>
 
     <?= $form->field($model, 'fecha_nacimiento')->textInput(['type' => 'date']) ?>
 
-    <?= $form->field($model, 'cedula')->textInput(['type' => 'number']) ?>
+    <?= $form->field($model, 'cedula')->textInput(['type' => 'number'])->label('Cédula') ?>
 
     <?= $form->field($model, 'celular')->textInput(['type' => 'number']) ?>
 
@@ -49,7 +51,7 @@ $arrayEquipos = ArrayHelper::map($modelEquipos, 'id', function($model) {
 
     <?= $form->field($model, 'hijos')->textInput(['type' => 'number']) ?>
     <div class="form-check form-switch">
-        <?= $form->field($model, 'estado')->checkbox(['label' => 'Activado']) ?>
+        <?= $form->field($model, 'estado')->checkbox(['label' => 'Calificado']) ?>
     </div>
     <div class="form-check form-switch">
         <?= $form->field($model, 'puede_jugar')->checkbox() ?>

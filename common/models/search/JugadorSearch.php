@@ -2,6 +2,7 @@
 
 namespace common\models\search;
 
+use common\models\Campeonato;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -44,11 +45,13 @@ class JugadorSearch extends Jugador
      */
     public function search($params, $idUserEquipo = null)
     {
+        $modelsCampeonato = Campeonato::find()->where(['estado' => true])->one();
 
-        $query = Jugador::find();
+        $query = Jugador::find()->where(['id_campeonato'=>$modelsCampeonato->id]);
         if ($idUserEquipo) {
+
             $query = Jugador::find()
-                ->where(['id_equipo' => $idUserEquipo]);
+                ->where(['id_equipo' => $idUserEquipo,'id_campeonato'=>$modelsCampeonato->id]);
         }
 
 

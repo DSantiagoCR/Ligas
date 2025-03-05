@@ -29,6 +29,7 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'num_camiseta',
+        'label'=>'Número',
     ],
     // [
     //     'class'=>'\kartik\grid\DataColumn',
@@ -37,6 +38,7 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'cedula',
+        'label'=>'Cédula',
     ],
     // [
         // 'class'=>'\kartik\grid\DataColumn',
@@ -53,6 +55,7 @@ return [
     [
         'class'=>'\kartik\grid\BooleanColumn',
         'attribute'=>'estado',
+        'label'=>'Calificado',
       
     ],
     // [

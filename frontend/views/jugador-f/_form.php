@@ -1,5 +1,6 @@
 <?php
 
+use common\models\Campeonato;
 use yii\helpers\Html;
 // use yii\widgets\ActiveForm;
 use yii\bootstrap5\ActiveForm;
@@ -11,6 +12,7 @@ use common\models\Util\HelperGeneral;
 
 $arrayEstadoCivil = HelperGeneral::devuelveArrayEstadoCivil();
 $aniosJugador =  HelperGeneral::calcularEdadCompleta($model->fecha_nacimiento);
+$modelsCampeonato = Campeonato::find()->where(['estado' => true])->one();
 
 ?>
 
@@ -27,7 +29,7 @@ $aniosJugador =  HelperGeneral::calcularEdadCompleta($model->fecha_nacimiento);
 
     <?= $form->field($model, 'id_equipo')->textInput(['value' => $model->equipo->nombre, 'disabled' => true])->label('Equipo') ?>
 
-
+    <?= $form->field($model, 'id_campeonato')->hiddenInput(['value' => $modelsCampeonato->id])->label(false) ?> 
 
     <?= $form->field($model, 'code')->hiddenInput(['value' => '-'])->label(false) ?>
 

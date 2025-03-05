@@ -22,7 +22,13 @@ use yii\widgets\DetailView;
             ],
             'nombres',
             'apellidos',
-            'num_camiseta',
+            //'num_camiseta',
+            [
+                'label'=>'Número',               
+                'value'=>function($data){     
+                    return ($data->num_camiseta)?($data->num_camiseta):'';               
+                }
+            ],
             //'fecha_nacimiento',
             [
                 'label'=>'Fecha Nacimiento',
@@ -33,7 +39,13 @@ use yii\widgets\DetailView;
                     return ($data->fecha_nacimiento)?($data->fecha_nacimiento.' '.$aniosJugador.''):'';               
                 }
             ],
-            'cedula',
+            //'cedula',
+            [
+                'label'=>'Cédula',
+                'value'=>function($data){                   
+                    return ($data->id_estado_civil)?$data->estadoCivil->valor:'';                   
+                }
+            ],
             'celular',
             // 'id_estado_civil',
             [
@@ -45,11 +57,11 @@ use yii\widgets\DetailView;
             'hijos',
             //'estado:boolean',
             [
-                'label'=>'Estado',
+                'label'=>'Calificado',
                 'format'=>'raw',
                 'value'=>function($data)
                 {
-                    return $data->estado?'<scan style="color:green"><b>ACTIVADO</b></scan>':'<scan style="color:red"><b>DESACTIVADO</b></scan>';
+                    return $data->estado?'<scan style="color:green"><b>SI</b></scan>':'<scan style="color:red"><b>NO</b></scan>';
                 }
             ],
            // 'link_foto',

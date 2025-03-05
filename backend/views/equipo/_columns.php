@@ -36,6 +36,7 @@ return [
     [
         'class' => '\kartik\grid\DataColumn',
         'attribute' => 'fecha_fundacion',
+        'label'=>'Fecha Fundación',
         'filter' => '',
     ],
     [
@@ -58,18 +59,20 @@ return [
         'class' => '\kartik\grid\DataColumn',
         'attribute' => 'id_genero',
         'label' => 'Género',
+        'format'=>'raw',
         'filter' => $arrayCatalogos,
         'value' => function ($model) {
-            return ($model->id_genero)?$model->genero->valor:'';
+            return ($model->id_genero)?'<span style="color:green"><b>'.$model->genero->valor.'</scan>':'';
         }
     ], 
     [
         'class' => '\kartik\grid\DataColumn',
         'attribute' => 'id_categoria',  
-        'label'=>'Categoria', 
+        'label'=>'Categoría', 
+        'format'=>'raw',
         'filter' => $arrayCategoria,     
         'value' => function ($data) {
-            return ($data->id_categoria)?$data->categoria->valor:'';
+            return ($data->id_categoria)?'<span style="color:blue"><b>'.$data->categoria->valor.'</scan>':'';
         }
     ],
     [
