@@ -28,6 +28,7 @@ use Yii;
  * @property int|null $goles
  * @property string|null $link_ficha
  * @property int|null $num_camiseta 
+ * @property int|null $id_campeonato
  *
  * @property DetalleVocalia[] $detalleVocalias
  * @property Equipo $equipo
@@ -49,10 +50,10 @@ class Jugador extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombres', 'apellidos', 'num_camiseta', 'estado', 'cedula', 'fecha_nacimiento'], 'required'],
+            [['nombres', 'apellidos', 'num_camiseta', 'estado', 'cedula', 'fecha_nacimiento','id_campeonato'], 'required'],
             [['fecha_nacimiento'], 'safe'],
-            [['id_estado_civil', 'hijos', 'id_equipo', 'ta_acumulada', 'ta_actuales', 'tr_acumulada', 'tr_actuales', 'goles', 'num_camiseta'], 'default', 'value' => null],
-            [['id_estado_civil', 'hijos', 'id_equipo', 'ta_acumulada', 'ta_actuales', 'tr_acumulada', 'tr_actuales', 'goles', 'num_camiseta'], 'integer'],
+            [['id_estado_civil', 'hijos', 'id_equipo', 'ta_acumulada', 'ta_actuales', 'tr_acumulada', 'tr_actuales', 'goles', 'num_camiseta','id_campeonato'], 'default', 'value' => null],
+            [['id_estado_civil', 'hijos', 'id_equipo', 'ta_acumulada', 'ta_actuales', 'tr_acumulada', 'tr_actuales', 'goles', 'num_camiseta','id_campeonato'], 'integer'],
             [['estado', 'puede_jugar'], 'boolean'],
             [['code'], 'string', 'max' => 20],
             [['nombres', 'apellidos'], 'string', 'max' => 100],

@@ -74,17 +74,29 @@ return [
         'filter'=>$arrayEquipos,
         'value'=>function($data)
         {
-            return $data->equipo->nombre.' - '. $data->equipo->genero->valor . ' - '.$data->equipo->categoria->valor;
+            return $data->equipo->nombre;
         }
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
         //'attribute'=>'id_equipo',
-        'label'=>'Categoria',
+        'label'=>'Categoría',
+        'format'=>'raw',
         'filter'=>$arrayEquipos,
         'value'=>function($data)
         {
-            return $data->equipo->genero->valor . ' - '.$data->equipo->categoria->valor;
+            return '<span style="color:blue"><b>'.$data->equipo->categoria->valor.'</b></scan>';
+        }
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        //'attribute'=>'id_equipo',
+        'label'=>'Género',
+        'format'=>'raw',
+        'filter'=>$arrayEquipos,
+        'value'=>function($data)
+        {
+            return '<span style="color:green"><b>'.$data->equipo->genero->valor.'</b></scan>';
         }
     ],
     [

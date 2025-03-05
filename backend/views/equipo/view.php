@@ -21,20 +21,22 @@ use yii\helpers\Html;
                 'value' => function ($data) {
                     return Html::a(substr($data->link_logotipo, 0, 40) . '...', $data->link_logotipo, ['target' => '_blank']);
                 }
-            ],
+            ],    
            
             //'id_genero',
             [
                 'label' => 'Género',
+                'format'=>'raw',   
                 'value' => function ($data) {
-                    return $data->genero->valor;
+                    return ($data->id_genero)?'<span style="color:green"><b>'.$data->genero->valor.'</scan>':'';
                 }
             ],
             //'id_categoria',
             [
                 'label' => 'Categoria',
+                'format'=>'raw',    
                 'value' => function ($data) {
-                    return ($data->id_categoria)?$data->categoria->valor:'';
+                    return ($data->id_categoria)?'<span style="color:blue"><b>'.$data->categoria->valor.'</scan>':'';
                 }
             ],
             //'id_campeonato',

@@ -26,6 +26,7 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'fecha_fundacion',
+        'label'=>'Fecha Fundación',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',

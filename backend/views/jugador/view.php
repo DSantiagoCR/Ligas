@@ -1,5 +1,6 @@
 <?php
 
+use common\models\Util\HelperGeneral;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -14,22 +15,58 @@ use yii\widgets\DetailView;
             //'code',
             'nombres',
             'apellidos',
-            'fecha_nacimiento',
-            'cedula',
+            //'fecha_nacimiento',
+            [
+                'label'=>'Fecha Nacimiento',
+                'format'=>'raw',
+                'value'=>function($data){                   
+                    $aniosJugador =  HelperGeneral::calcularEdadCompleta($data->fecha_nacimiento);
+                    $aniosJugador = '<scan style="color:green"><b>('.$aniosJugador.')</b></scan>';
+                    return ($data->fecha_nacimiento)?($data->fecha_nacimiento.' '.$aniosJugador.''):'';               
+                }
+            ],
+            // 'cedula',
+            [
+                'label'=>'Cédula',                
+                'value'=>function($data){                   
+                    return $data->cedula;            
+                }
+            ],
             'celular',
             //'id_estado_civil',
-            // [
-            //     'label'=>'Estado Civil',
-            //     'value'=>function($data){                   
-            //         return ($data->id_estado_civil)?$data->estadoCivil->valor:'';                   
-            //     }
-            // ],
+            [
+                'label'=>'Estado Civil',
+                'value'=>function($data){                   
+                    return ($data->id_estado_civil)?$data->estadoCivil->valor:'';                   
+                }
+            ],
             'hijos',
             //'estado:boolean',
             [
-                'label'=>'Estado ',                
+                'label'=>'Calificado', 
+                'format'=>'html',               
                 'value'=>function($data){                   
-                    return ($data->estado)?'Activado':'Desactivado';                 
+                    return ($data->estado)?'<span style="color:green"><b>SI</b></span>':'<span style="color:red"><b>NO</b></span>';                 
+                }
+            ],
+            [
+                'label'=>'Equipo',               
+                'value'=>function($data){                   
+                    return ($data->id_equipo)?$data->equipo->nombre:'';                 
+                }
+            ],
+            [
+                'label'=>'Categoria', 
+                'format'=>'raw',              
+                'value'=>function($data){                   
+                    return ($data->id_equipo)?'<span style="color:blue"><b>'.$data->equipo->categoria->valor.'</scan>':'';                 
+                }
+            ],
+            [
+                'label'=>'Género',
+                'format'=>'raw',               
+                'value'=>function($data){                   
+                    return ($data->id_equipo)?'<span style="color:green"><b>'.$data->equipo->genero->valor.'</scan>':'';                 
                 }
             ],
             

@@ -15,7 +15,13 @@ use yii\widgets\DetailView;
             'nombre',
             'apellido',
             'fecha_nacimiento',
-            'cedula',
+            // 'cedula',
+            [
+                'label'=>'Cédula',                
+                'value'=>function($data){                   
+                    return $data->cedula;                
+                }
+            ],
             //'id_estado_civil',      
             [
                 'label'=>'Estado Civil ',                
