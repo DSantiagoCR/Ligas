@@ -20,6 +20,8 @@ if ($defaultValue == $estadoVocalia) {
     $classContainer = "container-ms border border-info p-3 bg-ligth";
     $styleC = "pointer-events: none;";
 }
+
+
 ?>
 
 <!-- // cabcera -->
@@ -105,7 +107,7 @@ if ($defaultValue == $estadoVocalia) {
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_5">
-                        AMONESTADOS
+                        SUSPENDIDOS
                     </button>
                 </h2>
                 <?= $this->render('_jugadores_amonestados', ['modelDetVocalia' => $modelDetVocalia1B, 'tipo' => '_5']) ?>
@@ -143,7 +145,7 @@ if ($defaultValue == $estadoVocalia) {
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_6">
-                        AMONESTADOS
+                        SUSPENDIDOS
                     </button>
                 </h2>
                 <?= $this->render('_jugadores_amonestados', ['modelDetVocalia' => $modelDetVocalia2B, 'tipo' => '_6']) ?>
@@ -234,7 +236,9 @@ $script .= "});";
 $this->registerJs($script);
 
 ?>
+
 <?php
+//para guardar el estdo del partido
 $this->registerJs("
 $(document).on('click', '#guardar-estado', function() {
     let estado = $('#estado-partido').val(); // Obtener valor del select
