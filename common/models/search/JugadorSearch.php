@@ -57,6 +57,9 @@ class JugadorSearch extends Jugador
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 50, // Número de registros por página
+            ],
         ]);
 
         $this->load($params);
@@ -93,6 +96,7 @@ class JugadorSearch extends Jugador
 
         return $dataProvider;
     }
+  
     private function validarFecha($fecha, $formato = 'Y-m-d')
     {
         if ($fecha == null) {

@@ -1,13 +1,8 @@
 <?php
 
 use frontend\assets\AppAsset;
-use yii\helpers\Url;
 use yii\helpers\Html;
-use yii\bootstrap4\Modal;
-use kartik\grid\GridView;
 use hoaaah\ajaxcrud\CrudAsset;
-use hoaaah\ajaxcrud\BulkButtonWidget;
-use common\models\Util\HelperGeneral;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\search\DetalleFechaSearch */
@@ -21,30 +16,31 @@ CrudAsset::register($this);
 AppAsset::register($this);
 ?>
 
+
 <h1 class="text-center">Próximas Fechas</h1>
 
 <?php
 foreach ($modelCabFechas as $modelCab) {
 ?>
     <div id="accordion_<?= $modelCab->id ?>">
-        <div class="card text-center ">
+        <div class="card text-center  ">
             <div class="card-header" id="headingOne">
                 <h5 class="mb-0">
                     <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne_<?= $modelCab->id ?>" aria-expanded="true" aria-controls="collapseOne_<?= $modelCab->id ?>">
-                        <b>Fecha:</b>
-                        <scan style="color:gray"><?= $modelCab->dia ?></scan> <?= '   ' . $modelCab->fecha ?> (<?= $modelCab->estadoFecha->valor ?>) <i class="fas fa-arrow-circle-down"></i>
+                        <b class="fs-4 text-blue">Fecha:</b>
+                        <scan style="color:green"><b><?= $modelCab->dia ?></b> <?= '   ' . $modelCab->fecha ?> (<?= $modelCab->estadoFecha->valor ?>) <i class="fas fa-arrow-circle-down"></i></scan>
                     </button>
                 </h5>
             </div>
 
             <div id="collapseOne_<?= $modelCab->id ?>" class="collapse " aria-labelledby="headingOne" data-parent="#accordion_<?= $modelCab->id ?>">
-                <div class="card-body d-inline-block">
+                <div class="card-body d-inline-block ">
                     <?php
                     foreach ($modelDetFechas as $modelDet) {
                         if ($modelDet->id_cabecera_fecha == $modelCab->id) {
 
                     ?>
-                            <div class="card p-2  text-white  " style="background:#0076e6">
+                            <div class="card p-2  text-white " style="background:#0076e6" >
                                 <div class="row justify-content-between ">
                                     <div class="col">
                                         <scan class="fw-bold bg-light  rounded-pill p-1"><?= $modelDet->estadoPartido->valor ?></scan>
@@ -60,7 +56,7 @@ foreach ($modelCabFechas as $modelCab) {
                                         }
 
                                         ?>
-                                        <div><?= $iconoBandera?></div>
+                                        <div><?= $iconoBandera ?></div>
                                     </div>
                                     <div class="col">
                                         <div class="badge bg-danger rounded-pill">
@@ -86,7 +82,7 @@ foreach ($modelCabFechas as $modelCab) {
                                         }
 
                                         ?>
-                                        <div> <?= $iconoBandera?></div>
+                                        <div> <?= $iconoBandera ?></div>
                                     </div>
                                     <div class="col">
                                         <?= $modelDet->etapa->valor ?>
@@ -94,7 +90,7 @@ foreach ($modelCabFechas as $modelCab) {
                                 </div>
 
                             </div>
-                            <br>
+                            
 
                     <?php
                         }

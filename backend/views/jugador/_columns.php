@@ -98,16 +98,16 @@ return [
         }
 
     ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'id_equipo',
-        'label'=>'Equipos',
-        'filter'=>$arrayEquipos,
-        'value'=>function($data)
-        {
-            return $data->equipo->nombre . ' - '.$data->equipo->genero->valor . ' - '.$data->equipo->categoria->valor;
-        }
-    ],
+    // [
+    //     'class'=>'\kartik\grid\DataColumn',
+    //     'attribute'=>'id_equipo',
+    //     'label'=>'Equipos',
+    //     'filter'=>$arrayEquipos,
+    //     'value'=>function($data)
+    //     {
+    //         return $data->equipo->nombre . ' - '.$data->equipo->genero->valor . ' - '.$data->equipo->categoria->valor;
+    //     }
+    // ],
     [
         'class'=>'\kartik\grid\BooleanColumn',
         'attribute'=>'estado',

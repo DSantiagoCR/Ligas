@@ -6,18 +6,21 @@ use common\models\Util\HelperGeneral;
 $modelLigaBarrial = LigaBarrial::find()->where(['estado' => 1])->one();
 $modelCampeonato = HelperGeneral::devuelveCampeonatoActual();
 ?>
-
-<?= $modelLigaBarrial->nombre ?>
-<br>
-Fundación: <?= $modelLigaBarrial->fecha_fundacion ?>
-
-</br></br>
-<b>
-    <scan style="font-size: 20px;">Campeonato:</scan>
-</b>
-<?= $modelCampeonato->nombre ?>
+<div class="text-white fs-2">
+    <?= $modelLigaBarrial->nombre ?>
+    <br>
+    Fundación: <?= $modelLigaBarrial->fecha_fundacion ?>
+</div>
 </br>
-<b>
-    <scan style="font-size: 20px;">Periodo:</scan>
-</b>
-<?= $modelCampeonato->anio ?>
+<div class="text-white fs-5">
+
+    <b>
+        <scan style="font-size: 20px;">Campeonato:</scan>
+    </b>
+    <?= $modelCampeonato->nombre ?>
+    </br>
+    <b>
+        <scan style="font-size: 20px;">Periodo:</scan>
+    </b>
+    <?= $modelCampeonato->anio ?>
+</div>

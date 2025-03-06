@@ -49,6 +49,12 @@ class EquipoController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    public function actionIndex1()
+    {
+       
+        return $this->render('index1');
+    }
+
 
 
     /**

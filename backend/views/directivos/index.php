@@ -1,6 +1,7 @@
 <?php
 
 use common\models\Campeonato;
+use common\models\Equipo;
 use common\models\Util\HelperGeneral;
 use yii\helpers\Url;
 use yii\helpers\Html;
@@ -17,6 +18,8 @@ $this->title = 'Directivos';
 $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);
+$modelEquipo = Equipo::findOne($id_equipo);
+
 $modelCampeonato =HelperGeneral::devuelveCampeonatoActual();
 ?>
 <div class="directivos-index">
@@ -39,7 +42,7 @@ $modelCampeonato =HelperGeneral::devuelveCampeonatoActual();
                             ) .
                                 Html::a(
                                     '<i class="glyphicon glyphicon-repeat"></i>',
-                                    [''],
+                                    ['','id_equipo'=>$id_equipo],
                                     ['data-pjax' => 1, 'class' => 'btn btn-default', 'title' => 'Reset Grid']
                                 ) .
                                 '{toggleData}' .
@@ -51,8 +54,8 @@ $modelCampeonato =HelperGeneral::devuelveCampeonatoActual();
                     'responsive' => true,
                     'panel' => [
                         'type' => 'primary',
-                        'heading' => '<i class="glyphicon glyphicon-list"></i> Directivos ',
-                        'before' => '',
+                        'heading' => '<i class="glyphicon glyphicon-list"></i> Directivos Club '.' '.$modelEquipo->nombre. ' ('.$modelEquipo->categoria->valor.')'. ' ('.$modelEquipo->genero->valor.')',
+                        'before' => '<img style="width:30px" src="'.$modelEquipo->link_logotipo.'" />',
                         // 'after'=>BulkButtonWidget::widget([
                         //             'buttons'=>Html::a('<i class="glyphicon glyphicon-trash"></i>&nbsp; Delete All',
                         //                 ["bulkdelete"] ,

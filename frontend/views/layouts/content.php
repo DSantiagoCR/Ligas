@@ -3,7 +3,7 @@
 
 use yii\bootstrap4\Breadcrumbs;
 ?>
-<div class="content-wrapper">
+<div class="content-wrapper img-bg">
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
@@ -35,7 +35,7 @@ use yii\bootstrap4\Breadcrumbs;
     <!-- /.content-header -->
 
     <!-- Main content -->
-    <div class="content">      
+    <div class="content ">      
         <?= $content ?><!-- /.container-fluid -->
     </div>
     <!-- /.content -->
