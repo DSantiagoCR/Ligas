@@ -2,10 +2,15 @@
 
 use common\models\Util\HelperGeneral;
 use yii\widgets\DetailView;
+use yii\helpers\Html;
+use yii\helpers\Url;
+
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Jugador */
+   
 ?>
+
 <div class="jugador-view">
  
     <?= DetailView::widget([
@@ -14,6 +19,23 @@ use yii\widgets\DetailView;
             //'id',
             //'code',
              //'id_equipo',
+             [
+                'label'=>'Foto',
+                'format'=>'raw',                
+                'value' => function ($data) {                  
+                    // Obtener la URL accesible desde el navegador
+                    $pathWeb = Url::base(true)  . $data->link_foto;
+            
+                    //Retornar la imagen con tamaño ajustado
+                    //return Html::img($pathWeb, ['width' => '60px', 'height' => '60px']);  
+                    return Html::a(
+                        Html::img($pathWeb, ['width' => '60px', 'height' => '60px']),
+                        $pathWeb, // URL destino
+                        ['target' => '_blank'] // Abre en una nueva pestaña
+                    );  
+                                   
+                }
+            ],            
              [
                 'label'=>'Equipo',
                 'value'=>function($data){                   
@@ -43,7 +65,7 @@ use yii\widgets\DetailView;
             [
                 'label'=>'Cédula',
                 'value'=>function($data){                   
-                    return ($data->id_estado_civil)?$data->estadoCivil->valor:'';                   
+                    return $data->cedula   ;                  
                 }
             ],
             'celular',
@@ -118,3 +140,29 @@ use yii\widgets\DetailView;
     ]) ?>
 
 </div>
+<!-- Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Vista Previa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" class="img-fluid rounded" alt="Imagen">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('[data-bs-toggle="modal"]').forEach(item => {
+        item.addEventListener('click', function(event) {
+            event.preventDefault();
+            let imageUrl = this.querySelector('img').getAttribute('data-img');
+            document.getElementById('modalImage').setAttribute('src', imageUrl);
+        });
+    });
+});
+
+</script>

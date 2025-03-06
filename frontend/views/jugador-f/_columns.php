@@ -1,5 +1,7 @@
 <?php
 use yii\helpers\Url;
+use yii\helpers\Html;
+
 
 return [
     // [
@@ -18,6 +20,18 @@ return [
     //     'class'=>'\kartik\grid\DataColumn',
     //     'attribute'=>'code',
     // ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'link_foto',
+        'label'=>'Foto',
+        'format'=>'html',
+        'value'=>function($data){                  
+            $pathWeb = Url::base(true)  . $data->link_foto;
+            
+            // Retornar la imagen con tamaño ajustado
+            return Html::img($pathWeb, ['width' => '60px', 'height' => '60px']);                   
+        }
+    ],
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'nombres',

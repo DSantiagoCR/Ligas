@@ -31,9 +31,8 @@ class ImageCrud
             {
                 if($imageFile->saveAs($filePath))
                 {
-                    $model->path =  $pathShip. $model->id.'.'. $imageFile->extension;
+                    $model->link_foto =  $pathShip. $model->id.'.'. $imageFile->extension;
                     $model->save();
-
                 }
                 else
                 {
@@ -45,7 +44,7 @@ class ImageCrud
                 {
                     if($imageFile->saveAs($filePath))
                     {
-                        $model->path =  $pathShip. $model->id.'.'. $imageFile->extension;
+                        $model->link_foto =  $pathShip. $model->id.'.'. $imageFile->extension;
                         $model->save();
                     }else
                     {

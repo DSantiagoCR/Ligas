@@ -25,6 +25,19 @@ return [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
     ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'link_foto',
+        'label'=>'Foto',
+        'format'=>'html',
+        'value'=>function($data){                  
+            $pathWeb = Url::base(true)  . $data->link_foto;
+            $pathWeb = str_replace('/administrator', '', $pathWeb); 
+            
+            // Retornar la imagen con tamaño ajustado
+            return Html::img($pathWeb, ['width' => '60px', 'height' => '60px']);                   
+        }
+    ],
         // [
         // 'class'=>'\kartik\grid\DataColumn',
         // 'attribute'=>'id',

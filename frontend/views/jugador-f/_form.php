@@ -4,7 +4,7 @@ use common\models\Campeonato;
 use yii\helpers\Html;
 // use yii\widgets\ActiveForm;
 use yii\bootstrap5\ActiveForm;
-
+use kartik\widgets\FileInput;
 use common\models\Util\HelperGeneral;
 /* @var $this yii\web\View */
 /* @var $model common\models\Jugador */
@@ -49,6 +49,10 @@ $modelsCampeonato = Campeonato::find()->where(['estado' => true])->one();
     <?= $form->field($model, 'id_estado_civil')->dropDownList($arrayEstadoCivil, ['prompt' => 'Seleccione..'])->label('Estado Cívil') ?>
 
     <?= $form->field($model, 'hijos')->textInput() ?>
+
+    <?= $form->field($model, 'link_foto')->fileInput() ?>
+   
+
  
 
     <?php if (!Yii::$app->request->isAjax) { ?>
