@@ -50,6 +50,9 @@ class EquipoSearch extends Equipo
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 50, // Número de registros por página
+            ],
         ]);
 
         $this->load($params);

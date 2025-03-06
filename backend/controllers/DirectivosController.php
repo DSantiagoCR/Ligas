@@ -36,14 +36,15 @@ class DirectivosController extends Controller
      * Lists all Directivos models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($id_equipo)
     {    
         $searchModel = new DirectivosSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$id_equipo);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'id_equipo'=>$id_equipo,
         ]);
     }
 

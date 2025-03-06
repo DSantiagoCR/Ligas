@@ -72,11 +72,27 @@ class HelperGeneral
         $array = ArrayHelper::map($models, 'id', 'valor');
         return $array;
     }
+    public static function devuelveCategoriasEquiposObj()
+    {
+        $models = Catalogos::find()
+        ->where(['id_catalogo' => 21,'estado'=>true])
+        ->orderBy(['code'=>SORT_ASC])
+        ->all();
+        return $models;
+    }
     public static function devuelveGenerosEquipos()
     {
         $models = Catalogos::find()->where(['id_catalogo' => 17,'estado'=>true])->all();
         $array = ArrayHelper::map($models, 'id', 'valor');
         return $array;
+    }
+    public static function devuelveGenerosEquiposObj()
+    {
+        $models = Catalogos::find()
+        ->where(['id_catalogo' => 17,'estado'=>true])
+        ->orderBy(['code'=>SORT_ASC])
+        ->all();        
+        return $models;
     }
     public static function devuelveDiasHabilesObj()
     {

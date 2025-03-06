@@ -15,13 +15,12 @@ $this->title = 'Ligas';
 ?>
 
 
-
 <div class="site-index">
     <div class="bg-transparent rounded-3">
         <div class="container-fluid ">
             <div class="row text-center">
                 <div class="col">
-                    <h1 class="display-4">Bienvenido!</h1>
+                    <h1 class="display-1 text-dark bg-transparent"><b>Bienvenido </b></h1>
                     <?php
                     echo $this->render('_liga_barrial');
                     ?>
@@ -32,7 +31,7 @@ $this->title = 'Ligas';
                 <div class="col">
                     <div class="card">
                         <div class="card-header">
-                            <scan style="color:green;font-size:12px"><b> <i class="fas fa-futbol"></i> Equipos</b></scan>
+                            <scan style="color:green;font-size:14px"><b> <i class="fas fa-futbol"></i> Equipos</b></scan>
                         </div>
                         <div class="card-body">
                             <scan style="color:green;font-size:40px"><b> <?= count($modelEquipoCampActual)  ?></b></scan>
@@ -42,7 +41,7 @@ $this->title = 'Ligas';
                 <div class="col">
                     <div class="card">
                         <div class="card-header">
-                            <scan style="color:green;font-size:12px"><b> <i class="fas fa-network-wired"></i></i> Categorías</b></scan>
+                            <scan style="color:green;font-size:14px"><b> <i class="fas fa-network-wired"></i></i> Categorías</b></scan>
                         </div>
                         <div class="card-body">
                             <scan style="color:green;font-size:40px"><b> <?= count($modelCategorias) ?></b></scan>
@@ -50,7 +49,7 @@ $this->title = 'Ligas';
                                 <?php
                                 foreach ($modelCategorias as $model) {
                                 ?>
-                                    <scan style="font-size: 12px;color:green"><i class="fas fa-star"></i><?= '    ' . $model ?></scan><br>
+                                    <scan style="font-size: 14px;color:green"><i class="fas fa-star"></i><?= '    ' . $model ?></scan><br>
 
                                 <?php
                                 }
@@ -62,7 +61,7 @@ $this->title = 'Ligas';
                 <div class="col">
                     <div class="card">
                         <div class="card-header">
-                            <scan style="color:green;font-size:12px"><b> <i class="fas fa-people-arrows"></i></i> Géneros</b></scan>
+                            <scan style="color:green;font-size:14px"><b> <i class="fas fa-people-arrows"></i></i> Géneros</b></scan>
 
                         </div>
                         <div class="card-body">
@@ -72,7 +71,7 @@ $this->title = 'Ligas';
                                 foreach ($modelGeneros as $model) {
                                 ?>
 
-                                    <scan style="font-size: 12px;color:green"><i class="fas fa-star"></i><?= '    ' . $model ?></scan><br>
+                                    <scan style="font-size: 14px;color:green"><i class="fas fa-star"></i><?= '    ' . $model ?></scan><br>
 
                                 <?php
                                 }
@@ -85,7 +84,7 @@ $this->title = 'Ligas';
             </div>
             <div class="row text-center mt-5">
 
-                <h2><b>Equipos Asociados</b></h2>
+                <h2 class="text-white"><b>Equipos Asociados</b></h2>
 
                 <div class="row p-3">
                     <?php

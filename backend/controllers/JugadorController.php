@@ -2,12 +2,14 @@
 
 namespace backend\controllers;
 
+use common\models\Equipo;
 use Yii;
 use common\models\Jugador;
 use common\models\search\JugadorSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use \yii\web\Response;
 use yii\helpers\Html;
 
@@ -36,15 +38,31 @@ class JugadorController extends Controller
      * Lists all Jugador models.
      * @return mixed
      */
-    public function actionIndex()
+    // public function actionIndex()
+    // {    
+    //     $searchModel = new JugadorSearch();
+    //     $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+    //     return $this->renderPartial('index', [
+    //         'searchModel' => $searchModel,
+    //         'dataProvider' => $dataProvider,
+    //     ]);
+    // }
+    public function actionIndex($id_equipo=null)
     {    
         $searchModel = new JugadorSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$id_equipo);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'id_equipo'=>$id_equipo,
         ]);
+    }
+    public function actionIndex1()
+    {
+       
+        return $this->render('index1');
     }
 
 

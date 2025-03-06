@@ -2,13 +2,12 @@
 
 namespace frontend\controllers;
 
-use common\models\Equipo;
+use yii\web\UploadedFile;
 use Yii;
 use common\models\Jugador;
 use common\models\search\JugadorSearch;
 use common\models\UserEquipo;
-use common\models\Util\HelperGeneral;
-use yii\debug\panels\UserPanel;
+use common\models\Util\ImageCrud;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -23,8 +22,8 @@ class JugadorFController extends Controller
     /**
      * @inheritdoc
      */
-    
-  
+
+
 
     public function behaviors()
     {
@@ -44,20 +43,20 @@ class JugadorFController extends Controller
      * @return mixed
      */
     public function actionIndex($id)
-    {    
+    {
         // print_r($id);
         // die();
-       
+
         $modelUE = UserEquipo::findOne($id);
         $searchModel = new JugadorSearch();
-       
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$modelUE->id_equipo);       
 
-       
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $modelUE->id_equipo);
+
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'modelUE'=>$modelUE
+            'modelUE' => $modelUE
         ]);
     }
 
@@ -68,19 +67,19 @@ class JugadorFController extends Controller
      * @return mixed
      */
     public function actionView($id)
-    {   
+    {
         $request = Yii::$app->request;
-        if($request->isAjax){
+        if ($request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> "Jugador",
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $this->findModel($id),
-                    ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                            Html::a('Editar',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
-        }else{
+                'title' => "Jugador",
+                'content' => $this->renderAjax('view', [
+                    'model' => $this->findModel($id),
+                ]),
+                'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                    Html::a('Editar', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+            ];
+        } else {
             return $this->render('view', [
                 'model' => $this->findModel($id),
             ]);
@@ -96,50 +95,54 @@ class JugadorFController extends Controller
     public function actionCreate($id_equipo)
     {
         $request = Yii::$app->request;
-        $model = new Jugador();  
+        $model = new Jugador();
         $model->id_equipo = $id_equipo;
         $model->estado = false;
         $model->puede_jugar = false;
         $model->hijos = '0';
-        if($request->isAjax){
+        if ($request->isAjax) {
             /*
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            if($request->isGet){
+            if ($request->isGet) {
 
                 return [
-                    'title'=> "Crear Jugador",
-                    'content'=>$this->renderAjax('create', [
+                    'title' => "Crear Jugador",
+                    'content' => $this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
-        
-                ];         
-            }else if($model->load($request->post()) && $model->validate() &&  $model->save())
-            {               
-               
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                        Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+
+                ];
+            } else if ($model->load($request->post())) {
+
+                $model->imagenFile = UploadedFile::getInstance($model, 'link_foto');
+                
+                if ($model->validate() && $model->upload() && $model->save(false)) { // Guardar sin validación adicional
+
+                    return [
+                        'forceReload' => '#crud-datatable-pjax',
+                        'title' => "Crear Jugador",
+                        'content' => '<span class="text-success">Create Jugador success</span>',
+                        'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                            Html::a('Create Nuevo', ['create'], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+
+                    ];
+                }
+            } else {
                 return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Crear Jugador",
-                    'content'=>'<span class="text-success">Create Jugador success</span>',
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                            Html::a('Create Nuevo',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
-        
-                ];         
-            }else{           
-                return [
-                    'title'=> "Crear Jugador",
-                    'content'=>$this->renderAjax('create', [
+                    'title' => "Crear Jugador",
+                    'content' => $this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
-        
-                ];         
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                        Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+
+                ];
             }
-        }else{
+        } else {
             /*
             *   Process for non-ajax request
             */
@@ -151,7 +154,6 @@ class JugadorFController extends Controller
                 ]);
             }
         }
-       
     }
 
     /**
@@ -164,43 +166,65 @@ class JugadorFController extends Controller
     public function actionUpdate($id)
     {
         $request = Yii::$app->request;
-        $model = $this->findModel($id);       
+        $model = $this->findModel($id);
+        $objImagenCrud = new ImageCrud();
+        $pathServer = '';
+        $path = '';
 
-        if($request->isAjax){
+        if ($request->isAjax) {
             /*
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            if($request->isGet){
+            if ($request->isGet) {
                 return [
-                    'title'=> "Actualizar Jugador",
-                    'content'=>$this->renderAjax('update', [
+                    'title' => "Actualizar Jugador",
+                    'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
-                ];         
-            }else if($model->load($request->post()) && $model->save()){
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                        Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+                ];
+            } else if ($model->load($request->post())) {
+
+                if(UploadedFile::getInstance($model, 'link_foto'))
+                {
+                    $imagen = UploadedFile::getInstance($model, 'link_foto');
+                    $pathServer = Yii::getAlias('@webroot').'/img/jugadores/';
+                    $path = '/img/jugadores/';
+
+                    // $pathServer = Yii::getAlias('@webroot').'/uploads/jugadores/';
+                    // $pathServer = str_replace('/frontend/web', '', $pathServer);                   
+                    // $path = '/uploads/jugadores/';
+                    $model->link_foto = $path.$imagen->name;   
+                                     
+                }               
+                if ($model->validate() && $model->save()) { 
+                    if(!$objImagenCrud->almacenaImagen($model,'link_foto',$pathServer,$path))
+                    {
+                        Yii::$app->session->setFlash('imagenCabinError', "La imagen no puedo subir al servidor, consulte con el Administrador");
+                    }
+                    return [
+                        'forceReload' => '#crud-datatable-pjax',
+                        'title' => "Jugador",
+                        'content' => $this->renderAjax('view', [
+                            'model' => $model,
+                        ]),
+                        'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                            Html::a('Editar', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+                    ];
+                }
+            } else {
                 return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Jugador",
-                    'content'=>$this->renderAjax('view', [
+                    'title' => "Actualizar Jugador",
+                    'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                            Html::a('Editar',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
-            }else{
-                 return [
-                    'title'=> "Actualizar Jugador",
-                    'content'=>$this->renderAjax('update', [
-                        'model' => $model,
-                    ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
-                ];        
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                        Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+                ];
             }
-        }else{
+        } else {
             /*
             *   Process for non-ajax request
             */
@@ -226,23 +250,21 @@ class JugadorFController extends Controller
         $request = Yii::$app->request;
         $this->findModel($id)->delete();
 
-        if($request->isAjax){
+        if ($request->isAjax) {
             /*
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
+            return ['forceClose' => true, 'forceReload' => '#crud-datatable-pjax'];
+        } else {
             /*
             *   Process for non-ajax request
             */
             return $this->redirect(['index']);
         }
-
-
     }
 
-     /**
+    /**
      * Delete multiple existing Jugador model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
@@ -250,27 +272,26 @@ class JugadorFController extends Controller
      * @return mixed
      */
     public function actionBulkdelete()
-    {        
+    {
         $request = Yii::$app->request;
-        $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
-        foreach ( $pks as $pk ) {
+        $pks = explode(',', $request->post('pks')); // Array or selected records primary keys
+        foreach ($pks as $pk) {
             $model = $this->findModel($pk);
             $model->delete();
         }
 
-        if($request->isAjax){
+        if ($request->isAjax) {
             /*
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
+            return ['forceClose' => true, 'forceReload' => '#crud-datatable-pjax'];
+        } else {
             /*
             *   Process for non-ajax request
             */
             return $this->redirect(['index']);
         }
-       
     }
 
     /**
@@ -288,5 +309,4 @@ class JugadorFController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-
 }

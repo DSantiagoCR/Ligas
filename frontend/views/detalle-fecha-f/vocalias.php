@@ -8,7 +8,7 @@ $modelDiasHabiles = HelperGeneral::devuelveDiasHabilesObj();
 $this->title = "Vocalias";
 ?>
 
-<div class="container-fluid bg-light p-3">
+<div class="container-fluid bg-light p-3 ">
 
 
     <div class="card d-inline-block">

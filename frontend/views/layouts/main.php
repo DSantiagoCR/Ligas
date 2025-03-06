@@ -21,6 +21,13 @@ AppAsset::register($this);
 
 
 ?>
+<style>    
+    .img-bg {
+     background-image: url('<?= Yii::getAlias('@web') ?>/backend/web/img/fondo_index2.jpg') ;
+     height: 100%; 
+    }
+ </style>
+ 
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
@@ -54,7 +61,7 @@ AppAsset::register($this);
         <!-- /.content-wrapper -->
 
         <!-- Control Sidebar -->
-        <?= $this->render('control-sidebar') ?>
+        <!-- <?= $this->render('control-sidebar') ?> -->
         <!-- /.control-sidebar -->
 
         <!-- Main Footer -->

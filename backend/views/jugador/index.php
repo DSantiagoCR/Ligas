@@ -1,6 +1,7 @@
 <?php
 
 use common\models\Campeonato;
+use common\models\Equipo;
 use yii\helpers\Html;
 use yii\bootstrap4\Modal;
 use kartik\grid\GridView;
@@ -15,7 +16,7 @@ $this->title = 'Jugadores';
 $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);
-
+$modelEquipo = Equipo::findOne($id_equipo);
 $modelCampeonato = Campeonato::find()->where(['estado' => true])->one();
 ?>
 
@@ -37,12 +38,12 @@ $modelCampeonato = Campeonato::find()->where(['estado' => true])->one();
                                 Html::a(
                                     '<i class="glyphicon glyphicon-plus"></i>',
                                     ['create'],
-                                    ['role' => 'modal-remote', 'title' => 'Create new Jugadors', 'class' => 'btn btn-default']
+                                    ['role' => 'modal-remote', 'title' => 'Crear Jugador', 'class' => 'btn btn-default']
                                 ) .
                                     Html::a(
                                         '<i class="glyphicon glyphicon-repeat"></i>',
-                                        [''],
-                                        ['data-pjax' => 1, 'class' => 'btn btn-default', 'title' => 'Reset Grid']
+                                        ['','id_equipo'=>$id_equipo],
+                                        ['data-pjax' => 1, 'class' => 'btn btn-default', 'title' => 'Actualizar']
                                     ) .
                                     '{toggleData}' .
                                     '{export}'
@@ -53,8 +54,8 @@ $modelCampeonato = Campeonato::find()->where(['estado' => true])->one();
                         'responsive' => true,
                         'panel' => [
                             'type' => 'primary',
-                            'heading' => '<i class="glyphicon glyphicon-list"></i> Jugadores',
-                            'before' => '',
+                            'heading' => '<i class="glyphicon glyphicon-list"></i> Jugadores Club '.' '.$modelEquipo->nombre. ' ('.$modelEquipo->categoria->valor.')'. ' ('.$modelEquipo->genero->valor.')',
+                            'before' => '<img style="width:30px" src="'.$modelEquipo->link_logotipo.'" />',
                             // 'after' => BulkButtonWidget::widget([
                             //     'buttons' => Html::a(
                             //         '<i class="glyphicon glyphicon-trash"></i>&nbsp; Delete All',

@@ -2,6 +2,8 @@
 
 use common\models\Util\HelperGeneral;
 use yii\widgets\DetailView;
+use yii\helpers\Url;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Jugador */
@@ -13,6 +15,25 @@ use yii\widgets\DetailView;
         'attributes' => [
             //'id',
             //'code',
+            [
+                'label'=>'Foto',
+                'format'=>'raw',                
+                'value' => function ($data) {                  
+                    // Obtener la URL accesible desde el navegador
+                    $pathWeb = Url::base(true)  . $data->link_foto;
+                    $pathWeb = str_replace('/administrator', '', $pathWeb); 
+
+            
+                    //Retornar la imagen con tamaño ajustado
+                    //return Html::img($pathWeb, ['width' => '60px', 'height' => '60px']);  
+                    return Html::a(
+                        Html::img($pathWeb, ['width' => '60px', 'height' => '60px']),
+                        $pathWeb, // URL destino
+                        ['target' => '_blank'] // Abre en una nueva pestaña
+                    );  
+                                   
+                }
+            ],
             'nombres',
             'apellidos',
             //'fecha_nacimiento',

@@ -271,4 +271,3 @@ $(document).on('click', '#guardar-estado', function() {
 });
 ");
 ?>
-?>

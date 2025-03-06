@@ -4,9 +4,6 @@ use \common\models\Util\ScriptMenu;
 $objMenuLogic = new ScriptMenu();
 $arrayMenuItems = $objMenuLogic->obtenerMenuFrontend();
 
-// echo '<pre>';
-// print_r($arrayMenuItems);
-// die();
 ?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <div class="">

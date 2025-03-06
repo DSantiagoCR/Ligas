@@ -3,6 +3,7 @@
 namespace common\models;
 
 use common\models\Util\HelperGeneral;
+use yii\web\UploadedFile;
 use Yii;
 
 /**
@@ -63,6 +64,7 @@ class Jugador extends \yii\db\ActiveRecord
             [['id_equipo'], 'exist', 'skipOnError' => true, 'targetClass' => Equipo::class, 'targetAttribute' => ['id_equipo' => 'id']],
             ['cedula', 'validarCedula'],
             ['num_camiseta', 'validarNumCamiseta'],
+          
         ];
     }
 
@@ -175,4 +177,5 @@ class Jugador extends \yii\db\ActiveRecord
         }
         return false;
     }
+ 
 }
