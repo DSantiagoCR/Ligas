@@ -61,6 +61,54 @@ class ImageCrud
         }
         return $resp;
     }
+    public function almacenaImagenEquipos($model,$campoPath,$pathShipServer,$pathShip)
+    {
+        
+        $resp = true;
+        $imageFile = UploadedFile::getInstance($model, $campoPath);
+        if(true)//$imageFile->extension == 'jpg' or $imageFile->extension == 'png')
+        {
+            if (!file_exists($pathShipServer)) {
+                //FileHelper::createDirectory($pathShipServer);
+                mkdir($pathShipServer, 0777,true);
+            }
+            $filePath = $pathShipServer. $model->id.'.'. $imageFile->extension;
+            // Comprobar si la carpeta es escribible
+            //$filePath = 'c:/imagen/'. $model->id.'.'. $imageFile->extension;;
+            if (is_writable($pathShipServer))
+            {
+                if($imageFile->saveAs($filePath))
+                {
+                    $model->link_logotipo =  $pathShip. $model->id.'.'. $imageFile->extension;
+                    $model->save();
+                }
+                else
+                {
+
+                }
+
+            } else {
+                if (chmod($pathShipServer, 0777))
+                {
+                    if($imageFile->saveAs($filePath))
+                    {
+                        $model->link_logotipo =  $pathShip. $model->id.'.'. $imageFile->extension;
+                        $model->save();
+                    }else
+                    {
+
+                    }
+                } else {
+
+                }
+            }
+        }
+        else
+        {
+            $resp = false;
+        }
+        return $resp;
+    }
     public function eliminaImangen($pathServerFile)
     {
         /*FC: 2023-05-30    CP: Santiago C      FM:         MP

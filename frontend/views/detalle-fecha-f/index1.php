@@ -23,12 +23,12 @@ AppAsset::register($this);
 foreach ($modelCabFechas as $modelCab) {
 ?>
     <div id="accordion_<?= $modelCab->id ?>">
-        <div class="card text-center  ">
-            <div class="card-header" id="headingOne">
+        <div class="card text-center bg-transparent ">
+            <div class="card-header bg-white" id="headingOne">
                 <h5 class="mb-0">
                     <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne_<?= $modelCab->id ?>" aria-expanded="true" aria-controls="collapseOne_<?= $modelCab->id ?>">
-                        <b class="fs-4 text-blue">Fecha:</b>
-                        <scan style="color:green"><b><?= $modelCab->dia ?></b> <?= '   ' . $modelCab->fecha ?> (<?= $modelCab->estadoFecha->valor ?>) <i class="fas fa-arrow-circle-down"></i></scan>
+                        <b class="fs-4 text-blue">Fecha: <?= $modelCab->num_fecha ?></b>
+                        <scan style="color:green "><b><?= $modelCab->dia ?></b> <?= '   ' . $modelCab->fecha ?> (<?= $modelCab->estadoFecha->valor ?>) <i class="fas fa-arrow-circle-down"></i></scan>
                     </button>
                 </h5>
             </div>
@@ -47,7 +47,22 @@ foreach ($modelCabFechas as $modelCab) {
                                         <scan class="fw-bold bg-light  rounded-pill p-1"> <?= $modelDet->horaInicio->valor ?></scan>
                                     </div>
                                     <div class="col">
-                                        <div> <?= Html::img($modelDet->grupoEquipo1->equipo->link_logotipo, ['width' => '40px']) ?></div>
+                                        <!-- <div> <?= Html::img($modelDet->grupoEquipo1->equipo->link_logotipo, ['width' => '40px']) ?></div> -->
+                                        <div class="text-center">
+                                        <?php 
+                                        $pathWeb = Yii::getAlias('@web');
+                                        $pathWeb = $pathWeb.'/administrator';
+                                        $pathWeb = $pathWeb.$modelDet->grupoEquipo1->equipo->link_logotipo;
+                                        ?>
+                                            <div class=" p-1  shadow d-inline-block rounded-circle">
+                                                <?= Html::img($pathWeb, [
+                                                    'width' => '80px',
+                                                    'height' => '80px',
+                                                    'class' => 'rounded-circle border border-warning p-1 shadow'
+                                                ]); ?>
+                                            </div>
+                                        </div>
+                                        <p></p>
                                         <div><?= $modelDet->grupoEquipo1->equipo->nombre ?></div>
                                         <?php
                                         $iconoBandera = "";
@@ -73,7 +88,22 @@ foreach ($modelCabFechas as $modelCab) {
                                     </div>
 
                                     <div class="col">
-                                        <div> <?= Html::img($modelDet->grupoEquipo2->equipo->link_logotipo, ['width' => '40px']) ?></div>
+                                        <!-- <div> <?= Html::img($modelDet->grupoEquipo2->equipo->link_logotipo, ['width' => '40px']) ?></div> -->
+                                        <div class="text-center">
+                                        <?php 
+                                        $pathWeb = Yii::getAlias('@web');
+                                        $pathWeb = $pathWeb.'/administrator';
+                                        $pathWeb = $pathWeb.$modelDet->grupoEquipo2->equipo->link_logotipo;
+                                        ?>
+                                            <div class=" p-1  shadow d-inline-block rounded-circle">
+                                                <?= Html::img($pathWeb, [
+                                                    'width' => '80px',
+                                                    'height' => '80px',
+                                                    'class' => 'rounded-circle border border-warning p-1 shadow'
+                                                ]); ?>
+                                            </div>
+                                        </div>
+                                        <p></p>
                                         <div> <?= $modelDet->grupoEquipo2->equipo->nombre ?></div>
                                         <?php
                                         $iconoBandera = "";

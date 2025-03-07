@@ -2,10 +2,13 @@
 
 namespace backend\controllers;
 
+use yii\web\UploadedFile;
+
 use common\models\Campeonato;
 use common\models\Directivos;
 use Yii;
 use common\models\Equipo;
+use common\models\Util\ImageCrud;
 use common\models\search\EquipoSearch;
 use common\models\Util\HelperGeneral;
 use yii\web\Controller;
@@ -40,7 +43,7 @@ class EquipoController extends Controller
      * @return mixed
      */
     public function actionIndex()
-    {    
+    {
         $searchModel = new EquipoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -51,7 +54,7 @@ class EquipoController extends Controller
     }
     public function actionIndex1()
     {
-       
+
         return $this->render('index1');
     }
 
@@ -63,19 +66,19 @@ class EquipoController extends Controller
      * @return mixed
      */
     public function actionView($id)
-    {   
+    {
         $request = Yii::$app->request;
-        if($request->isAjax){
+        if ($request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> "Equipo ",
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $this->findModel($id),
-                    ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                            Html::a('Editar',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
-        }else{
+                'title' => "Equipo ",
+                'content' => $this->renderAjax('view', [
+                    'model' => $this->findModel($id),
+                ]),
+                'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                    Html::a('Editar', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+            ];
+        } else {
             return $this->render('view', [
                 'model' => $this->findModel($id),
             ]);
@@ -91,44 +94,72 @@ class EquipoController extends Controller
     public function actionCreate()
     {
         $request = Yii::$app->request;
-        $model = new Equipo();  
+        $model = new Equipo();
+        $objImagenCrud = new ImageCrud();
 
-        if($request->isAjax){
+
+        if ($request->isAjax) {
             /*
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            if($request->isGet){
+            if ($request->isGet) {
                 return [
-                    'title'=> "Crear Equipo",
-                    'content'=>$this->renderAjax('create', [
+                    'title' => "Crear Equipo",
+                    'content' => $this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
-        
-                ];         
-            }else if($model->load($request->post()) && $model->save()){
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                        Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+
+                ];
+            } else if ($model->load($request->post())) {
+
+                if (UploadedFile::getInstance($model, 'link_logotipo')) {
+                    $imagen = UploadedFile::getInstance($model, 'link_logotipo');
+                    $pathServer = Yii::getAlias('@webroot') . '/img/equipos/';
+                    $path = '/img/equipos/';
+
+                    // $pathServer = Yii::getAlias('@webroot').'/uploads/jugadores/';
+                    // $pathServer = str_replace('/frontend/web', '', $pathServer);                   
+                    // $path = '/uploads/jugadores/';
+                    $model->link_logotipo = $path . $imagen->name;
+                }
+                if ($model->validate() && $model->save()) { // Guardar sin validación adicional
+                    if (!$objImagenCrud->almacenaImagenEquipos($model, 'link_logotipo', $pathServer, $path)) {
+                        Yii::$app->session->setFlash('imagenCabinError', "La imagen no puedo subir al servidor, consulte con el Administrador");
+                    }
+                    return [
+                        'forceReload' => '#crud-datatable-pjax',
+                        'title' => "Crear Nuevo Equipo",
+                        'content' => '<span class="text-success">Creación Equipo Exitosa</span>',
+                        'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                            Html::a('Crear Nuevo', ['create'], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+
+                    ];
+                } else {
+                    return [
+                        'title' => "Crear Equipo",
+                        'content' => $this->renderAjax('create', [
+                            'model' => $model,
+                        ]),
+                        'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                            Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+
+                    ];
+                }
+            } else {
                 return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Crear Nuevo Equipo",
-                    'content'=>'<span class="text-success">Creación Equipo Exitosa</span>',
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                            Html::a('Crear Nuevo',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
-        
-                ];         
-            }else{           
-                return [
-                    'title'=> "Crear Equipo",
-                    'content'=>$this->renderAjax('create', [
+                    'title' => "Crear Equipo",
+                    'content' => $this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
-        
-                ];         
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                        Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+
+                ];
             }
-        }else{
+        } else {
             /*
             *   Process for non-ajax request
             */
@@ -140,7 +171,6 @@ class EquipoController extends Controller
                 ]);
             }
         }
-       
     }
 
     /**
@@ -153,43 +183,78 @@ class EquipoController extends Controller
     public function actionUpdate($id)
     {
         $request = Yii::$app->request;
-        $model = $this->findModel($id);       
+        $model = $this->findModel($id);
+        $objImagenCrud = new ImageCrud();
+        $pathServer = '';
+        $path = '';
 
-        if($request->isAjax){
+        if ($request->isAjax) {
             /*
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            if($request->isGet){
+            if ($request->isGet) {
                 return [
-                    'title'=> "Actualizar Equipo ",
-                    'content'=>$this->renderAjax('update', [
+                    'title' => "Actualizar Equipo ",
+                    'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
-                ];         
-            }else if($model->load($request->post()) && $model->save()){
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                        Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+                ];
+            } else if ($model->load($request->post())) {
+                $existeImagen = false;
+
+                if (UploadedFile::getInstance($model, 'link_logotipo')) {
+
+                    $imagen = UploadedFile::getInstance($model, 'link_logotipo');
+                    $pathServer = Yii::getAlias('@webroot') . '/img/equipos/';
+                    $path = '/img/equipos/';
+
+                    // $pathServer = Yii::getAlias('@webroot').'/uploads/jugadores/';
+                    // $pathServer = str_replace('/frontend/web', '', $pathServer);                   
+                    // $path = '/uploads/jugadores/';
+                    $model->link_logotipo = $path . $imagen->name;
+                    $existeImagen = true;  
+
+                }
+                if ($model->validate() && $model->save()) {
+                    if ($existeImagen) {
+                        if (!$objImagenCrud->almacenaImagenEquipos($model, 'link_logotipo', $pathServer, $path)) {
+                            Yii::$app->session->setFlash('imagenCabinError', "La imagen no puedo subir al servidor, consulte con el Administrador");
+                        }
+                    }
+
+                    return [
+                        'forceReload' => '#crud-datatable-pjax',
+                        'title' => "Equipo ",
+                        'content' => $this->renderAjax('view', [
+                            'model' => $model,
+                        ]),
+                        'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                            Html::a('Editar', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+                    ];
+                } else {
+                    return [
+                        'title' => "Actualizar Equipo ",
+                        'content' => $this->renderAjax('update', [
+                            'model' => $model,
+                        ]),
+                        'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                            Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+                    ];
+                }
+            } else {
                 return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Equipo ",
-                    'content'=>$this->renderAjax('view', [
+                    'title' => "Actualizar Equipo ",
+                    'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                            Html::a('Editar',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
-            }else{
-                 return [
-                    'title'=> "Actualizar Equipo ",
-                    'content'=>$this->renderAjax('update', [
-                        'model' => $model,
-                    ]),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
-                ];        
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                        Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+                ];
             }
-        }else{
+        } else {
             /*
             *   Process for non-ajax request
             */
@@ -215,23 +280,21 @@ class EquipoController extends Controller
         $request = Yii::$app->request;
         $this->findModel($id)->delete();
 
-        if($request->isAjax){
+        if ($request->isAjax) {
             /*
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceCerrar'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
+            return ['forceCerrar' => true, 'forceReload' => '#crud-datatable-pjax'];
+        } else {
             /*
             *   Process for non-ajax request
             */
             return $this->redirect(['index']);
         }
-
-
     }
 
-     /**
+    /**
      * Delete multiple existing Equipo model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
@@ -239,45 +302,44 @@ class EquipoController extends Controller
      * @return mixed
      */
     public function actionBulkdelete()
-    {        
+    {
         $request = Yii::$app->request;
-        $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
-        foreach ( $pks as $pk ) {
+        $pks = explode(',', $request->post('pks')); // Array or selected records primary keys
+        foreach ($pks as $pk) {
             $model = $this->findModel($pk);
             $model->delete();
         }
 
-        if($request->isAjax){
+        if ($request->isAjax) {
             /*
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceCerrar'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
+            return ['forceCerrar' => true, 'forceReload' => '#crud-datatable-pjax'];
+        } else {
             /*
             *   Process for non-ajax request
             */
             return $this->redirect(['index']);
         }
-       
     }
 
     public function actionModalContenido($id)
     {
-        $request = Yii::$app->request;     
-        $id_contenido =2;
+        $request = Yii::$app->request;
+        $id_contenido = 2;
         switch ($id_contenido) {
             case 1:
                 Yii::$app->response->format = Response::FORMAT_JSON;
                 return [
-                    'title'=> "Crear Nuevo Jugador",
-                    'content'=>$this->contenidoCatGenero($id),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-bs-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-        
-                ]; 
+                    'title' => "Crear Nuevo Jugador",
+                    'content' => $this->contenidoCatGenero($id),
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                        Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
+
+                ];
                 //$content = $this->contenidoCatGenero($id);
-              
+
                 break;
             case 2:
                 $content = $this->contenidoDirectivos($id);
@@ -285,15 +347,15 @@ class EquipoController extends Controller
             case 3:
                 Yii::$app->response->format = Response::FORMAT_JSON;
                 return [
-                    'title'=> "Crear Nuevo Jugador",
-                    'content'=>$this->contenidoJugadores($id),
-                    'footer'=> Html::button('Cerrar',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
-                                //Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-        
+                    'title' => "Crear Nuevo Jugador",
+                    'content' => $this->contenidoJugadores($id),
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"])
+                    //Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+
                 ];
                 //$content = $this->contenidoJugadores($id_equipo);
                 break;
-                // Puedes agregar más casos si es necesario
+            // Puedes agregar más casos si es necesario
             default:
                 //$content = "Contenido por defecto o no encontrado";
                 $content = $this->renderPartial('default', [
@@ -304,7 +366,7 @@ class EquipoController extends Controller
 
         return $content; // O podrías renderizar una vista parcial si lo prefieres
     }
- 
+
 
     /**
      * Finds the Equipo model based on its primary key value.

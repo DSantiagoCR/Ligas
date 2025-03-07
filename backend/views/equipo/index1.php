@@ -79,22 +79,36 @@ $modelGenerosEquipos = HelperGeneral::devuelveGenerosEquiposObj();
 								<div class="card" style=" padding: 5px;">
 									<div class="card-body">
 										<div class="row">
-											<div class="col-6">
-												<img src="<?= $item->link_logotipo ?>" class="card-img-top card-xs" alt="Descripción de la imagen"
-													style="width: 100%; height: 50px">
+											<div class="col-8">
+												<!-- <img src="<?= $item->link_logotipo ?>" class="card-img-top card-xs" alt="Descripción de la imagen"
+													style="width: 100%; height: 50px"> -->
+												<div class="text-center">
+													<?php
+													$pathWeb = Yii::getAlias('@web');
+													$pathWeb = $pathWeb . $item->link_logotipo ;
+													?>
+													<div class=" p-1  shadow d-inline-block rounded-circle">
+														<?= Html::img($pathWeb, [
+															'width' => '100px',
+															'height' => '100px',
+															'class' => 'rounded-circle border border-primary p-1 shadow'
+														]); ?>
+													</div>
+												</div>
+												<p></p>
 
 												<p class="card-title text-primary fw-bold mb-3"
-													style="font-size: 1.25rem; letter-spacing: 0.05rem;">
+													style="font-size: 1rem; letter-spacing: 0.05rem;">
 													<?= $item->nombre ?>
 												</p>
 
 											</div>
-											<div class="col-5">
+											<div class="col-4">
 												<?= Html::a('<i class="fas fa-user-plus"></i>', ['jugador/index', 'id_equipo' => $item->id], [
 													'class' => 'btn btn-outline-primary btn-sm',
 													'id' => 'modalButton', // O un ID único como 'catGenero'.$item->id
 													'title' => 'Jugadores'
-												]) ?>									
+												]) ?>
 												<?= Html::a('<i class="fas fa-user-tie"></i>', ['directivos/index', 'id_equipo' => $item->id], [
 													'class' => 'btn btn-outline-primary btn-sm',
 													'id' => 'modalButton', // O un ID único como 'catGenero'.$item->id

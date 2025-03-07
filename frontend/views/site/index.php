@@ -97,8 +97,22 @@ $this->title = 'Ligas';
                                         <?= Html::a($model->equipo->nombre, ['/principal/index', 'id' => $model->id]); ?>
                                     </div>
                                     <div class="card-body">
-                                        <img src="<?= $model->equipo->link_logotipo ?>" style="width:100px" />
-
+                                
+                                        <div class="text-center">
+                                        <?php 
+                                        $pathWeb = Yii::getAlias('@web');
+                                        $pathWeb = $pathWeb.'/administrator';
+                                        $pathWeb = $pathWeb.$model->equipo->link_logotipo;
+                                        ?>
+                                            <div class=" p-1  shadow d-inline-block rounded-circle">
+                                                <?= Html::img($pathWeb, [
+                                                    'width' => '100px',
+                                                    'height' => '100px',
+                                                    'class' => 'rounded-circle border border-primary p-1 shadow'
+                                                ]); ?>
+                                            </div>
+                                        </div>
+                                        <p></p>
                                     </div>
                                 </div>
                             </div>

@@ -100,6 +100,8 @@ class JugadorFController extends Controller
         $model->estado = false;
         $model->puede_jugar = false;
         $model->hijos = '0';
+        $objImagenCrud = new ImageCrud();
+
         if ($request->isAjax) {
             /*
             *   Process for ajax request
@@ -118,9 +120,24 @@ class JugadorFController extends Controller
                 ];
             } else if ($model->load($request->post())) {
 
-                $model->imagenFile = UploadedFile::getInstance($model, 'link_foto');
-                
-                if ($model->validate() && $model->upload() && $model->save(false)) { // Guardar sin validación adicional
+                if(UploadedFile::getInstance($model, 'link_foto'))
+                {
+                    $imagen = UploadedFile::getInstance($model, 'link_foto');
+                    $pathServer = Yii::getAlias('@webroot').'/img/jugadores/';
+                    $path = '/img/jugadores/';
+
+                    // $pathServer = Yii::getAlias('@webroot').'/uploads/jugadores/';
+                    // $pathServer = str_replace('/frontend/web', '', $pathServer);                   
+                    // $path = '/uploads/jugadores/';
+                    $model->link_foto = $path.$imagen->name;   
+                                     
+                }   
+             
+                if ($model->validate() && $model->save()) { // Guardar sin validación adicional
+                    if(!$objImagenCrud->almacenaImagen($model,'link_foto',$pathServer,$path))
+                    {
+                        Yii::$app->session->setFlash('imagenCabinError', "La imagen no puedo subir al servidor, consulte con el Administrador");
+                    }
 
                     return [
                         'forceReload' => '#crud-datatable-pjax',
@@ -129,6 +146,18 @@ class JugadorFController extends Controller
                         'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
                             Html::a('Create Nuevo', ['create'], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
 
+                    ];
+                }
+                else
+                {
+                    return [
+                        'title' => "Crear Jugador",
+                        'content' => $this->renderAjax('create', [
+                            'model' => $model,
+                        ]),
+                        'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                            Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+    
                     ];
                 }
             } else {
@@ -187,6 +216,7 @@ class JugadorFController extends Controller
                 ];
             } else if ($model->load($request->post())) {
 
+                $existeImagen = false;
                 if(UploadedFile::getInstance($model, 'link_foto'))
                 {
                     $imagen = UploadedFile::getInstance($model, 'link_foto');
@@ -196,14 +226,19 @@ class JugadorFController extends Controller
                     // $pathServer = Yii::getAlias('@webroot').'/uploads/jugadores/';
                     // $pathServer = str_replace('/frontend/web', '', $pathServer);                   
                     // $path = '/uploads/jugadores/';
-                    $model->link_foto = $path.$imagen->name;   
+                    $model->link_foto = $path.$imagen->name; 
+                    $existeImagen = true;  
                                      
                 }               
                 if ($model->validate() && $model->save()) { 
-                    if(!$objImagenCrud->almacenaImagen($model,'link_foto',$pathServer,$path))
+                    if($existeImagen)
                     {
-                        Yii::$app->session->setFlash('imagenCabinError', "La imagen no puedo subir al servidor, consulte con el Administrador");
+                        if(!$objImagenCrud->almacenaImagen($model,'link_foto',$pathServer,$path))
+                        {
+                            Yii::$app->session->setFlash('imagenCabinError', "La imagen no puedo subir al servidor, consulte con el Administrador");
+                        }
                     }
+                   
                     return [
                         'forceReload' => '#crud-datatable-pjax',
                         'title' => "Jugador",
@@ -212,6 +247,17 @@ class JugadorFController extends Controller
                         ]),
                         'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
                             Html::a('Editar', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+                    ];
+                }
+                else
+                {
+                    return [
+                        'title' => "Actualizar Jugador",
+                        'content' => $this->renderAjax('update', [
+                            'model' => $model,
+                        ]),
+                        'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-bs-dismiss' => "modal"]) .
+                            Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
                     ];
                 }
             } else {
