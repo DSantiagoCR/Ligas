@@ -97,13 +97,13 @@ $this->title = 'Ligas';
                                         <?= Html::a($model->equipo->nombre, ['/principal/index', 'id' => $model->id]); ?>
                                     </div>
                                     <div class="card-body">
-                                
+
                                         <div class="text-center">
-                                        <?php 
-                                        $pathWeb = Yii::getAlias('@web');
-                                        $pathWeb = $pathWeb.'/administrator';
-                                        $pathWeb = $pathWeb.$model->equipo->link_logotipo;
-                                        ?>
+                                            <?php
+                                            $pathWeb = Yii::getAlias('@web');
+                                            $pathWeb = $pathWeb . '/administrator';
+                                            $pathWeb = $pathWeb . $model->equipo->link_logotipo;
+                                            ?>
                                             <div class=" p-1  shadow d-inline-block rounded-circle">
                                                 <?= Html::img($pathWeb, [
                                                     'width' => '100px',
@@ -123,14 +123,8 @@ $this->title = 'Ligas';
                 </div>
             </div>
         </div>
-        <!-- <p class="fs-5 fw-light"><?= Yii::t('app/error', '404-No-Found') ?></p> -->
-        <!-- <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p> -->
+        <!-- <p class="fs-5 fw-light"><?= Yii::t('app/error', '404-No-Found') ?></p>
+        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p> -->
     </div>
-
-</div>
-
-
-
-
 
 </div>
