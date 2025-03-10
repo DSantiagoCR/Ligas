@@ -4,12 +4,7 @@
 /** @var string $content */
 
 use yii\bootstrap5\Html;
-use common\widgets\Alert;
 use frontend\assets\AppAsset;
-use yii\bootstrap5\Breadcrumbs;
-
-use yii\bootstrap5\Nav;
-use yii\bootstrap5\NavBar;
 
 \hail812\adminlte3\assets\FontAwesomeAsset::register($this);
 \hail812\adminlte3\assets\AdminLteAsset::register($this);
@@ -21,12 +16,7 @@ AppAsset::register($this);
 
 
 ?>
-<style>    
-    .img-bg {
-     background-image: url('<?= Yii::getAlias('@web') ?>/backend/web/img/fondo_index2.jpg') ;
-     height: 100%; 
-    }
- </style>
+
  
 <?php $this->beginPage() ?>
 <!DOCTYPE html>

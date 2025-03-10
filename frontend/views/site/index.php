@@ -97,8 +97,22 @@ $this->title = 'Ligas';
                                         <?= Html::a($model->equipo->nombre, ['/principal/index', 'id' => $model->id]); ?>
                                     </div>
                                     <div class="card-body">
-                                        <img src="<?= $model->equipo->link_logotipo ?>" style="width:100px" />
 
+                                        <div class="text-center">
+                                            <?php
+                                            $pathWeb = Yii::getAlias('@web');
+                                            $pathWeb = $pathWeb . '/administrator';
+                                            $pathWeb = $pathWeb . $model->equipo->link_logotipo;
+                                            ?>
+                                            <div class=" p-1  shadow d-inline-block rounded-circle">
+                                                <?= Html::img($pathWeb, [
+                                                    'width' => '100px',
+                                                    'height' => '100px',
+                                                    'class' => 'rounded-circle border border-primary p-1 shadow'
+                                                ]); ?>
+                                            </div>
+                                        </div>
+                                        <p></p>
                                     </div>
                                 </div>
                             </div>
@@ -109,14 +123,8 @@ $this->title = 'Ligas';
                 </div>
             </div>
         </div>
-        <!-- <p class="fs-5 fw-light"><?= Yii::t('app/error', '404-No-Found') ?></p> -->
-        <!-- <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p> -->
+        <!-- <p class="fs-5 fw-light"><?= Yii::t('app/error', '404-No-Found') ?></p>
+        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p> -->
     </div>
-
-</div>
-
-
-
-
 
 </div>

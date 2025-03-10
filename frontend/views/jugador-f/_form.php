@@ -4,7 +4,6 @@ use common\models\Campeonato;
 use yii\helpers\Html;
 // use yii\widgets\ActiveForm;
 use yii\bootstrap5\ActiveForm;
-use kartik\widgets\FileInput;
 use common\models\Util\HelperGeneral;
 /* @var $this yii\web\View */
 /* @var $model common\models\Jugador */
@@ -13,23 +12,33 @@ use common\models\Util\HelperGeneral;
 $arrayEstadoCivil = HelperGeneral::devuelveArrayEstadoCivil();
 $aniosJugador =  HelperGeneral::calcularEdadCompleta($model->fecha_nacimiento);
 $modelsCampeonato = Campeonato::find()->where(['estado' => true])->one();
-
+$pathWeb = '';
+if ($model->link_foto) {
+    $pathWeb = Yii::getAlias('@web')  . $model->link_foto;
+}
 ?>
 
 <div class="jugador-form">
 
+    <div class="text-center">
+
+        <div class=" p-1  shadow d-inline-block rounded-circle">
+            <?= Html::img($pathWeb, [
+                'width' => '100px',
+                'height' => '100px',
+                'class' => 'rounded-circle border border-primary p-1 shadow'
+            ]); ?>
+        </div>
+    </div>
+    <p></p>
+
     <?php $form = ActiveForm::begin(['layout' => 'horizontal']); ?>
-   <?php
-   
-//    if ($model->hasErrors()) {
-//     print_r($model->getErrors());
-// }
-   ?> 
+
 
 
     <?= $form->field($model, 'id_equipo')->textInput(['value' => $model->equipo->nombre, 'disabled' => true])->label('Equipo') ?>
 
-    <?= $form->field($model, 'id_campeonato')->hiddenInput(['value' => $modelsCampeonato->id])->label(false) ?> 
+    <?= $form->field($model, 'id_campeonato')->hiddenInput(['value' => $modelsCampeonato->id])->label(false) ?>
 
     <?= $form->field($model, 'code')->hiddenInput(['value' => '-'])->label(false) ?>
 
@@ -51,9 +60,9 @@ $modelsCampeonato = Campeonato::find()->where(['estado' => true])->one();
     <?= $form->field($model, 'hijos')->textInput() ?>
 
     <?= $form->field($model, 'link_foto')->fileInput() ?>
-   
 
- 
+
+
 
     <?php if (!Yii::$app->request->isAjax) { ?>
         <div class="form-group">

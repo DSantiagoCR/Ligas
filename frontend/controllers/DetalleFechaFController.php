@@ -9,9 +9,11 @@ use Yii;
 use common\models\DetalleFecha;
 use common\models\DetalleVocalia;
 use common\models\Equipo;
+use common\models\GrupoEquipo;
 use common\models\Jugador;
 use common\models\LigaBarrial;
 use common\models\search\DetalleFechaSearch;
+use common\models\UserEquipo;
 use common\models\Util\HelperGeneral;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -276,9 +278,8 @@ class DetalleFechaFController extends Controller
         }
     }
 
-    public function actionFechas($dia = null)
+    public function actionFechas($dia = null, $soloMiEquipo = false)
     {
-
         $modelCabFechas = CabeceraFechas::find()
             ->where(['estado' => true])
             ->andWhere(['in', 'id_estado_fecha', [45, 49]])
@@ -293,17 +294,46 @@ class DetalleFechaFController extends Controller
                 ->orderBy(['fecha' => SORT_ASC])
                 ->all();
         }
-        $modelCabFechas = CabeceraFechas::find()
-            ->where(['estado' => true])
-            ->andWhere(['in', 'id_estado_fecha', [45, 49]])
-            ->andWhere(['dia' => $dia])
-            ->orderBy(['fecha' => SORT_ASC])
-            ->all();
+        // $modelCabFechas = CabeceraFechas::find()
+        //     ->where(['estado' => true])
+        //     ->andWhere(['in', 'id_estado_fecha', [45, 49]])
+        //     ->andWhere(['dia' => $dia])
+        //     ->orderBy(['fecha' => SORT_ASC])
+        //     ->all();
 
         $modelDetFechas = DetalleFecha::find()
             ->where(['in', 'id_cabecera_fecha', ArrayHelper::map($modelCabFechas, 'id', 'id')])
             ->orderBy(['hora_inicio' => SORT_ASC])
             ->all();
+
+        if ($soloMiEquipo) {
+            
+            $id_user = Yii::$app->user->identity->getId();
+            $modelCampeonato = HelperGeneral::devuelveCampeonatoActual();
+
+            $userEquipo = UserEquipo::find()
+                ->where(['id_user' => $id_user])
+                ->one();
+            $modelGrupoEquipo = GrupoEquipo::find()
+                ->where(['id_equipo' => $userEquipo->id_equipo])
+                ->andWhere(['id_campeonato' => $modelCampeonato->id])
+                ->all();
+
+            $arrayGrupoEquipo = ArrayHelper::map($modelGrupoEquipo, 'id', 'id');
+
+            $modelDetFechas = DetalleFecha::find()
+                ->where(['in', 'id_cabecera_fecha', ArrayHelper::map($modelCabFechas, 'id', 'id')])
+                ->andWhere([
+                    'or',
+                    ['in','id_grupo_equipo1',$arrayGrupoEquipo],
+                    ['in','id_grupo_equipo2' ,$arrayGrupoEquipo]
+                ])
+                ->orderBy(['hora_inicio' => SORT_ASC])
+                ->all();
+
+              
+        }
+       
 
         return $this->render('vocalias', [
             'modelCabFechas' => $modelCabFechas,
@@ -364,7 +394,7 @@ class DetalleFechaFController extends Controller
             ->orderBy(['id_jugador' => SORT_ASC])
             ->all();
 
-            //1B Y 2B  AMONESTADOS=SUSPENDIDOS
+        //1B Y 2B  AMONESTADOS=SUSPENDIDOS
         $modelDetVocalia1B = DetalleVocalia::find()
             ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
             ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo1->id_equipo])
@@ -372,7 +402,7 @@ class DetalleFechaFController extends Controller
             ->orderBy(['id_jugador' => SORT_ASC])
             ->all();
 
-           
+
         $modelDetVocalia2B = DetalleVocalia::find()
             ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
             ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo2->id_equipo])
@@ -431,7 +461,7 @@ class DetalleFechaFController extends Controller
                 ->orderBy(['id_jugador' => SORT_ASC])
                 ->all();
 
-           
+
 
             foreach ($modelDetVocalia1A as $model) {
                 $goles1A = $goles1A + ($model->goles ? $model->goles : 0);
@@ -528,7 +558,7 @@ class DetalleFechaFController extends Controller
                 $golesAntes = $model->goles;
                 $model->goles = $goles;
                 if ($model->entrega_carnet && $model->save()) {
-                    $this->sincronizaDatosJugadorAjaxUno($model,$golesAntes, $goles);
+                    $this->sincronizaDatosJugadorAjaxUno($model, $golesAntes, $goles);
                     $modelCabVocalia = CabeceraVocalia::findOne($model->id_cabecera_vocalia);
                     //$this->sincronizaDetalleFechas($modelCabVocalia);
                     return ['success' => true, 'message' => 'Valor actualizado'];
@@ -678,10 +708,10 @@ class DetalleFechaFController extends Controller
     //         }
     //     }
     // }
-    public function sincronizaDatosJugadorAjaxUno($modelDetVocalia,$golesAntes, $golesAhora)
+    public function sincronizaDatosJugadorAjaxUno($modelDetVocalia, $golesAntes, $golesAhora)
     {
-        $sumaGol = true;       
-     
+        $sumaGol = true;
+
         if ($golesAntes == $golesAhora) {
 
             return '';
@@ -692,9 +722,9 @@ class DetalleFechaFController extends Controller
 
         //sincroniza la suma de tarjetas, goles, del jugador
 
-      
+
         $jugador = Jugador::findOne($modelDetVocalia->id_jugador);
-     
+
 
         if ($sumaGol) {
             $jugador->goles = ($jugador->goles ? $jugador->goles : 0) + 1;
@@ -702,7 +732,6 @@ class DetalleFechaFController extends Controller
             $jugador->goles = ($jugador->goles ? $jugador->goles : 0) - 1;
         }
         $jugador->save();
-     
     }
 
     /**

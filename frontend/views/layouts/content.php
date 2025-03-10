@@ -3,6 +3,12 @@
 
 use yii\bootstrap4\Breadcrumbs;
 ?>
+<style>    
+    .img-bg {
+     background-image: url('<?= Yii::getAlias('@web') ?>/backend/web/img/fondo_index2.jpg') ;
+      
+    }
+ </style>
 <div class="content-wrapper img-bg">
     <!-- Content Header (Page header) -->
     <div class="content-header">

@@ -30,6 +30,26 @@ return [
     //     'width'=>'70px',
     // ],
     [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'link_logotipo',
+        'label'=>'Foto',
+        'format'=>'html',
+        'contentOptions' => ['class' => 'text-center'],
+        'value'=>function($data){                  
+            // $pathWeb = Url::base(true)  . $data->link_logotipo;
+            $pathWeb = Yii::getAlias('@web')  . $data->link_logotipo;
+            
+            // Retornar la imagen con tamaño ajustado
+            // return Html::img($pathWeb, ['width' => '70px', 'height' => '70px']);     
+            return Html::img($pathWeb, [
+                'width' => '100px',
+                'height' => '100px',
+                'class' => 'rounded-circle', // O 'rounded-circle' para hacerlo circular
+                'alt' => 'Logotipo',
+            ]);               
+        }
+    ],
+    [
         'class' => '\kartik\grid\DataColumn',
         'attribute' => 'nombre',
     ],
@@ -39,17 +59,17 @@ return [
         'label'=>'Fecha Fundación',
         'filter' => '',
     ],
-    [
-        'class' => '\kartik\grid\DataColumn',
-        'attribute' => 'link_logotipo',
-        'filter' => '',
-        'label' => 'Logotipo',
-        'format' => 'html',
-        'width' => '100px',
-        'value' => function ($data) {
-            return Html::img($data->link_logotipo, ['width' => '200px']);
-        }
-    ],
+    // [
+    //     'class' => '\kartik\grid\DataColumn',
+    //     'attribute' => 'link_logotipo',
+    //     'filter' => '',
+    //     'label' => 'Logotipo',
+    //     'format' => 'html',
+    //     'width' => '100px',
+    //     'value' => function ($data) {
+    //         return Html::img($data->link_logotipo, ['width' => '200px']);
+    //     }
+    // ],
     [
         'class' => '\kartik\grid\BooleanColumn',
         'attribute' => 'activo',

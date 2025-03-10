@@ -20,7 +20,21 @@ AppAsset::register($this);
                         <?= Html::a($modelUE->equipo->nombre, ['/principal/index', 'id' => $modelUE->id]); ?>
                     </div>
                     <div class="card-body">
-                        <img src="<?= $modelUE->equipo->link_logotipo ?>" style="width:150px" />
+                        <div class="text-center">
+                            <?php
+                            $pathWeb = Yii::getAlias('@web');
+                            $pathWeb = $pathWeb . '/administrator';
+                            $pathWeb = $pathWeb . $modelUE->equipo->link_logotipo;
+                            ?>
+                            <div class=" p-1  shadow d-inline-block rounded-circle">
+                                <?= Html::img($pathWeb, [
+                                    'width' => '200px',
+                                    'height' => '200px',
+                                    'class' => 'rounded-circle border border-primary p-1 shadow'
+                                ]); ?>
+                            </div>
+                        </div>
+                        <p></p>
                     </div>
                     <div><?= Html::tag('p', $modelUE->equipo->genero->valor, ['style' => 'color: green; font-size: 15px;']) ?></div>
                     <div><?= Html::tag('p', $modelUE->equipo->categoria->valor, ['style' => 'color: green; font-size: 15px;']) ?></div>
@@ -44,10 +58,7 @@ AppAsset::register($this);
                     <div class="card-header fw-bold">Estadisticas</div>
                     <div class="card-body">
                         <ul>
-                            <li>Proximas Fechas</li>
-                            <li>Estadisticas</li>
-                            <li>Históricos</li>
-                            <li>Vocalias</li>
+                            
 
                         </ul>
                     </div>

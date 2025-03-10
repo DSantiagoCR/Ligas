@@ -26,10 +26,17 @@ return [
         'label'=>'Foto',
         'format'=>'html',
         'value'=>function($data){                  
-            $pathWeb = Url::base(true)  . $data->link_foto;
+            // $pathWeb = Url::base(true)  . $data->link_logotipo;
+            $pathWeb = Yii::getAlias('@web')  . $data->link_foto;
             
             // Retornar la imagen con tamaño ajustado
-            return Html::img($pathWeb, ['width' => '60px', 'height' => '60px']);                   
+            // return Html::img($pathWeb, ['width' => '70px', 'height' => '70px']);     
+            return Html::img($pathWeb, [
+                'width' => '70px',
+                'height' => '70px',
+                'class' => 'rounded-circle border border-warning  shadow',
+                'alt' => '',
+            ]);               
         }
     ],
     [
