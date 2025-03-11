@@ -525,6 +525,195 @@ class DetalleFechaFController extends Controller
             'modelCabVocalia' => $modelCabVocalia,
             'goles1A' => $goles1A,
             'goles2A' => $goles2A,
+            'idDetFec'=>$idDetFec,
+
+        ]);
+    }
+    public function actionVocaliaImagen($idDetFec)
+    {
+        $modelDetFec = DetalleFecha::findOne($idDetFec);
+        $modelCabFec = CabeceraFechas::findOne($modelDetFec->id_cabecera_fecha);
+
+        $modelLigaBarrial = LigaBarrial::find()->one();
+
+        $modelCampeonato = HelperGeneral::devuelveCampeonatoActual();
+
+        $modelArbitros = Arbitros::find()
+            ->alias('a')
+            ->innerJoin(['n' => 'nucle_arbitros'], 'n.id = a.id_nucleo_arbitro')
+            ->where([
+                'a.estado' => true,
+                'n.estado' => true,
+            ])
+            ->one();
+
+        $modelEstadoVocalia = HelperGeneral::devuelveEstadoVocaliaObj();
+
+        $modelEquipos1 = Equipo::find()
+            ->where(['id' => $modelDetFec->grupoEquipo1->id_equipo])
+            ->one();
+        $modelEquipos2 = Equipo::find()
+            ->where(['id' => $modelDetFec->grupoEquipo2->id_equipo])
+            ->one();
+
+        $modelJugadores1 = Jugador::find()
+            ->where(['id_equipo' => $modelDetFec->grupoEquipo1->id_equipo])
+            ->all();
+
+        $modelJugadores2 = Jugador::find()
+            ->where(['id_equipo' => $modelDetFec->grupoEquipo2->id_equipo])
+            ->all();
+
+        $modelCabVocalia = CabeceraVocalia::find()->where(['id_det_fecha' => $modelDetFec->id])->one();
+
+
+        // 1A Y 2A = HABILITADOS PARA JUGAR
+        $modelDetVocalia1A = DetalleVocalia::find()
+            ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
+            ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo1->id_equipo])
+            ->andWhere(['puede_jugar' => true])
+            ->orderBy(['id_jugador' => SORT_ASC])
+            ->all();
+
+        $modelDetVocalia2A = DetalleVocalia::find()
+            ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
+            ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo2->id_equipo])
+            ->andWhere(['puede_jugar' => true])
+            ->orderBy(['id_jugador' => SORT_ASC])
+            ->all();
+
+        //1B Y 2B  AMONESTADOS=SUSPENDIDOS
+        $modelDetVocalia1B = DetalleVocalia::find()
+            ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
+            ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo1->id_equipo])
+            ->andWhere(['puede_jugar' => false])
+            ->orderBy(['id_jugador' => SORT_ASC])
+            ->all();
+
+
+        $modelDetVocalia2B = DetalleVocalia::find()
+            ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
+            ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo2->id_equipo])
+            ->andWhere(['puede_jugar' => false])
+            ->orderBy(['id_jugador' => SORT_ASC])
+            ->all();
+
+        $goles1A = 0;
+        foreach ($modelDetVocalia1A as $model) {
+            $goles1A = $goles1A + ($model->goles ? $model->goles : 0);
+        }
+        $goles2A = 0;
+        foreach ($modelDetVocalia2A as $model) {
+            $goles2A = $goles2A + ($model->goles ? $model->goles : 0);
+        }
+
+
+        if (!$modelDetVocalia1A) {
+
+            foreach ($modelJugadores1 as $jugador) {
+                $modelDetVocalia1 = new DetalleVocalia();
+                $modelDetVocalia1->id_cabecera_vocalia = $modelCabVocalia->id;
+                $modelDetVocalia1->ta = 0;
+                $modelDetVocalia1->tr = 0;
+                $modelDetVocalia1->goles = 0;
+                $modelDetVocalia1->entrega_carnet = 0;
+                $modelDetVocalia1->id_jugador = $jugador->id;
+                $modelDetVocalia1->id_equipo = $jugador->id_equipo;
+                $modelDetVocalia1->puede_jugar = $jugador->puede_jugar;
+                $modelDetVocalia1->estado = $jugador->estado;
+                $modelDetVocalia1->num_jugador = $jugador->num_camiseta . '';
+                $modelDetVocalia1->nom_jugador = $jugador->nombres . ' ' . $jugador->apellidos;
+
+                $modelDetVocalia1->save();
+                // if(!$modelDetVocalia1->save())
+                // {
+                //     print_r($modelDetVocalia1->errors);
+                //     die();
+                // }
+
+            }
+
+            $modelDetVocalia1A = DetalleVocalia::find()
+                ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
+                ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo1->id_equipo])
+                ->andWhere(['puede_jugar' => true])
+                ->orderBy(['id_jugador' => SORT_ASC])
+                ->all();
+
+
+
+            $modelDetVocalia1B = DetalleVocalia::find()
+                ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
+                ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo1->id_equipo])
+                ->andWhere(['puede_jugar' => false])
+                ->orderBy(['id_jugador' => SORT_ASC])
+                ->all();
+
+
+
+            foreach ($modelDetVocalia1A as $model) {
+                $goles1A = $goles1A + ($model->goles ? $model->goles : 0);
+            }
+        }
+
+        if (!$modelDetVocalia2A) {
+
+            foreach ($modelJugadores2 as $jugador) {
+
+
+                $modelDetVocalia2 = new DetalleVocalia();
+                $modelDetVocalia2->id_cabecera_vocalia = $modelCabVocalia->id;
+                $modelDetVocalia2->ta = 0;
+                $modelDetVocalia2->tr = 0;
+                $modelDetVocalia2->goles = 0;
+                $modelDetVocalia2->entrega_carnet = 0;
+                $modelDetVocalia2->id_jugador = $jugador->id;
+                $modelDetVocalia2->id_equipo = $jugador->id_equipo;
+                $modelDetVocalia2->puede_jugar = $jugador->puede_jugar;
+                $modelDetVocalia2->estado = $jugador->estado;
+                $modelDetVocalia1->num_jugador = $jugador->num_camiseta . '';
+                $modelDetVocalia1->nom_jugador = $jugador->nombres . ' ' . $jugador->apellidos;
+
+                $modelDetVocalia2->save();
+            }
+            $modelDetVocalia2A = DetalleVocalia::find()
+                ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
+                ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo2->id_equipo])
+                ->andWhere(['puede_jugar' => true])
+                ->orderBy(['id_jugador' => SORT_ASC])
+                ->all();
+
+            $modelDetVocalia2B = DetalleVocalia::find()
+                ->where(['id_cabecera_vocalia' => $modelCabVocalia->id])
+                ->andWhere(['id_equipo' => $modelDetFec->grupoEquipo2->id_equipo])
+                ->andWhere(['puede_jugar' => false])
+                ->orderBy(['id_jugador' => SORT_ASC])
+                ->all();
+
+            foreach ($modelDetVocalia2A as $model) {
+                $goles2A = $goles2A + ($model->goles ? $model->goles : 0);
+            }
+        }
+
+
+
+        return $this->render('vocalia-imagenes', [
+            'modelLigaBarrial' => $modelLigaBarrial,
+            'modelCabFec' => $modelCabFec,
+            'modelDetFec' => $modelDetFec,
+            'modelCampeonato' => $modelCampeonato,
+            'modelArbitros' => $modelArbitros,
+            'modelEstadoVocalia' => $modelEstadoVocalia,
+            'modelEquipos1' => $modelEquipos1,
+            'modelEquipos2' => $modelEquipos2,
+            'modelDetVocalia1A' => $modelDetVocalia1A,
+            'modelDetVocalia2A' => $modelDetVocalia2A,
+            'modelDetVocalia1B' => $modelDetVocalia1B,
+            'modelDetVocalia2B' => $modelDetVocalia2B,
+            'modelCabVocalia' => $modelCabVocalia,
+            'goles1A' => $goles1A,
+            'goles2A' => $goles2A,
+            'idDetFec'=>$idDetFec,
 
         ]);
     }

@@ -30,6 +30,7 @@ use Yii;
  * @property string|null $link_ficha
  * @property int|null $num_camiseta 
  * @property int|null $id_campeonato
+ * @property string|null $posicion
  *
  * @property DetalleVocalia[] $detalleVocalias
  * @property Equipo $equipo
@@ -58,7 +59,7 @@ class Jugador extends \yii\db\ActiveRecord
             [['estado', 'puede_jugar'], 'boolean'],
             [['code'], 'string', 'max' => 20],
             [['nombres', 'apellidos'], 'string', 'max' => 100],
-            [['cedula', 'celular'], 'string', 'max' => 50],
+            [['cedula', 'celular','posicion'], 'string', 'max' => 50],
             [['link_foto', 'link_ficha'], 'string', 'max' => 1000],
             [['id_estado_civil'], 'exist', 'skipOnError' => true, 'targetClass' => Catalogos::class, 'targetAttribute' => ['id_estado_civil' => 'id']],
             [['id_equipo'], 'exist', 'skipOnError' => true, 'targetClass' => Equipo::class, 'targetAttribute' => ['id_equipo' => 'id']],
@@ -94,6 +95,7 @@ class Jugador extends \yii\db\ActiveRecord
             'goles' => 'Goles',
             'link_ficha' => 'Link Ficha',
             'num_camiseta' => 'Num Camiseta',
+            'posicion'=>'Posicion',
         ];
     }
 
