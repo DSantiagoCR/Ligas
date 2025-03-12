@@ -30,7 +30,7 @@ if ($defaultValue == $estadoVocalia) {
 
     <div class="row">
         <div class="col-2">
-            <?= Html::a('MODO IMAGEN', ['vocalia-imagen','idDetFec'=>$idDetFec], ['class' => 'btn btn-warning', 'id' => 'guardar-estado']) ?>
+            <?= Html::a('MODO IMAGEN', ['vocalia-imagen', 'idDetFec' => $idDetFec], ['class' => 'btn btn-warning', 'id' => 'guardar-estado']) ?>
 
         </div>
 
@@ -45,7 +45,19 @@ if ($defaultValue == $estadoVocalia) {
             </div>
         </div>
         <div class="col-2">
-            <img class="rounded-pill border border-success" style="width:100px" src="<?= $modelLigaBarrial->link_logo ?>" />
+            <div class="col text-center">
+                <?php
+                $pathWeb = Yii::getAlias('@web');
+                $pathWeb = $pathWeb . '/administrator' . $modelLigaBarrial->link_logo;
+                ?>
+                <?= Html::img($pathWeb, [
+                    'width' => '150px',
+                    'height' => '150px',
+                    'class' => 'rounded-pill border border-warning shadow', // O 'rounded-circle' para hacerlo circular
+                    'alt' => 'Logotipo',
+                    //'onclick' => 'mostrarMensaje()'
+                ]); ?>
+            </div>
         </div>
         <div class="col-2">
             <div class="form-group">
@@ -91,10 +103,11 @@ if ($defaultValue == $estadoVocalia) {
                 </div>
                 <div class="col d-flex"><?= Html::img($modelCabVocalia->equipo1->link_logotipo, ['width' => '40px', 'class' => 'img-fluid ms-auto']) ?></div>
             </div>
+         
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_1">
-                        INGRESAN
+                        INGRESAN A CANCHA
                     </button>
                 </h2>
                 <?= $this->render('_jugadores_titulares', ['modelDetVocalia' => $modelDetVocalia1A, 'tipo' => '_1', 'i' => 1]) ?>
@@ -104,7 +117,7 @@ if ($defaultValue == $estadoVocalia) {
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_2">
-                        JUGADORES
+                    NOMINA JUGADORES
                     </button>
                 </h2>
                 <?= $this->render('_jugadores_suplentes', ['modelDetVocalia' => $modelDetVocalia1A, 'tipo' => '_2', 'i' => 31]) ?>
@@ -112,7 +125,7 @@ if ($defaultValue == $estadoVocalia) {
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_5">
-                        SUSPENDIDOS
+                        AMONESTADOS
                     </button>
                 </h2>
                 <?= $this->render('_jugadores_amonestados', ['modelDetVocalia' => $modelDetVocalia1B, 'tipo' => '_5']) ?>
@@ -132,7 +145,7 @@ if ($defaultValue == $estadoVocalia) {
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_3">
-                        INGRESAN
+                        INGRESAN A CANCHA
                     </button>
                 </h2>
                 <?= $this->render('_jugadores_titulares', ['modelDetVocalia' => $modelDetVocalia2A, 'tipo' => '_3', 'i' => 61]) ?>
@@ -141,7 +154,7 @@ if ($defaultValue == $estadoVocalia) {
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_4">
-                        JUGADORES
+                    NOMINA JUGADORES
                     </button>
                 </h2>
                 <?= $this->render('_jugadores_suplentes', ['modelDetVocalia' => $modelDetVocalia2A, 'tipo' => '_4', 'i' => 91]) ?>
@@ -150,7 +163,7 @@ if ($defaultValue == $estadoVocalia) {
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_6">
-                        SUSPENDIDOS
+                    AMONESTADOS / NO CALIFICADOS
                     </button>
                 </h2>
                 <?= $this->render('_jugadores_amonestados', ['modelDetVocalia' => $modelDetVocalia2B, 'tipo' => '_6']) ?>

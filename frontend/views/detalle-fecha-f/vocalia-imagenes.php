@@ -41,7 +41,20 @@ if ($defaultValue == $estadoVocalia) {
             </div>
         </div>
         <div class="col-2">
-            <img class="rounded-pill border border-success" style="width:100px" src="<?= $modelLigaBarrial->link_logo ?>" />
+
+            <div class="col text-center">
+                <?php
+                $pathWeb = Yii::getAlias('@web');
+                $pathWeb = $pathWeb . '/administrator' . $modelLigaBarrial->link_logo;
+                ?>
+                <?= Html::img($pathWeb, [
+                    'width' => '150px',
+                    'height' => '150px',
+                    'class' => 'rounded-pill border border-warning shadow', // O 'rounded-circle' para hacerlo circular
+                    'alt' => 'Logotipo',
+                    //'onclick' => 'mostrarMensaje()'
+                ]); ?>
+            </div>
         </div>
         <div class="col-2">
             <div class="form-group">
@@ -87,39 +100,87 @@ if ($defaultValue == $estadoVocalia) {
                 </div>
                 <div class="col d-flex"><?= Html::img($modelCabVocalia->equipo1->link_logotipo, ['width' => '40px', 'class' => 'img-fluid ms-auto']) ?></div>
             </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_1">
-                        INGRESAN
-                    </button>
-                </h2>
-                <?= $this->render('_jugadores_titulares_img', ['modelDetVocalia' => $modelDetVocalia1A, 'tipo' => '_1', 'i' => 31]) ?>
-               
+            <div class="row">
+                <div class="col">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_2">
+                                NOMINA JUGADORES
+                            </button>
+                        </h2>
+                        <?= $this->render('_jugadores_suplentes_img', ['modelDetVocalia' => $modelDetVocalia1A, 'tipo' => '_2', 'i' => 31]) ?>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_1">
+                                INGRESAN A CANCHA
+                            </button>
+                        </h2>
+                        <?= $this->render('_jugadores_titulares_img', ['modelDetVocalia' => $modelDetVocalia1A, 'tipo' => '_1', 'i' => 1]) ?>
+                    </div>
+                </div>
+
             </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_2">
-                        JUGADORES
-                    </button>
-                </h2>
-                <?= $this->render('_jugadores_suplentes_img', ['modelDetVocalia' => $modelDetVocalia1A, 'tipo' => '_2', 'i' => 31]) ?>
-            </div>
-            
-          
+
+
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_5">
-                        SUSPENDIDOS
+                        AMONESTADOS / NO CALIFICADOS
                     </button>
                 </h2>
-                <?= $this->render('_jugadores_amonestados_img', ['modelDetVocalia' => $modelDetVocalia1B, 'tipo' => '_5', 'i' => 31]) ?>
+                <?= $this->render('_jugadores_amonestados_img', ['modelDetVocalia' => $modelDetVocalia1B, 'tipo' => '_5']) ?>
+            </div>
+        </div>
+    </div>
+    <div class="row p-2 border border-success">
+        <div class="col p-3 border border-success">
+            <div class="row text-center">
+                <div class="col">
+                    <h3 class="bg-primary"><b><?= $modelCabVocalia->equipo2->nombre ?></b></h3>
+                </div>
+                <div class="col">
+                    <h3 class="bg-primary"><b> Goles: <?= $goles2A ?></b></h3>
+                </div>
+                <div class="col d-flex"><?= Html::img($modelCabVocalia->equipo2->link_logotipo, ['width' => '40px', 'class' => 'img-fluid ms-auto']) ?></div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_4">
+                                NOMINA JUGADORES
+                            </button>
+                        </h2>
+                        <?= $this->render('_jugadores_suplentes_img', ['modelDetVocalia' => $modelDetVocalia2A, 'tipo' => '_4', 'i' => 91]) ?>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_3">
+                                INGRESAN A CANCHA
+                            </button>
+                        </h2>
+                        <?= $this->render('_jugadores_titulares_img', ['modelDetVocalia' => $modelDetVocalia2A, 'tipo' => '_3', 'i' => 61]) ?>
+                    </div>
+                </div>
+            </div>
 
-              
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_6">
+                        AMONESTADOS / NO CALIFICADOS
+                    </button>
+                </h2>
+                <?= $this->render('_jugadores_amonestados_img', ['modelDetVocalia' => $modelDetVocalia2B, 'tipo' => '_6']) ?>
             </div>
         </div>
     </div>
 
-    
+
 </div>
 
 <!-- // detalle -->

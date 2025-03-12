@@ -54,7 +54,7 @@ $this->registerJs(new JsExpression("
         /* Sombra ligera */
         object-fit: cover;
         /* Asegura que la imagen se vea bien */
-        
+
     }
 </style>
 <?php Pjax::begin() ?>
@@ -65,18 +65,27 @@ $this->registerJs(new JsExpression("
         <div class="row">
             <?php
             $cont_jug = 1;
-            $num_jug_por_fila= 0;
+            $num_jug_por_fila = 0;
 
             foreach ($modelDetVocalia as $model) {
-                
+
                 if (!$model->entrega_carnet) {
 
             ?>
                     <div class="col border border-secondary bg-success p-2">
-                        <div class="text-center bg-danger p-0" >#<?= ($model->jugador->num_camiseta) ? $model->jugador->num_camiseta : '' ?></div>
-                        <br>
-                        <div class="row ">
-                           
+                        <div class="text-center bg-danger p-0">#<?= ($model->jugador->num_camiseta) ? $model->jugador->num_camiseta : '' ?></div>
+
+                        <div class="row p-2">
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <div class="rounded-pill bg-info text-xs">Goles</div>
+                                    <div class=" text-bold"> <?= $model->goles ?></div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="rounded-pill bg-info text-xs">Posición</div>
+                                    <div class=" text-sm"> <?= $model->jugador->posicion ?></div>
+                                </div>
+                            </div>
                             <div class="col text-center">
                                 <?php
                                 //$pathWeb = Url::base(true)  . $data->link_logotipo;
@@ -93,7 +102,7 @@ $this->registerJs(new JsExpression("
                                 <div class="rounded-pill bg-white text-black p-1"><?= substr($model->jugador->nombres . ' ' . $model->jugador->apellidos, 0, 20) ?></div>
                             </div>
                         </div>
-                        <div class="text-center bg-gray p-0" ><?= $cont_jug?></div>
+                        <div class="text-center bg-gray p-0"><?= $cont_jug ?></div>
 
                     </div>
 

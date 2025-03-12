@@ -1,4 +1,6 @@
 <?php
+
+use common\models\LigaBarrial;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\bootstrap4\Modal;
@@ -14,7 +16,7 @@ $this->title = 'Liga Barrials';
 $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);
-
+$modelLigaBarrial = LigaBarrial::find()->where(['estado'=>true])->one();
 ?>
 <div class="liga-barrial-index">
     <div id="ajaxCrudDatatable">
@@ -40,7 +42,7 @@ CrudAsset::register($this);
             'panel' => [
                 'type' => 'primary', 
                 'heading' => '<i class="glyphicon glyphicon-list"></i> Liga Barriales ',
-                'before'=>'',
+                'before'=>'<img style="width:50px" src="'.Yii::getAlias('@web').$modelLigaBarrial->link_logo.'" />',
                 'after'=>BulkButtonWidget::widget([
                             'buttons'=>Html::a('<i class="glyphicon glyphicon-trash"></i>&nbsp; Delete All',
                                 ["bulkdelete"] ,

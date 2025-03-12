@@ -55,7 +55,7 @@ $modelCampeonato = Campeonato::find()->where(['estado' => true])->one();
                         'panel' => [
                             'type' => 'primary',
                             'heading' => '<i class="glyphicon glyphicon-list"></i> Jugadores Club '.' '.$modelEquipo->nombre. ' ('.$modelEquipo->categoria->valor.')'. ' ('.$modelEquipo->genero->valor.')',
-                            'before' => '<img style="width:30px" src="'.$modelEquipo->link_logotipo.'" />',
+                            'before' => '<img style="width:50px" src="'.Yii::getAlias('@web')  . $modelEquipo->link_logotipo.'" />',
                             // 'after' => BulkButtonWidget::widget([
                             //     'buttons' => Html::a(
                             //         '<i class="glyphicon glyphicon-trash"></i>&nbsp; Delete All',
