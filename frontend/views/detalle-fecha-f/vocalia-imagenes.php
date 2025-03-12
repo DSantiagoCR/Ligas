@@ -14,27 +14,23 @@ $modelEstadoPartido = HelperGeneral::devuelveEstadoVocalia();
 $defaultValue =  $modelCabVocalia->id_estado_vocalia;
 
 $estadoVocalia = '54'; //54=Finalizado, en tabla catalogos
-$classContainer = "container-ms border border-info p-3 ";
+$classContainer = "container-ms border border-info p-3";
 $styleC = '';
 if ($defaultValue == $estadoVocalia) {
     $classContainer = "container-ms border border-info p-3 bg-ligth";
     $styleC = "pointer-events: none;";
 }
-
-
 ?>
-
 <!-- // cabcera -->
 
 <div class="<?= $classContainer ?> " style="<?= $styleC ?>">
 
     <div class="row">
         <div class="col-2">
-            <?= Html::a('MODO IMAGEN', ['vocalia-imagen','idDetFec'=>$idDetFec], ['class' => 'btn btn-warning', 'id' => 'guardar-estado']) ?>
+            <?= Html::a('MODO TRADICIONAL', ['vocalia', 'idDetFec' => $idDetFec], ['class' => 'btn btn-warning', 'id' => 'guardar-estado']) ?>
 
         </div>
-
-        <div class="col-6">
+        <div class="col-6 ">
             <div class="row  text-center p-2">
                 <div class="col">
                     <h3><?= $modelLigaBarrial->nombre ?></h3>
@@ -63,7 +59,7 @@ if ($defaultValue == $estadoVocalia) {
         </div>
     </div>
     <br>
-    <div class="row p-2 border border-success text-white">
+    <div class="row p-2 border border-success text-white text-">
         <div class="col">
             <div class="col"><b>FECHA: </b><?= $modelCabFec->dia . ', ' . $modelCabFec->fecha ?></div>
             <div class="col"><b>HORA: </b><?= $modelDetFec->horaInicio->valor ?></div>
@@ -97,68 +93,33 @@ if ($defaultValue == $estadoVocalia) {
                         INGRESAN
                     </button>
                 </h2>
-                <?= $this->render('_jugadores_titulares', ['modelDetVocalia' => $modelDetVocalia1A, 'tipo' => '_1', 'i' => 1]) ?>
-
+                <?= $this->render('_jugadores_titulares_img', ['modelDetVocalia' => $modelDetVocalia1A, 'tipo' => '_1', 'i' => 31]) ?>
+               
             </div>
-
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_2">
                         JUGADORES
                     </button>
                 </h2>
-                <?= $this->render('_jugadores_suplentes', ['modelDetVocalia' => $modelDetVocalia1A, 'tipo' => '_2', 'i' => 31]) ?>
+                <?= $this->render('_jugadores_suplentes_img', ['modelDetVocalia' => $modelDetVocalia1A, 'tipo' => '_2', 'i' => 31]) ?>
             </div>
+            
+          
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_5">
                         SUSPENDIDOS
                     </button>
                 </h2>
-                <?= $this->render('_jugadores_amonestados', ['modelDetVocalia' => $modelDetVocalia1B, 'tipo' => '_5']) ?>
+                <?= $this->render('_jugadores_amonestados_img', ['modelDetVocalia' => $modelDetVocalia1B, 'tipo' => '_5', 'i' => 31]) ?>
 
+              
             </div>
-        </div>
-        <div class="col p-3 border border-success">
-            <div class="row text-center">
-                <div class="col">
-                    <h3 class="bg-primary"><b><?= $modelCabVocalia->equipo2->nombre ?></b></h3>
-                </div>
-                <div class="col">
-                    <h3 class="bg-primary"><b> Goles: <?= $goles2A ?></b></h3>
-                </div>
-                <div class="col d-flex"><?= Html::img($modelCabVocalia->equipo2->link_logotipo, ['width' => '40px', 'class' => 'img-fluid ms-auto']) ?></div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_3">
-                        INGRESAN
-                    </button>
-                </h2>
-                <?= $this->render('_jugadores_titulares', ['modelDetVocalia' => $modelDetVocalia2A, 'tipo' => '_3', 'i' => 61]) ?>
-
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_4">
-                        JUGADORES
-                    </button>
-                </h2>
-                <?= $this->render('_jugadores_suplentes', ['modelDetVocalia' => $modelDetVocalia2A, 'tipo' => '_4', 'i' => 91]) ?>
-
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_6">
-                        SUSPENDIDOS
-                    </button>
-                </h2>
-                <?= $this->render('_jugadores_amonestados', ['modelDetVocalia' => $modelDetVocalia2B, 'tipo' => '_6']) ?>
-
-            </div>
-
         </div>
     </div>
+
+    
 </div>
 
 <!-- // detalle -->
