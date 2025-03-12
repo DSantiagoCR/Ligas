@@ -102,7 +102,7 @@ $this->registerJs(new JsExpression("
                             ]); ?>
                             </div>
                            
-                            <div class="rounded-pill bg-white text-black text-center p-1"><?= substr($model->jugador->nombres . ' ' . $model->jugador->apellidos, 0, 15) ?></div>
+                            <div class="rounded-pill bg-white text-black text-center p-0"><?= substr($model->jugador->nombres . ' ' . $model->jugador->apellidos, 0, 20) ?></div>
                             <!-- </div> -->
                         </div>
                         <div class="text-center bg-gray p-0"><?= $cont ?></div>

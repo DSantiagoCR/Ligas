@@ -94,8 +94,7 @@ $this->registerJs(new JsExpression("
                     </div>
 
             <?php
-                    $cont = $cont + 1;
-                    $i = $i + 1;
+                    $cont = $cont + 1;                    
                 
             } ?>
         </div>

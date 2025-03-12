@@ -282,7 +282,7 @@ class DetalleFechaFController extends Controller
     {
         $modelCabFechas = CabeceraFechas::find()
             ->where(['estado' => true])
-            ->andWhere(['in', 'id_estado_fecha', [45, 49]])
+            ->andWhere(['in', 'id_estado_fecha', [45, 49]]) //45=pendiente, 49=Suspendido
             ->orderBy(['fecha' => SORT_ASC])
             ->all();
 
@@ -293,13 +293,7 @@ class DetalleFechaFController extends Controller
                 ->andWhere(['dia' => $dia])
                 ->orderBy(['fecha' => SORT_ASC])
                 ->all();
-        }
-        // $modelCabFechas = CabeceraFechas::find()
-        //     ->where(['estado' => true])
-        //     ->andWhere(['in', 'id_estado_fecha', [45, 49]])
-        //     ->andWhere(['dia' => $dia])
-        //     ->orderBy(['fecha' => SORT_ASC])
-        //     ->all();
+        }    
 
         $modelDetFechas = DetalleFecha::find()
             ->where(['in', 'id_cabecera_fecha', ArrayHelper::map($modelCabFechas, 'id', 'id')])
@@ -307,15 +301,30 @@ class DetalleFechaFController extends Controller
             ->all();
 
         if ($soloMiEquipo) {
-            
+
+            $modelCabVocalia = CabeceraVocalia::find()
+            ->where(['in','id_cab_fecha',ArrayHelper::map($modelCabFechas, 'id', 'id')])
+            ->all();
+            $arrayCabVocaliaVocal = ArrayHelper::map($modelCabVocalia,'id','id_equipo_vocal');
+            $arrayCabVocaliaVeedor = ArrayHelper::map($modelCabVocalia,'id','id_equipo_veedor');
+
+            print_r($arrayCabVocaliaVocal );
+            die();
+            $arrayFinal = array_merge($arrayCabVocaliaVocal, $arrayCabVocaliaVeedor);
+
+          
             $id_user = Yii::$app->user->identity->getId();
             $modelCampeonato = HelperGeneral::devuelveCampeonatoActual();
 
             $userEquipo = UserEquipo::find()
                 ->where(['id_user' => $id_user])
                 ->one();
+
+            $arrayFinal[] = $userEquipo->id_equipo;
+
             $modelGrupoEquipo = GrupoEquipo::find()
-                ->where(['id_equipo' => $userEquipo->id_equipo])
+                //->where(['id_equipo' => $userEquipo->id_equipo])
+                ->where(['in','id_equipo',$arrayFinal])
                 ->andWhere(['id_campeonato' => $modelCampeonato->id])
                 ->all();
 
@@ -326,7 +335,7 @@ class DetalleFechaFController extends Controller
                 ->andWhere([
                     'or',
                     ['in','id_grupo_equipo1',$arrayGrupoEquipo],
-                    ['in','id_grupo_equipo2' ,$arrayGrupoEquipo]
+                    ['in','id_grupo_equipo2' ,$arrayGrupoEquipo],               
                 ])
                 ->orderBy(['hora_inicio' => SORT_ASC])
                 ->all();
@@ -472,6 +481,7 @@ class DetalleFechaFController extends Controller
 
             foreach ($modelJugadores2 as $jugador) {
 
+               
 
                 $modelDetVocalia2 = new DetalleVocalia();
                 $modelDetVocalia2->id_cabecera_vocalia = $modelCabVocalia->id;
@@ -483,9 +493,8 @@ class DetalleFechaFController extends Controller
                 $modelDetVocalia2->id_equipo = $jugador->id_equipo;
                 $modelDetVocalia2->puede_jugar = $jugador->puede_jugar;
                 $modelDetVocalia2->estado = $jugador->estado;
-                $modelDetVocalia1->num_jugador = $jugador->num_camiseta . '';
-                $modelDetVocalia1->nom_jugador = $jugador->nombres . ' ' . $jugador->apellidos;
-
+                $modelDetVocalia2->num_jugador = $jugador->num_camiseta;
+                $modelDetVocalia2->nom_jugador = $jugador->nombres . ' ' . $jugador->apellidos;  
                 $modelDetVocalia2->save();
             }
             $modelDetVocalia2A = DetalleVocalia::find()
@@ -792,10 +801,10 @@ class DetalleFechaFController extends Controller
         if ($model) {
             $model->id_estado_vocalia = $estado;
             if ($model->save()) {
-                // if($model->id_estado_vocalia == 54)//54=Finalizado, en tabla catalogos
-                // {
-                //     $this->sincronizaFinPartido($model);
-                // }             
+                if($model->id_estado_vocalia == 54)//54=Finalizado, en tabla catalogos
+                {
+                    $this->sincronizaFinPartido($model);
+                }             
                 return ['success' => true];
             }
         }
@@ -803,67 +812,66 @@ class DetalleFechaFController extends Controller
         return ['success' => false];
     }
 
-    // public function sincronizaFinPartido($modelCabVocalia)
-    // {
-    //     //sincroniza la suma de tarjetas, goles, 
-    //     if ($modelCabVocalia) {
-    //         $this->sincronizaDatosJugador($modelCabVocalia);
-    //         $this->sincronizaDetalleFechas($modelCabVocalia);
-    //     }
-    // }
-    // public function sincronizaDetalleFechas($modelCabVocalia)
-    // {
+    public function sincronizaFinPartido($modelCabVocalia)
+    {
+        //sincroniza la suma de tarjetas, goles, 
+        if ($modelCabVocalia) {
+            //$this->sincronizaDatosJugador($modelCabVocalia);
+            $this->sincronizaDetalleFechas($modelCabVocalia);
+        }
+    }
+    public function sincronizaDetalleFechas($modelCabVocalia)
+    {
+        //sincroniza la suma de goles en detfecha
+        if ($modelCabVocalia) {
+            $modelDetFecha = DetalleFecha::findOne($modelCabVocalia->id_det_fecha);
+            $goles1 = 0;
+            $goles2 = 0;
+            $ta1 = 0;
+            $ta2 = 0;
+            $tr1 = 0;
+            $tr2 = 0;
 
-    //     //sincroniza la suma de goles en detfecha
-    //     if ($modelCabVocalia) {
-    //         $modelDetFecha = DetalleFecha::findOne($modelCabVocalia->id_det_fecha);
-    //         $goles1 = 0;
-    //         $goles2 = 0;
-    //         $ta1 = 0;
-    //         $ta2 = 0;
-    //         $tr1 = 0;
-    //         $tr2 = 0;
+            $modelDetVocalia = DetalleVocalia::find()
+                ->where(['id_cabecera_vocalia' => $modelCabVocalia->id, 'id_equipo' => $modelCabVocalia->id_equipo_1])
+                ->all();
 
-    //         $modelDetVocalia = DetalleVocalia::find()
-    //             ->where(['id_cabecera_vocalia' => $modelCabVocalia->id, 'id_equipo' => $modelCabVocalia->id_equipo_1])
-    //             ->all();
+            foreach ($modelDetVocalia as $model) {
+                $goles1 = $goles1 + ($model->goles ? $model->goles : 0);
+                $ta1 =  $ta1 + ($model->ta ? $model->ta : 0);
+                $tr1 =  $tr1 + ($model->tr ? $model->tr : 0);
+            }
 
-    //         foreach ($modelDetVocalia as $model) {
-    //             $goles1 = $goles1 + ($model->goles ? $model->goles : 0);
-    //             $ta1 =  $ta1 + ($model->ta ? $model->ta : 0);
-    //             $tr1 =  $tr1 + ($model->tr ? $model->tr : 0);
-    //         }
+            $modelDetVocalia = DetalleVocalia::find()
+                ->where(['id_cabecera_vocalia' => $modelCabVocalia->id, 'id_equipo' => $modelCabVocalia->id_equipo_2])
+                ->all();
 
-    //         $modelDetVocalia = DetalleVocalia::find()
-    //             ->where(['id_cabecera_vocalia' => $modelCabVocalia->id, 'id_equipo' => $modelCabVocalia->id_equipo_2])
-    //             ->all();
+            foreach ($modelDetVocalia as $model) {
+                $goles2 = $goles2 + ($model->goles ? $model->goles : 0);
+                $ta2 =  $ta2 + ($model->ta ? $model->ta : 0);
+                $tr2 =  $tr2 + ($model->tr ? $model->tr : 0);
+            }
 
-    //         foreach ($modelDetVocalia as $model) {
-    //             $goles2 = $goles2 + ($model->goles ? $model->goles : 0);
-    //             $ta2 =  $ta2 + ($model->ta ? $model->ta : 0);
-    //             $tr2 =  $tr2 + ($model->tr ? $model->tr : 0);
-    //         }
+            $modelDetFecha->goles_equipo2 = $goles2;
+            $modelDetFecha->goles_equipo1 = $goles1;
 
-    //         $modelDetFecha->goles_equipo2 = $goles2;
-    //         $modelDetFecha->goles_equipo1 = $goles1;
+            if ($goles1 > $goles2) {
+                $modelDetFecha->ganador1 = 1;
+                $modelDetFecha->ganador2 = 0;
+            }
+            if ($goles2 > $goles1) {
+                $modelDetFecha->ganador1 = 0;
+                $modelDetFecha->ganador2 = 1;
+            }
+            if ($goles2 == $goles1) {
+                $modelDetFecha->ganador1 = 2;
+                $modelDetFecha->ganador2 = 2;
+            }
 
-    //         if ($goles1 > $goles2) {
-    //             $modelDetFecha->ganador1 = 1;
-    //             $modelDetFecha->ganador2 = 0;
-    //         }
-    //         if ($goles2 > $goles1) {
-    //             $modelDetFecha->ganador1 = 0;
-    //             $modelDetFecha->ganador2 = 1;
-    //         }
-    //         if ($goles2 == $goles1) {
-    //             $modelDetFecha->ganador1 = 2;
-    //             $modelDetFecha->ganador2 = 2;
-    //         }
-
-    //         $modelDetFecha->save();
-    //         // die('zz');
-    //     }
-    // }
+            $modelDetFecha->save();
+            // die('zz');
+        }
+    }
 
     // public function sincronizaDatosJugador($modelCabVocalia)
     // {

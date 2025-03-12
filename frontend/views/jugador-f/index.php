@@ -45,12 +45,12 @@ CrudAsset::register($this);
                                     'content' =>
                                     Html::a(
                                         '<i class="glyphicon glyphicon-plus"></i>',
-                                        ['create', 'id_equipo' => $modelUE->id],
+                                        ['create', 'id_equipo' => $modelUE->equipo->id],
                                         ['role' => 'modal-remote', 'title' => 'Crear Nuevo Jugador', 'class' => 'btn btn-default']
                                     ) .
                                         Html::a(
                                             '<i class="glyphicon glyphicon-repeat"></i>',
-                                            ['', 'id' => $modelUE->id],
+                                            ['', 'id' => $modelUE->equipo->id],
                                             ['data-pjax' => 1, 'class' => 'btn btn-default', 'title' => 'Reset Grid']
                                         ) .
                                         '{toggleData}' .

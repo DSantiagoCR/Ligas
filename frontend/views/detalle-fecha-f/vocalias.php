@@ -29,7 +29,7 @@ AppAsset::register($this);
             }
             ?>
             <div class="col">
-                <?= Html::a('SOLO MI EQUIPO', ['fechas', 'dia' => null,'soloMiEquipo' => true], ['class' => 'btn btn-warning rounded-pill']) ?>
+                <?= Html::a('SOLO MI EQUIPO', ['fechas', 'dia' => null,'soloMiEquipo' => true], ['class' => 'btn btn-danger rounded-pill']) ?>
             </div>
 
         </div>
