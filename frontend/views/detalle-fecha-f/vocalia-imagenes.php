@@ -89,20 +89,22 @@ if ($defaultValue == $estadoVocalia) {
             </div>
             <div class="accordion-item">
                 <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_1">
+                        INGRESAN
+                    </button>
+                </h2>
+                <?= $this->render('_jugadores_titulares_img', ['modelDetVocalia' => $modelDetVocalia1A, 'tipo' => '_1', 'i' => 31]) ?>
+               
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_2">
                         JUGADORES
                     </button>
                 </h2>
                 <?= $this->render('_jugadores_suplentes_img', ['modelDetVocalia' => $modelDetVocalia1A, 'tipo' => '_2', 'i' => 31]) ?>
             </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_1">
-                        INGRESAN
-                    </button>
-                </h2>
-               
-            </div>
+            
           
             <div class="accordion-item">
                 <h2 class="accordion-header">
@@ -110,6 +112,8 @@ if ($defaultValue == $estadoVocalia) {
                         SUSPENDIDOS
                     </button>
                 </h2>
+                <?= $this->render('_jugadores_amonestados_img', ['modelDetVocalia' => $modelDetVocalia1B, 'tipo' => '_5', 'i' => 31]) ?>
+
               
             </div>
         </div>

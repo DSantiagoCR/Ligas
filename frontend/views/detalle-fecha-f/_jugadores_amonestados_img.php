@@ -7,10 +7,9 @@ use yii\widgets\Pjax;
 
 //java scrip para cambiar el check de entrega carnet
 $this->registerJs(new JsExpression("
-    $(document).on('click', '.ajax-click-suplentes', function() {
-      
+    $(document).on('change', '.ajax-checkbox', function() {
         var id = $(this).data('id'); // ID del registro
-        var estado = 1;
+        var estado = $(this).is(':checked') ? 1 : 0; // Estado del checkbox
 
         $.ajax({
             url: '" . Url::to(['detalle-fecha-f/entrega-carnet']) . "',
@@ -64,12 +63,9 @@ $this->registerJs(new JsExpression("
     <div class="accordion-body">
         <div class="row">
             <?php
-            $cont_jug = 1;
-            $num_jug_por_fila= 0;
-
+            $cont = 1;
             foreach ($modelDetVocalia as $model) {
-                
-                if (!$model->entrega_carnet) {
+               
 
             ?>
                     <div class="col border border-secondary bg-success p-2">
@@ -85,26 +81,30 @@ $this->registerJs(new JsExpression("
                                 <?= Html::img($pathWeb, [
                                     'width' => '150px',
                                     'height' => '150px',
-                                    'data-id' => $model->id,
-                                    'class' => 'carnet-img border border-warning shadow ajax-click-suplentes', // O 'rounded-circle' para hacerlo circular
+                                    'class' => 'carnet-img border border-warning shadow', // O 'rounded-circle' para hacerlo circular
                                     'alt' => 'Logotipo',
+                                    //'onclick' => 'mostrarMensaje()'
                                 ]); ?>
                                 <br>
                                 <div class="rounded-pill bg-white text-black p-1"><?= substr($model->jugador->nombres . ' ' . $model->jugador->apellidos, 0, 20) ?></div>
                             </div>
                         </div>
-                        <div class="text-center bg-gray p-0" ><?= $cont_jug?></div>
+                        <div class="text-center bg-gray p-0" ><?= $cont?></div>
 
                     </div>
 
             <?php
-                    $cont_jug = $cont_jug + 1;
-                    $num_jug_por_fila = $num_jug_por_fila + 1;
+                    $cont = $cont + 1;
                     $i = $i + 1;
-                }
+                
             } ?>
         </div>
     </div>
 </div>
 
 <?php Pjax::end() ?>
+<script>
+    function mostrarMensaje() {
+        alert("¡Imagen clickeada!");
+    }
+</script>

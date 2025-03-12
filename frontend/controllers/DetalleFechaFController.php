@@ -725,7 +725,11 @@ class DetalleFechaFController extends Controller
         $id = Yii::$app->request->post('id');
         $estado = Yii::$app->request->post('estado');
 
+        // print_r('id:'.$id);
+        // print_r('estado:'.$estado);
+        // die();
         $model = DetalleVocalia::findOne($id);
+       
         if ($model) {
             $model->entrega_carnet = $estado;
             if ($model->save()) {

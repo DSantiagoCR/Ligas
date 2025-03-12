@@ -104,12 +104,12 @@ $modelGenerosEquipos = HelperGeneral::devuelveGenerosEquiposObj();
 
 											</div>
 											<div class="col-4">
-												<?= Html::a('<i class="fas fa-user-plus"></i>', ['jugador/index', 'id_equipo' => $item->id], [
+												<?= Html::a('<i class="fas fa-running fa-2x"></i>', ['jugador/index', 'id_equipo' => $item->id], [
 													'class' => 'btn btn-outline-primary btn-sm',
 													'id' => 'modalButton', // O un ID único como 'catGenero'.$item->id
 													'title' => 'Jugadores'
 												]) ?>
-												<?= Html::a('<i class="fas fa-user-tie"></i>', ['directivos/index', 'id_equipo' => $item->id], [
+												<?= Html::a('<i class="fas fa-user-tie fa-2x"></i>', ['directivos/index', 'id_equipo' => $item->id], [
 													'class' => 'btn btn-outline-primary btn-sm',
 													'id' => 'modalButton', // O un ID único como 'catGenero'.$item->id
 													'title' => 'Directivos'
