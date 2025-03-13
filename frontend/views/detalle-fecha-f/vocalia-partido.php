@@ -3,20 +3,20 @@
 use common\models\Util\HelperGeneral;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\ActiveForm;
+use yii\web\JsExpression;
 
 $this->title = "Vocalia";
 $cont1 = 1;
 $cont2 = 1;
 
 $modelEstadoPartido = HelperGeneral::devuelveEstadoVocalia();
+$modelEstPartido = HelperGeneral::devuelveIDEstadoFinalizadoPartido();
 
 $defaultValue =  $modelCabVocalia->id_estado_vocalia;
 
-$estadoVocalia = '54'; //54=Finalizado, en tabla catalogos
 $classContainer = "container-ms border border-info p-3 ";
 $styleC = '';
-if ($defaultValue == $estadoVocalia) {
+if ($defaultValue == $modelEstPartido->valor1) {
     $classContainer = "container-ms border border-info p-3 bg-ligth";
     $styleC = "pointer-events: none;";
 }
@@ -29,12 +29,12 @@ if ($defaultValue == $estadoVocalia) {
 <div class="<?= $classContainer ?> " style="<?= $styleC ?>">
 
     <div class="row">
-        <div class="col-2">
+        <div class="col-1">
             <?= Html::a('MODO IMAGEN', ['vocalia-imagen', 'idDetFec' => $idDetFec], ['class' => 'btn btn-warning', 'id' => 'guardar-estado']) ?>
 
         </div>
 
-        <div class="col-6">
+        <div class="col-5">
             <div class="row  text-center p-2">
                 <div class="col">
                     <h3><?= $modelLigaBarrial->nombre ?></h3>
@@ -59,20 +59,47 @@ if ($defaultValue == $estadoVocalia) {
                 ]); ?>
             </div>
         </div>
-        <div class="col-2">
-            <div class="form-group">
-                <label for="estado-partido" style="color:white">Estado del Partido</label>
-                <select id="estado-partido" class="form-control">
-                    <?php foreach ($modelEstadoPartido as $key => $value): ?>
-                        <option value="<?= $key ?>" <?= ($key == $defaultValue) ? 'selected' : '' ?>>
-                            <?= $value ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-                <?= Html::button('Guardar', ['class' => 'btn btn-success', 'id' => 'guardar-estado']) ?>
+        <div class="col-4">
+            <div class="row border border-warning d-flex">
+                <?php 
+                if(!$modelCabVocalia->hora_inicia)
+                {                
+                ?>
+                <div class="col-auto">
+                    <?= Html::button('Inicia Partido', [
+                        'class' => 'btn btn-warning text-bold iniciar-partido',
+                        'data-id' => $modelCabVocalia->id, // ID del partido
+                    ]) ?>
+                </div>
+                <?php 
+                }else{                
+                ?>
+                <div class="col-auto">                    
+                    <p class="text-white text-center text-bold m-0 fs-4"> Inicia Partido: <?= ($modelCabVocalia->hora_inicia) ? $modelCabVocalia->hora_inicia : '' ?></p>
 
+                </div>
+                <?php 
+                }                
+                ?>
             </div>
-        </div>
+            <div class="row border border-warning ">
+                <div class="col bg-info">
+                    <label for="estado-partido " style="color:white">Estado del Partido</label>
+                </div>
+                <div class="col">
+                    <select id="estado-partido" class="form-control">
+                        <?php foreach ($modelEstadoPartido as $key => $value): ?>
+                            <option value="<?= $key ?>" <?= ($key == $defaultValue) ? 'selected' : '' ?>>
+                                <?= $value ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col">
+                    <?= Html::button('Guardar', ['class' => 'btn btn-success', 'id' => 'guardar-estado']) ?>
+                </div>
+            </div>
+        </div>  
     </div>
     <br>
     <div class="row p-2 border border-success text-white">
@@ -103,7 +130,7 @@ if ($defaultValue == $estadoVocalia) {
                 </div>
                 <div class="col d-flex"><?= Html::img($modelCabVocalia->equipo1->link_logotipo, ['width' => '40px', 'class' => 'img-fluid ms-auto']) ?></div>
             </div>
-         
+
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_1">
@@ -117,7 +144,7 @@ if ($defaultValue == $estadoVocalia) {
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_2">
-                    NOMINA JUGADORES
+                        NOMINA JUGADORES
                     </button>
                 </h2>
                 <?= $this->render('_jugadores_suplentes', ['modelDetVocalia' => $modelDetVocalia1A, 'tipo' => '_2', 'i' => 31]) ?>
@@ -154,7 +181,7 @@ if ($defaultValue == $estadoVocalia) {
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_4">
-                    NOMINA JUGADORES
+                        NOMINA JUGADORES
                     </button>
                 </h2>
                 <?= $this->render('_jugadores_suplentes', ['modelDetVocalia' => $modelDetVocalia2A, 'tipo' => '_4', 'i' => 91]) ?>
@@ -163,7 +190,7 @@ if ($defaultValue == $estadoVocalia) {
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_6">
-                    AMONESTADOS / NO CALIFICADOS
+                        AMONESTADOS / NO CALIFICADOS
                     </button>
                 </h2>
                 <?= $this->render('_jugadores_amonestados', ['modelDetVocalia' => $modelDetVocalia2B, 'tipo' => '_6']) ?>
@@ -288,4 +315,28 @@ $(document).on('click', '#guardar-estado', function() {
     });
 });
 ");
+
+$this->registerJs(new JsExpression("
+    $(document).on('click', '.iniciar-partido', function() {
+        var id = $(this).data('id');
+
+        $.ajax({
+            url: '" . Url::to(['iniciar-partido']) . "',
+            type: 'POST',
+            data: {id: id},
+            success: function(response) {
+                if (response.success) {
+                    //alert('¡El partido ha iniciado!');
+                    location.reload();
+                } else {
+                    alert('Error al iniciar el partido.');
+                }
+            },
+            error: function() {
+                alert('Error en la petición AJAX.');
+            }
+        });
+    });
+"));
+
 ?>

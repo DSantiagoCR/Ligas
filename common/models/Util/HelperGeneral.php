@@ -6,6 +6,7 @@ use common\models\Campeonato;
 use Yii;
 use common\models\Catalogos;
 use common\models\Equipo;
+use common\models\Parametros;
 use common\models\UserEquipo;
 use DateTime;
 use yii\helpers\ArrayHelper;
@@ -149,5 +150,10 @@ class HelperGeneral
             return "{$diferencia->y} años, {$diferencia->m} meses y {$diferencia->d} días";
         }
         return '';
+    }
+    public static function devuelveIDEstadoFinalizadoPartido()
+    {
+        $model = Parametros::find()->where(['code'=>'id_finaliza_partido'])->one();
+        return $model;
     }
 }

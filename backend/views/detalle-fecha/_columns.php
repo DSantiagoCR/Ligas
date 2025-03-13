@@ -73,6 +73,11 @@ return [
         'label'=>'Logo 1',
         'format'=>'html',      
         'value'=>function($data){
+            
+            $pathWeb = Yii::getAlias('@web');
+            $pathWeb = $pathWeb . $data->grupoEquipo1->equipo->link_logotipo;
+            
+            
             $iconoBandera = "";         
             if ($data->ganador1 == 1)
             {
@@ -83,9 +88,13 @@ return [
                 $iconoBandera = '<br><i class="fas fa-flag" style="color:orange"></i>';
             }
         
-            
-            return HTML::img($data->grupoEquipo1->equipo->link_logotipo, ['width' => '40px',]).$iconoBandera;
-           
+            return Html::img($pathWeb, [
+                'width' => '50px',
+                'height' => '50px',
+                'class' => 'rounded-pill border border-warning shadow', // O 'rounded-circle' para hacerlo circular
+                'alt' => 'Logotipo',
+                //'onclick' => 'mostrarMensaje()'
+            ]).$iconoBandera;         
           
         }
     ],
@@ -109,6 +118,9 @@ return [
         'label'=>'Logo 2',
         'format'=>'html',      
         'value'=>function($data){
+            $pathWeb = Yii::getAlias('@web');
+            $pathWeb = $pathWeb . $data->grupoEquipo2->equipo->link_logotipo;
+            
             $iconoBandera = "";         
             if ($data->ganador2 == 1)
             {
@@ -118,7 +130,14 @@ return [
             {
                 $iconoBandera = '<br><i class="fas fa-flag" style="color:orange"></i>';
             }
-            return HTML::img($data->grupoEquipo2->equipo->link_logotipo, ['width' => '40px']).$iconoBandera;
+            return Html::img($pathWeb, [
+                'width' => '50px',
+                'height' => '50px',
+                'class' => 'rounded-pill border border-warning shadow', // O 'rounded-circle' para hacerlo circular
+                'alt' => 'Logotipo',
+                //'onclick' => 'mostrarMensaje()'
+            ]).$iconoBandera;         
+          
           
         }
     ],
@@ -149,16 +168,16 @@ return [
 
 
     ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'id_estado_partido',
-        'label'=>'Estado Patido',
-        'filter'=>'',
-        'value'=>function($data){
-            return $data->estadoPartido->valor;
-        }
+    // [
+    //     'class'=>'\kartik\grid\DataColumn',
+    //     'attribute'=>'id_estado_partido',
+    //     'label'=>'Estado Patido',
+    //     'filter'=>'',
+    //     'value'=>function($data){
+    //         return $data->estadoPartido->valor;
+    //     }
 
-    ],
+    // ],
     [
         'class'=>'\kartik\grid\BooleanColumn',
         'attribute'=>'estado',
