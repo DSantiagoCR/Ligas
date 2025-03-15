@@ -58,14 +58,14 @@ return [
             return ($data->id_campeonato)?$data->campeonato->nombre:'';
         }
     ],
-    [
-        'attribute'=>'id_estado_fecha',
-        'label'=>'Estado Fecha',
-        'value'=>function($data)
-        {
-            return $data->estadoFecha->valor;
-        }
-    ],
+    // [
+    //     'attribute'=>'id_estado_fecha',
+    //     'label'=>'Estado Fecha',
+    //     'value'=>function($data)
+    //     {
+    //         return $data->estadoFecha->valor;
+    //     }
+    // ],
 
     [
         'class'=>'\kartik\grid\BooleanColumn',

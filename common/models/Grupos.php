@@ -20,6 +20,7 @@ use Yii;
  * @property DetalleFecha[] $detalleFechas
  * @property Catalogos $genero
  * @property GrupoEquipo[] $grupoEquipos
+ * @property int $id_campeonato
  */
 class Grupos extends \yii\db\ActiveRecord
 {
@@ -37,7 +38,7 @@ class Grupos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['code', 'nombre', 'estado', 'id_catalogo', 'id_genero', 'id_categoria'], 'required'],
+            [['code', 'nombre', 'estado', 'id_catalogo', 'id_genero', 'id_categoria', 'id_campeonato'], 'required'],
             [['estado'], 'boolean'],
             [['id_catalogo', 'id_genero', 'id_categoria'], 'default', 'value' => null],
             [['id_catalogo', 'id_genero', 'id_categoria'], 'integer'],
@@ -62,6 +63,7 @@ class Grupos extends \yii\db\ActiveRecord
             'id_catalogo' => 'Catalogo',
             'id_genero' => 'Genero',
             'id_categoria' => 'Categoria',
+            'id_campeonato' => 'Campeonato',
         ];
     }
 
@@ -113,5 +115,14 @@ class Grupos extends \yii\db\ActiveRecord
     public function getGrupoEquipos()
     {
         return $this->hasMany(GrupoEquipo::class, ['id_grupo' => 'id']);
+    }
+    /** 
+    * Gets query for [[Campeonato]].
+    *
+    * @return \yii\db\ActiveQuery
+    */
+    public function getCampeonato()
+    {
+        return $this->hasOne(Campeonato::class, ['id' => 'id_campeonato']);
     }
 }

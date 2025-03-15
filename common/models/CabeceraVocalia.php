@@ -31,7 +31,8 @@ use Yii;
  * @property int|null $id_equipo_veedor
  * @property int $id_cab_fecha
  * @property int|null $id_det_fecha 
- *
+ * @property string|null $hora_inicia
+ * @property string|null $hora_fin
  * @property Arbitros $arbitro
  * @property CabeceraFechas $cabFecha
  * @property Campeonato $campeonato
@@ -65,6 +66,7 @@ class CabeceraVocalia extends \yii\db\ActiveRecord
             [['informe_vocal', 'informe_veedor', 'informe_arbitro', 'novedades_equipo_1', 'novedades_equipo_2', 'novedades_generales', 'novedades_directiva'], 'string', 'max' => 2500],
             [['link_documento'], 'string', 'max' => 255],
             [['hora_termina'], 'string', 'max' => 20],
+            [['hora_inicia', 'hora_fin'], 'safe'],
             [['id_arbitro'], 'exist', 'skipOnError' => true, 'targetClass' => Arbitros::class, 'targetAttribute' => ['id_arbitro' => 'id']],
             [['id_cab_fecha'], 'exist', 'skipOnError' => true, 'targetClass' => CabeceraFechas::class, 'targetAttribute' => ['id_cab_fecha' => 'id']],
             [['id_campeonato'], 'exist', 'skipOnError' => true, 'targetClass' => Campeonato::class, 'targetAttribute' => ['id_campeonato' => 'id']],
@@ -74,6 +76,8 @@ class CabeceraVocalia extends \yii\db\ActiveRecord
             [['id_equipo_vocal'], 'exist', 'skipOnError' => true, 'targetClass' => Equipo::class, 'targetAttribute' => ['id_equipo_vocal' => 'id']],
             [['id_equipo_veedor'], 'exist', 'skipOnError' => true, 'targetClass' => Equipo::class, 'targetAttribute' => ['id_equipo_veedor' => 'id']],
             [['id_det_fecha'], 'exist', 'skipOnError' => true, 'targetClass' => DetalleFecha::class, 'targetAttribute' => ['id_det_fecha' => 'id']],
+            [['id_det_fecha'], 'exist', 'skipOnError' => true, 'targetClass' => DetalleFecha::class, 'targetAttribute' => ['id_det_fecha' => 'id']],
+             
         ];
     }
 
@@ -107,6 +111,8 @@ class CabeceraVocalia extends \yii\db\ActiveRecord
             'id_equipo_veedor' => 'Equipo Veedor',
             'id_cab_fecha' => 'Cab Fecha',
             'id_det_fecha' => 'Det Fecha',
+            'hora_inicia' => 'Hora Inicia',
+            'hora_fin' => 'Hora Fin',
         ];
     }
     /**

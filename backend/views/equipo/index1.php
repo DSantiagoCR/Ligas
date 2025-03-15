@@ -24,6 +24,8 @@ CrudAsset::register($this);
 AppAsset::register($this);
 $modelCategoriaEquipos = HelperGeneral::devuelveCategoriasEquiposObj();
 $modelGenerosEquipos = HelperGeneral::devuelveGenerosEquiposObj();
+$modelCampeonato = HelperGeneral::devuelveCampeonatoActual();
+
 ?>
 
 <div class="equipo-config-index">
@@ -61,7 +63,7 @@ $modelGenerosEquipos = HelperGeneral::devuelveGenerosEquiposObj();
 					<p class="display-6 form-control text-ligth bg-info">GENERO : <?= $gene->valor ?></p>
 					<?php
 					$modelListEquipos = Equipo::find()
-						->where(['id_categoria' => $categ->id])
+						->where(['id_categoria' => $categ->id,'id_campeonato'=>$modelCampeonato->id])
 						->andWhere(['id_genero' => $gene->id])
 						->all();
 

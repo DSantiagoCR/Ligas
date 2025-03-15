@@ -293,7 +293,7 @@ class DetalleFechaFController extends Controller
                 ->andWhere(['dia' => $dia])
                 ->orderBy(['fecha' => SORT_ASC])
                 ->all();
-        }    
+        }
 
         $modelDetFechas = DetalleFecha::find()
             ->where(['in', 'id_cabecera_fecha', ArrayHelper::map($modelCabFechas, 'id', 'id')])
@@ -302,47 +302,34 @@ class DetalleFechaFController extends Controller
 
         if ($soloMiEquipo) {
 
-            $modelCabVocalia = CabeceraVocalia::find()
-            ->where(['in','id_cab_fecha',ArrayHelper::map($modelCabFechas, 'id', 'id')])
-            ->all();
-            $arrayCabVocaliaVocal = ArrayHelper::map($modelCabVocalia,'id','id_equipo_vocal');
-            $arrayCabVocaliaVeedor = ArrayHelper::map($modelCabVocalia,'id','id_equipo_veedor');
-
-            print_r($arrayCabVocaliaVocal );
-            die();
-            $arrayFinal = array_merge($arrayCabVocaliaVocal, $arrayCabVocaliaVeedor);
-
-          
-            $id_user = Yii::$app->user->identity->getId();
             $modelCampeonato = HelperGeneral::devuelveCampeonatoActual();
+            $id_user = Yii::$app->user->identity->getId();
 
             $userEquipo = UserEquipo::find()
                 ->where(['id_user' => $id_user])
                 ->one();
 
-            $arrayFinal[] = $userEquipo->id_equipo;
+            $modelCabVocalia = CabeceraVocalia::find()
+                ->where(['in', 'id_cab_fecha', ArrayHelper::map($modelCabFechas, 'id', 'id')])
+                ->andWhere([
+                    'or',
+                    ['id_equipo_vocal' => $userEquipo->id_equipo],
+                    ['id_equipo_veedor' => $userEquipo->id_equipo],
+                    ['id_equipo_1' => $userEquipo->id_equipo],
+                    ['id_equipo_2' => $userEquipo->id_equipo],
 
-            $modelGrupoEquipo = GrupoEquipo::find()
-                //->where(['id_equipo' => $userEquipo->id_equipo])
-                ->where(['in','id_equipo',$arrayFinal])
-                ->andWhere(['id_campeonato' => $modelCampeonato->id])
+                ])
                 ->all();
 
-            $arrayGrupoEquipo = ArrayHelper::map($modelGrupoEquipo, 'id', 'id');
+            $arrayCabVocaliaIdDetFecha = ArrayHelper::map($modelCabVocalia, 'id_det_fecha', 'id_det_fecha');
 
             $modelDetFechas = DetalleFecha::find()
                 ->where(['in', 'id_cabecera_fecha', ArrayHelper::map($modelCabFechas, 'id', 'id')])
-                ->andWhere([
-                    'or',
-                    ['in','id_grupo_equipo1',$arrayGrupoEquipo],
-                    ['in','id_grupo_equipo2' ,$arrayGrupoEquipo],               
-                ])
+                ->where(['in', 'id', $arrayCabVocaliaIdDetFecha])
                 ->orderBy(['hora_inicio' => SORT_ASC])
                 ->all();
-
-              
         }
-       
+
 
         return $this->render('vocalias', [
             'modelCabFechas' => $modelCabFechas,
@@ -481,7 +468,7 @@ class DetalleFechaFController extends Controller
 
             foreach ($modelJugadores2 as $jugador) {
 
-               
+
 
                 $modelDetVocalia2 = new DetalleVocalia();
                 $modelDetVocalia2->id_cabecera_vocalia = $modelCabVocalia->id;
@@ -494,7 +481,7 @@ class DetalleFechaFController extends Controller
                 $modelDetVocalia2->puede_jugar = $jugador->puede_jugar;
                 $modelDetVocalia2->estado = $jugador->estado;
                 $modelDetVocalia2->num_jugador = $jugador->num_camiseta;
-                $modelDetVocalia2->nom_jugador = $jugador->nombres . ' ' . $jugador->apellidos;  
+                $modelDetVocalia2->nom_jugador = $jugador->nombres . ' ' . $jugador->apellidos;
                 $modelDetVocalia2->save();
             }
             $modelDetVocalia2A = DetalleVocalia::find()
@@ -534,7 +521,7 @@ class DetalleFechaFController extends Controller
             'modelCabVocalia' => $modelCabVocalia,
             'goles1A' => $goles1A,
             'goles2A' => $goles2A,
-            'idDetFec'=>$idDetFec,
+            'idDetFec' => $idDetFec,
 
         ]);
     }
@@ -722,7 +709,7 @@ class DetalleFechaFController extends Controller
             'modelCabVocalia' => $modelCabVocalia,
             'goles1A' => $goles1A,
             'goles2A' => $goles2A,
-            'idDetFec'=>$idDetFec,
+            'idDetFec' => $idDetFec,
 
         ]);
     }
@@ -738,7 +725,7 @@ class DetalleFechaFController extends Controller
         // print_r('estado:'.$estado);
         // die();
         $model = DetalleVocalia::findOne($id);
-       
+
         if ($model) {
             $model->entrega_carnet = $estado;
             if ($model->save()) {
@@ -798,19 +785,39 @@ class DetalleFechaFController extends Controller
 
         $model = CabeceraVocalia::findOne($id);
 
+        $modelEstPartido = HelperGeneral::devuelveIDEstadoFinalizadoPartido();
+
         if ($model) {
             $model->id_estado_vocalia = $estado;
             if ($model->save()) {
-                if($model->id_estado_vocalia == 54)//54=Finalizado, en tabla catalogos
+                if ($model->id_estado_vocalia == $modelEstPartido->valor1) //54=Finalizado, en tabla catalogos
                 {
                     $this->sincronizaFinPartido($model);
-                }             
+                }
                 return ['success' => true];
             }
         }
 
         return ['success' => false];
     }
+    public function actionIniciarPartido()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $id = Yii::$app->request->post('id');
+        $model = CabeceraVocalia::findOne($id);
+        $timestamp = date('Y-m-d H:i:s'); // Formato compatible con PostgreSQL
+
+        if ($model) {
+            $model->hora_inicia = $timestamp; // O el estado que necesites
+            if ($model->save(false)) {
+                return ['success' => true];
+            }
+        }
+
+        return ['success' => false];
+    }
+
 
     public function sincronizaFinPartido($modelCabVocalia)
     {
