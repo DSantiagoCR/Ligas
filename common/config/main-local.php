@@ -6,12 +6,12 @@ return [
         'db' => [
             'class' => \yii\db\Connection::class,
             //'dsn' => 'mysql:host=localhost;dbname=yii2advanced',
-            'dsn' => 'pgsql:host=localhost;dbname=LigasZ',           
-            'username' => 'postgres',
-            'password' => '12345',
-            // 'dsn' => 'pgsql:host=51.222.75.105;port=5432;dbname=yiidb',
-            // 'username' => 'yii',
-            // 'password' => 'yii',
+            // 'dsn' => 'pgsql:host=localhost;dbname=LigasZ',           
+            // 'username' => 'postgres',
+            // 'password' => '12345',
+            'dsn' => 'pgsql:host=51.222.75.105;port=5432;dbname=yiidb',
+            'username' => 'yii',
+            'password' => 'yii',
             'charset' => 'utf8',
         ],
         'mailer' => [
