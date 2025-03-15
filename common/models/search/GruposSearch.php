@@ -6,6 +6,8 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Grupos;
+use common\models\Util\HelperGeneral;
+use Symfony\Component\Console\Helper\HelperSet;
 
 /**
  * GruposSearch represents the model behind the search form about `common\models\Grupos`.
@@ -41,7 +43,9 @@ class GruposSearch extends Grupos
      */
     public function search($params)
     {
-        $query = Grupos::find();
+        $modelCampeonato = HelperGeneral::devuelveCampeonatoActual();
+
+        $query = Grupos::find()->where(['id_campeonato'=>$modelCampeonato->id]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

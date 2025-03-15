@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use common\models\Grupos;
 use common\models\search\GruposSearch;
+use common\models\Util\HelperGeneral;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -83,6 +84,7 @@ class GruposController extends Controller
     {
         $request = Yii::$app->request;
         $model = new Grupos();  
+        
 
         if($request->isAjax){
             /*
@@ -99,7 +101,11 @@ class GruposController extends Controller
                                 Html::button('Guardar',['class'=>'btn btn-primary','type'=>"submit"])
         
                 ];         
-            }else if($model->load($request->post()) && $model->save()){
+            }else if($model->load($request->post()) ){
+
+                $modelCampeonato = HelperGeneral::devuelveCampeonatoActual();
+                $model->id_campeonato = $modelCampeonato->id; 
+                $model->save();
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
                     'title'=> "Crear Nuevo Grupos",
